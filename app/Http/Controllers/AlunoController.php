@@ -36,6 +36,14 @@ class AlunoController extends Controller
     {
         $validatedData = $this->validateAlunoData($request);
         
+        // Handle checkbox field 'ativo' - if not checked, it won't be in request
+        $validatedData['ativo'] = $request->has('ativo');
+        
+        // Handle photo upload
+        if ($request->hasFile('foto_perfil')) {
+            $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
+        }
+        
         Aluno::create($validatedData);
 
         return redirect()
@@ -65,6 +73,18 @@ class AlunoController extends Controller
     public function update(Request $request, Aluno $aluno): RedirectResponse
     {
         $validatedData = $this->validateAlunoData($request, $aluno->id);
+        
+        // Handle checkbox field 'ativo' - if not checked, it won't be in request
+        $validatedData['ativo'] = $request->has('ativo');
+        
+        // Handle photo upload
+        if ($request->hasFile('foto_perfil')) {
+            // Delete old photo if exists
+            if ($aluno->foto_perfil && \Storage::disk('public')->exists($aluno->foto_perfil)) {
+                \Storage::disk('public')->delete($aluno->foto_perfil);
+            }
+            $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
+        }
         
         $aluno->update($validatedData);
 
@@ -105,8 +125,22 @@ class AlunoController extends Controller
             'data_nascimento' => 'required|date|before:today',
             'telefone' => 'nullable|string|max:15',
             'endereco' => 'nullable|string|max:500',
-            'foto_perfil' => 'nullable|string|max:255',
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'ativo' => 'boolean',
         ]);
+    }
+
+    /**
+     * Handle photo upload and return the stored path.
+     */
+    private function handlePhotoUpload($file): string
+    {
+        // Generate unique filename
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        
+        // Store in public disk under alunos folder
+        $path = $file->storeAs('alunos', $filename, 'public');
+        
+        return $path;
     }
 }

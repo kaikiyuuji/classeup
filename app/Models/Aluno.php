@@ -33,4 +33,22 @@ class Aluno extends Model
         'data_nascimento' => 'date',
         'ativo' => 'boolean',
     ];
+
+    /**
+     * Get the full URL for the profile photo.
+     */
+    public function getFotoPerfilUrlAttribute(): ?string
+    {
+        if (!$this->foto_perfil) {
+            return null;
+        }
+
+        // If it's already a full URL, return as is
+        if (filter_var($this->foto_perfil, FILTER_VALIDATE_URL)) {
+            return $this->foto_perfil;
+        }
+
+        // Otherwise, generate storage URL
+        return asset('storage/' . $this->foto_perfil);
+    }
 }

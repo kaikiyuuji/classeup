@@ -60,8 +60,8 @@
                                             <td class="px-6 py-4">
                                                 <div class="flex items-center">
                                                     <div class="flex-shrink-0 h-10 w-10">
-                                                        @if($aluno->foto_perfil)
-                                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ $aluno->foto_perfil }}" alt="{{ $aluno->nome }}">
+                                                        @if($aluno->foto_perfil_url)
+                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ $aluno->foto_perfil_url }}" alt="{{ $aluno->nome }}">
                                                         @else
                                                             <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
                                                                 <span class="text-blue-600 font-medium text-sm">{{ substr($aluno->nome, 0, 2) }}</span>
@@ -140,8 +140,8 @@
                                     <div class="flex items-start justify-between">
                                         <div class="flex items-center space-x-3">
                                             <div class="flex-shrink-0">
-                                                @if($aluno->foto_perfil)
-                                                    <img class="h-12 w-12 rounded-full object-cover" src="{{ $aluno->foto_perfil }}" alt="{{ $aluno->nome }}">
+                                                @if($aluno->foto_perfil_url)
+                                    <img class="h-12 w-12 rounded-full object-cover" src="{{ $aluno->foto_perfil_url }}" alt="{{ $aluno->nome }}">
                                                 @else
                                                     <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
                                                         <span class="text-blue-600 font-medium">{{ substr($aluno->nome, 0, 2) }}</span>

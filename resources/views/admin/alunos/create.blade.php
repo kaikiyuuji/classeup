@@ -21,7 +21,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
-                    <form action="{{ route('alunos.store') }}" method="POST" class="space-y-8">
+                    <form action="{{ route('alunos.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
 
                         <!-- Informações Pessoais -->
@@ -131,10 +131,57 @@
 
                                 <!-- Foto de Perfil -->
                                 <div>
-                                    <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">URL da Foto de Perfil</label>
-                                    <input type="url" name="foto_perfil" id="foto_perfil" value="{{ old('foto_perfil') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                           placeholder="https://exemplo.com/foto.jpg">
+                                    <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
+                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
+                                        <div class="space-y-1 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                            <div class="flex text-sm text-gray-600">
+                                                <label for="foto_perfil" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                                    <span>Enviar uma foto</span>
+                                                    <input id="foto_perfil" name="foto_perfil" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
+                                                </label>
+                                                <p class="pl-1">ou arraste e solte</p>
+                                            </div>
+                                            <p class="text-xs text-gray-500">PNG, JPG, GIF até 2MB</p>
+                                        </div>
+                                    </div>
+                                    <!-- Preview da imagem -->
+                                    <div id="imagePreview" class="mt-4 hidden">
+                                        <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <p class="text-sm font-medium text-blue-700">📷 Preview da imagem selecionada</p>
+                                                <button type="button" onclick="removeImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 hover:bg-red-200 rounded-md transition-colors duration-200">
+                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    Remover
+                                                </button>
+                                            </div>
+                                            <div class="flex items-center space-x-4">
+                                                <div class="flex-shrink-0">
+                                                    <img id="preview" class="h-20 w-20 object-cover rounded-lg border-2 border-blue-300 shadow-md" src="" alt="Preview">
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <div id="fileInfo" class="text-sm text-gray-700 space-y-1">
+                                                        <div class="flex items-center">
+                                                            <span class="font-medium text-gray-600 w-16">Nome:</span> 
+                                                            <span id="fileName" class="text-gray-800 truncate"></span>
+                                                        </div>
+                                                        <div class="flex items-center">
+                                                            <span class="font-medium text-gray-600 w-16">Tamanho:</span> 
+                                                            <span id="fileSize" class="text-gray-800"></span>
+                                                        </div>
+                                                        <div class="flex items-center">
+                                                            <span class="font-medium text-gray-600 w-16">Tipo:</span> 
+                                                            <span id="fileType" class="text-gray-800"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @error('foto_perfil')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

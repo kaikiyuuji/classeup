@@ -49,9 +49,9 @@
                         <!-- Foto de Perfil -->
                         <div class="flex-shrink-0">
                             <div class="relative">
-                                @if($aluno->foto_perfil)
-                                    <img src="{{ $aluno->foto_perfil }}" 
-                                         alt="Foto de {{ $aluno->nome }}"
+                                @if($aluno->foto_perfil_url)
+                    <img src="{{ $aluno->foto_perfil_url }}"
+                         alt="Foto de {{ $aluno->nome }}"
                                          class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg">
                                 @else
                                     <div class="w-40 h-40 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center border-4 border-white shadow-lg">
