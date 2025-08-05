@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AlunoStoreRequest;
+use App\Http\Requests\AlunoUpdateRequest;
 use App\Models\Aluno;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -32,12 +33,9 @@ class AlunoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(AlunoStoreRequest $request): RedirectResponse
     {
-        $validatedData = $this->validateAlunoData($request);
-        
-        // Handle checkbox field 'ativo' - if not checked, it won't be in request
-        $validatedData['ativo'] = $request->has('ativo');
+        $validatedData = $request->validated();
         
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
@@ -70,12 +68,9 @@ class AlunoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Aluno $aluno): RedirectResponse
+    public function update(AlunoUpdateRequest $request, Aluno $aluno): RedirectResponse
     {
-        $validatedData = $this->validateAlunoData($request, $aluno->id);
-        
-        // Handle checkbox field 'ativo' - if not checked, it won't be in request
-        $validatedData['ativo'] = $request->has('ativo');
+        $validatedData = $request->validated();
         
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
@@ -105,30 +100,7 @@ class AlunoController extends Controller
             ->with('success', 'Aluno excluído com sucesso!');
     }
 
-    /**
-     * Validate aluno data with complete validation rules.
-     */
-    private function validateAlunoData(Request $request, ?int $alunoId = null): array
-    {
-        $emailRule = $alunoId 
-            ? 'required|email|unique:alunos,email,' . $alunoId
-            : 'required|email|unique:alunos,email';
-            
-        $cpfRule = $alunoId 
-            ? 'required|string|size:11|unique:alunos,cpf,' . $alunoId
-            : 'required|string|size:11|unique:alunos,cpf';
 
-        return $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => $emailRule,
-            'cpf' => $cpfRule,
-            'data_nascimento' => 'required|date|before:today',
-            'telefone' => 'nullable|string|max:15',
-            'endereco' => 'nullable|string|max:500',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'ativo' => 'boolean',
-        ]);
-    }
 
     /**
      * Handle photo upload and return the stored path.

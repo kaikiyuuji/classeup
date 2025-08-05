@@ -20,7 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::resource('alunos', AlunoController::class);
-    Route::resource('professores', ProfessorController::class);
+    Route::resource('professores', ProfessorController::class)->parameters([
+        'professores' => 'professor'
+    ]);
     Route::resource('disciplinas', DisciplinaController::class);
 });
 

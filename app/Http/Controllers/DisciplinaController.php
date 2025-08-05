@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DisciplinaStoreRequest;
+use App\Http\Requests\DisciplinaUpdateRequest;
 use App\Models\Disciplina;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -31,17 +32,9 @@ class DisciplinaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(DisciplinaStoreRequest $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'nome' => 'required|string|max:255',
-            'codigo' => 'required|string|max:20|unique:disciplinas,codigo',
-            'descricao' => 'nullable|string|max:1000',
-            'carga_horaria' => 'required|integer|min:1|max:999',
-        ]);
-
-        // Processar campo ativo (checkbox)
-        $validatedData['ativo'] = $request->has('ativo');
+        $validatedData = $request->validated();
 
         Disciplina::create($validatedData);
 
@@ -68,17 +61,9 @@ class DisciplinaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Disciplina $disciplina): RedirectResponse
+    public function update(DisciplinaUpdateRequest $request, Disciplina $disciplina): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'nome' => 'required|string|max:255',
-            'codigo' => 'required|string|max:20|unique:disciplinas,codigo,' . $disciplina->id,
-            'descricao' => 'nullable|string|max:1000',
-            'carga_horaria' => 'required|integer|min:1|max:999',
-        ]);
-
-        // Processar campo ativo (checkbox)
-        $validatedData['ativo'] = $request->has('ativo');
+        $validatedData = $request->validated();
 
         $disciplina->update($validatedData);
 

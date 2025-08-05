@@ -6,11 +6,11 @@
                     Detalhes do Professor
                 </h2>
                 <p class="mt-1 text-sm text-gray-600">
-                    Visualize e gerencie as informações do professor {{ $professore->nome }}
+                    Visualize e gerencie as informações do professor {{ $professor->nome }}
                 </p>
             </div>
             <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                <a href="{{ route('professores.edit', $professore) }}" 
+                <a href="{{ route('professores.edit', $professor) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -49,14 +49,14 @@
                         <!-- Foto de Perfil -->
                         <div class="flex-shrink-0">
                             <div class="relative">
-                                @if($professore->foto_perfil_url)
-                    <img src="{{ $professore->foto_perfil_url }}"
-                         alt="Foto de {{ $professore->nome }}"
+                                @if($professor->foto_perfil_url)
+                    <img src="{{ $professor->foto_perfil_url }}"
+                         alt="Foto de {{ $professor->nome }}"
                                          class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg">
                                 @else
                                     <div class="w-40 h-40 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center border-4 border-white shadow-lg">
                                         <span class="text-4xl font-bold text-white">
-                                            {{ strtoupper(substr($professore->nome, 0, 2)) }}
+                                            {{ strtoupper(substr($professor->nome, 0, 2)) }}
                                         </span>
                                     </div>
                                 @endif
@@ -64,8 +64,8 @@
                                 <!-- Badge de Status -->
                                 <div class="absolute -bottom-2 -right-2">
                                     <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full shadow-sm
-                                        {{ $professore->ativo ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                        {{ $professore->ativo ? 'Ativo' : 'Inativo' }}
+                                        {{ $professor->ativo ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
+                                        {{ $professor->ativo ? 'Ativo' : 'Inativo' }}
                                     </span>
                                 </div>
                             </div>
@@ -73,29 +73,29 @@
 
                         <!-- Informações Principais -->
                         <div class="flex-1 text-center lg:text-left">
-                            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $professore->nome }}</h1>
+                            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $professor->nome }}</h1>
                             <div class="flex flex-col sm:flex-row items-center lg:items-start space-y-2 sm:space-y-0 sm:space-x-4 text-gray-600">
                                 <div class="flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                     </svg>
-                                    <a href="mailto:{{ $professore->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                        {{ $professore->email }}
+                                    <a href="mailto:{{ $professor->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                    {{ $professor->email }}
                                     </a>
                                 </div>
-                                @if($professore->telefone)
+                                @if($professor->telefone)
                                     <div class="flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                         </svg>
-                                        <a href="tel:{{ $professore->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                            {{ $professore->telefone }}
+                                        <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        {{ $professor->telefone }}
                                         </a>
                                     </div>
                                 @endif
                             </div>
                             <div class="mt-3 text-sm text-gray-500">
-                                Cadastrado em {{ $professore->created_at->format('d/m/Y') }}
+                                Cadastrado em {{ $professor->created_at->format('d/m/Y') }}
                             </div>
                         </div>
                     </div>
@@ -114,21 +114,21 @@
                             <dl class="space-y-4">
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <dt class="text-sm font-medium text-gray-600">Nome Completo</dt>
-                                    <dd class="text-sm text-gray-900 font-medium">{{ $professore->nome }}</dd>
+                                    <dd class="text-sm text-gray-900 font-medium">{{ $professor->nome }}</dd>
                                 </div>
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <dt class="text-sm font-medium text-gray-600">CPF</dt>
-                                    <dd class="text-sm text-gray-900 font-mono">{{ $professore->cpf }}</dd>
+                                    <dd class="text-sm text-gray-900 font-mono">{{ $professor->cpf }}</dd>
                                 </div>
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <dt class="text-sm font-medium text-gray-600">Data de Nascimento</dt>
                                     <dd class="text-sm text-gray-900">
-                                        {{ $professore->data_nascimento?->format('d/m/Y') }}
-                                        @if($professore->data_nascimento)
+                                        {{ $professor->data_nascimento?->format('d/m/Y') }}
+                                        @if($professor->data_nascimento)
                                             <span class="text-gray-500 ml-1">
-                                                ({{ $professore->data_nascimento->age }} anos)
+                                                ({{ $professor->data_nascimento->age }} anos)
                                             </span>
                                         @endif
                                     </dd>
@@ -138,8 +138,8 @@
                                     <dt class="text-sm font-medium text-gray-600">Status</dt>
                                     <dd>
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                            {{ $professore->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ $professore->ativo ? 'Ativo' : 'Inativo' }}
+                                            {{ $professor->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            {{ $professor->ativo ? 'Ativo' : 'Inativo' }}
                                         </span>
                                     </dd>
                                 </div>
@@ -156,24 +156,24 @@
                             </h3>
                             
                             <dl class="space-y-4">
-                                @if($professore->especialidade)
+                                @if($professor->especialidade)
                                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                         <dt class="text-sm font-medium text-gray-600">Especialidade</dt>
-                                        <dd class="text-sm text-gray-900 font-medium">{{ $professore->especialidade }}</dd>
+                                        <dd class="text-sm text-gray-900 font-medium">{{ $professor->especialidade }}</dd>
                                     </div>
                                 @endif
 
-                                @if($professore->formacao)
+                                @if($professor->formacao)
                                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                         <dt class="text-sm font-medium text-gray-600">Formação</dt>
-                                        <dd class="text-sm text-gray-900">{{ $professore->formacao }}</dd>
+                                        <dd class="text-sm text-gray-900">{{ $professor->formacao }}</dd>
                                     </div>
                                 @endif
 
                                 <div class="flex justify-between items-center py-2">
                                     <dt class="text-sm font-medium text-gray-600">Cadastrado em</dt>
                                     <dd class="text-sm text-gray-900">
-                                        {{ $professore->created_at->format('d/m/Y H:i') }}
+                                        {{ $professor->created_at->format('d/m/Y H:i') }}
                                     </dd>
                                 </div>
                             </dl>
@@ -195,29 +195,29 @@
                                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                         <dt class="text-sm font-medium text-gray-600">Email</dt>
                                         <dd class="text-sm">
-                                            <a href="mailto:{{ $professore->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                                {{ $professore->email }}
+                                            <a href="mailto:{{ $professor->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                                {{ $professor->email }}
                                             </a>
                                         </dd>
                                     </div>
 
-                                    @if($professore->telefone)
+                                    @if($professor->telefone)
                                         <div class="flex justify-between items-center py-2">
                                             <dt class="text-sm font-medium text-gray-600">Telefone</dt>
                                             <dd class="text-sm">
-                                                <a href="tel:{{ $professore->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                                    {{ $professore->telefone }}
+                                                <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                                    {{ $professor->telefone }}
                                                 </a>
                                             </dd>
                                         </div>
                                     @endif
                                 </dl>
 
-                                @if($professore->endereco)
+                                @if($professor->endereco)
                                     <div>
                                         <dt class="text-sm font-medium text-gray-600 mb-2">Endereço</dt>
                                         <dd class="text-sm text-gray-900 leading-relaxed bg-white p-3 rounded border">
-                                            {{ $professore->endereco }}
+                                            {{ $professor->endereco }}
                                         </dd>
                                     </div>
                                 @endif
@@ -229,7 +229,7 @@
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                             <!-- Botão de Exclusão -->
-                            <form action="{{ route('professores.destroy', $professore) }}" 
+                            <form action="{{ route('professores.destroy', $professor) }}" 
                                   method="POST" 
                                   onsubmit="return confirm('Tem certeza que deseja excluir este professor? Esta ação não pode ser desfeita.')">
                                 @csrf
@@ -252,7 +252,7 @@
                                     </svg>
                                     Voltar à Lista
                                 </a>
-                                <a href="{{ route('professores.edit', $professore) }}" 
+                                <a href="{{ route('professores.edit', $professor) }}" 
                                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>

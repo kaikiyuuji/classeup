@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfessorStoreRequest;
+use App\Http\Requests\ProfessorUpdateRequest;
 use App\Models\Professor;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -32,12 +33,9 @@ class ProfessorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(ProfessorStoreRequest $request): RedirectResponse
     {
-        $validatedData = $this->validateProfessorData($request);
-        
-        // Handle checkbox field 'ativo' - if not checked, it won't be in request
-        $validatedData['ativo'] = $request->has('ativo');
+        $validatedData = $request->validated();
         
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
@@ -54,83 +52,55 @@ class ProfessorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Professor $professore): View
+    public function show(Professor $professor): View
     {
-        return view('admin.professores.show', compact('professore'));
+        return view('admin.professores.show', compact('professor'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Professor $professore): View
+    public function edit(Professor $professor): View
     {
-        return view('admin.professores.edit', compact('professore'));
+        return view('admin.professores.edit', compact('professor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Professor $professore): RedirectResponse
+    public function update(ProfessorUpdateRequest $request, Professor $professor): RedirectResponse
     {
-        $validatedData = $this->validateProfessorData($request, $professore->id);
-        
-        // Handle checkbox field 'ativo' - if not checked, it won't be in request
-        $validatedData['ativo'] = $request->has('ativo');
+        $validatedData = $request->validated();
         
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
             // Delete old photo if exists
-            if ($professore->foto_perfil && \Storage::disk('public')->exists($professore->foto_perfil)) {
-                \Storage::disk('public')->delete($professore->foto_perfil);
+            if ($professor->foto_perfil && \Storage::disk('public')->exists($professor->foto_perfil)) {
+                \Storage::disk('public')->delete($professor->foto_perfil);
             }
             $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
         }
         
-        $professore->update($validatedData);
+        $professor->update($validatedData);
 
         return redirect()
-            ->route('professores.show', $professore)
+            ->route('professores.show', $professor)
             ->with('success', 'Professor atualizado com sucesso!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Professor $professore): RedirectResponse
+    public function destroy(Professor $professor): RedirectResponse
     {
-        $professore->delete();
+        $professor->delete();
 
         return redirect()
             ->route('professores.index')
             ->with('success', 'Professor excluído com sucesso!');
     }
 
-    /**
-     * Validate professor data with complete validation rules.
-     */
-    private function validateProfessorData(Request $request, ?int $professorId = null): array
-    {
-        $emailRule = $professorId 
-            ? 'required|email|unique:professores,email,' . $professorId
-            : 'required|email|unique:professores,email';
-            
-        $cpfRule = $professorId 
-            ? 'required|string|size:11|unique:professores,cpf,' . $professorId
-            : 'required|string|size:11|unique:professores,cpf';
 
-        return $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => $emailRule,
-            'cpf' => $cpfRule,
-            'data_nascimento' => 'required|date|before:today',
-            'telefone' => 'nullable|string|max:15',
-            'endereco' => 'nullable|string|max:500',
-            'especialidade' => 'required|string|max:255',
-            'formacao' => 'required|string|max:1000',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'ativo' => 'boolean',
-        ]);
-    }
 
     /**
      * Handle photo upload and return the stored path.

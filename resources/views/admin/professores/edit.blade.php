@@ -5,10 +5,10 @@
                 <h2 class="font-bold text-2xl text-gray-900">
                     {{ __('Editar Professor') }}
                 </h2>
-                <p class="text-sm text-gray-600 mt-1">{{ $professore->nome }}</p>
+                <p class="text-sm text-gray-600 mt-1">{{ $professor->nome }}</p>
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-                <a href="{{ route('professores.show', $professore) }}"> 
+                <a href="{{ route('professores.show', $professor) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -31,7 +31,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
-                    <form action="{{ route('professores.update', $professore) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                    <form action="{{ route('professores.update', $professor) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
                         @method('PUT')
 
@@ -48,7 +48,7 @@
                                 <!-- Nome -->
                                 <div class="md:col-span-2">
                                     <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo *</label>
-                                    <input type="text" name="nome" id="nome" value="{{ old('nome', $professore->nome) }}" 
+                                    <input type="text" name="nome" id="nome" value="{{ old('nome', $professor->nome) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            placeholder="Digite o nome completo do professor"
                                            required>
@@ -65,7 +65,7 @@
                                 <!-- CPF -->
                                 <div>
                                     <label for="cpf" class="block text-sm font-semibold text-gray-700 mb-2">CPF *</label>
-                                    <input type="text" name="cpf" id="cpf" value="{{ old('cpf', $professore->cpf) }}" 
+                                    <input type="text" name="cpf" id="cpf" value="{{ old('cpf', $professor->cpf) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            placeholder="000.000.000-00"
                                            required>
@@ -82,7 +82,7 @@
                                 <!-- Data de Nascimento -->
                                 <div>
                                     <label for="data_nascimento" class="block text-sm font-semibold text-gray-700 mb-2">Data de Nascimento *</label>
-                                    <input type="date" name="data_nascimento" id="data_nascimento" value="{{ old('data_nascimento', $professore->data_nascimento?->format('Y-m-d')) }}" 
+                                    <input type="date" name="data_nascimento" id="data_nascimento" value="{{ old('data_nascimento', $professor->data_nascimento?->format('Y-m-d')) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            required>
                                     @error('data_nascimento')
@@ -110,7 +110,7 @@
                                 <!-- Especialidade -->
                                 <div>
                                     <label for="especialidade" class="block text-sm font-semibold text-gray-700 mb-2">Especialidade</label>
-                                    <input type="text" name="especialidade" id="especialidade" value="{{ old('especialidade', $professore->especialidade) }}" 
+                                    <input type="text" name="especialidade" id="especialidade" value="{{ old('especialidade', $professor->especialidade) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            placeholder="Ex: Matemática, Física, História...">
                                     @error('especialidade')
@@ -126,7 +126,7 @@
                                 <!-- Formação -->
                                 <div>
                                     <label for="formacao" class="block text-sm font-semibold text-gray-700 mb-2">Formação</label>
-                                    <input type="text" name="formacao" id="formacao" value="{{ old('formacao', $professore->formacao) }}" 
+                                    <input type="text" name="formacao" id="formacao" value="{{ old('formacao', $professor->formacao) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            placeholder="Ex: Licenciatura em Matemática, Mestrado em Educação...">
                                     @error('formacao')
@@ -154,7 +154,7 @@
                                 <!-- Email -->
                                 <div>
                                     <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
-                                    <input type="email" name="email" id="email" value="{{ old('email', $professore->email) }}" 
+                                    <input type="email" name="email" id="email" value="{{ old('email', $professor->email) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            placeholder="exemplo@email.com"
                                            required>
@@ -171,7 +171,7 @@
                                 <!-- Telefone -->
                                 <div>
                                     <label for="telefone" class="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
-                                    <input type="text" name="telefone" id="telefone" value="{{ old('telefone', $professore->telefone) }}" 
+                                    <input type="text" name="telefone" id="telefone" value="{{ old('telefone', $professor->telefone) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
                                            placeholder="(11) 99999-9999">
                                     @error('telefone')
@@ -188,11 +188,11 @@
                                 <div>
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     
-                                    @if($professore->foto_perfil_url)
+                                    @if($professor->foto_perfil_url)
                                         <!-- Foto atual -->
                                         <div class="mb-4">
                                             <p class="text-sm text-gray-600 mb-2">Foto atual:</p>
-                                            <img src="{{ $professore->foto_perfil_url }}" alt="Foto atual" class="h-32 w-32 object-cover rounded-lg border border-gray-300">
+                                            <img src="{{ $professor->foto_perfil_url }}" alt="Foto atual" class="h-32 w-32 object-cover rounded-lg border border-gray-300">
                                         </div>
                                     @endif
                                     
@@ -203,7 +203,7 @@
                                             </svg>
                                             <div class="flex text-sm text-gray-600">
                                                 <label for="foto_perfil" class="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500">
-                                                    <span>{{ $professore->foto_perfil ? 'Alterar foto' : 'Enviar uma foto' }}</span>
+                                                    <span>{{ $professor->foto_perfil ? 'Alterar foto' : 'Enviar uma foto' }}</span>
                                                     <input id="foto_perfil" name="foto_perfil" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
                                                 </label>
                                                 <p class="pl-1">ou arraste e solte</p>
@@ -261,7 +261,7 @@
                                     <label for="endereco" class="block text-sm font-semibold text-gray-700 mb-2">Endereço</label>
                                     <textarea name="endereco" id="endereco" rows="3" 
                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200 resize-none"
-                                              placeholder="Digite o endereço completo">{{ old('endereco', $professore->endereco) }}</textarea>
+                                              placeholder="Digite o endereço completo">{{ old('endereco', $professor->endereco) }}</textarea>
                                     @error('endereco')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -288,7 +288,7 @@
                                        name="ativo" 
                                        id="ativo" 
                                        value="1"
-                                       {{ old('ativo', $professore->ativo) ? 'checked' : '' }}
+                                       {{ old('ativo', $professor->ativo) ? 'checked' : '' }}
                                        class="h-5 w-5 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
                                 <label for="ativo" class="ml-3 block text-sm font-medium text-gray-900">
                                     Professor ativo
@@ -310,11 +310,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
                                 <div>
                                     <span class="font-medium">Criado em:</span> 
-                                    {{ $professore->created_at->format('d/m/Y H:i') }}
+                                    {{ $professor->created_at->format('d/m/Y H:i') }}
                                 </div>
                                 <div>
                                     <span class="font-medium">Última atualização:</span> 
-                                    {{ $professore->updated_at->format('d/m/Y H:i') }}
+                                    {{ $professor->updated_at->format('d/m/Y H:i') }}
                                 </div>
                             </div>
                         </div>

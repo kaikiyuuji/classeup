@@ -130,7 +130,7 @@
                                 </div>
 
                                 <!-- Foto de Perfil -->
-                                <div>
+                                 <div class="md:col-span-2">
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
                                         <div class="space-y-1 text-center">
@@ -191,6 +191,8 @@
                                         </p>
                                     @enderror
                                 </div>
+                            </div>
+                        </div>
 
                                 <!-- Endereço -->
                                 <div class="md:col-span-2">

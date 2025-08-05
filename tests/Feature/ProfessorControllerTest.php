@@ -88,7 +88,7 @@ class ProfessorControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertViewIs('admin.professores.show')
-            ->assertViewHas('professore', $professor);
+            ->assertViewHas('professor', $professor);
     }
 
     public function test_edit_displays_form_with_professor(): void
@@ -100,7 +100,7 @@ class ProfessorControllerTest extends TestCase
 
         $response->assertStatus(200)
             ->assertViewIs('admin.professores.edit')
-            ->assertViewHas('professore', $professor);
+            ->assertViewHas('professor', $professor);
     }
 
     public function test_update_modifies_professor(): void
@@ -108,8 +108,8 @@ class ProfessorControllerTest extends TestCase
         $professor = Professor::factory()->create();
         $updateData = [
             'nome' => 'Nome Atualizado',
-            'email' => $professor->email,
-            'cpf' => $professor->cpf,
+            'email' => 'novo_email@teste.com',
+            'cpf' => '98765432100',
             'data_nascimento' => $professor->data_nascimento->format('Y-m-d'),
             'especialidade' => 'Física',
             'formacao' => $professor->formacao,
@@ -125,6 +125,8 @@ class ProfessorControllerTest extends TestCase
         $this->assertDatabaseHas('professores', [
             'id' => $professor->id,
             'nome' => 'Nome Atualizado',
+            'email' => 'novo_email@teste.com',
+            'cpf' => '98765432100',
             'especialidade' => 'Física',
             'ativo' => 0,
         ]);
