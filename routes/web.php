@@ -4,6 +4,7 @@ use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TurmaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
         'professores' => 'professor'
     ]);
     Route::resource('disciplinas', DisciplinaController::class);
+    Route::resource('turmas', TurmaController::class);
 });
 
 require __DIR__.'/auth.php';

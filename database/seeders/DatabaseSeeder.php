@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             AlunoSeeder::class,
             ProfessorSeeder::class,
             DisciplinaSeeder::class,
+            TurmaSeeder::class,
         ]);
     }
 }

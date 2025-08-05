@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('disciplinas.index')" :active="request()->routeIs('disciplinas.*')">
                         {{ __('Disciplinas') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('turmas.index')" :active="request()->routeIs('turmas.*')">
+                        {{ __('Turmas') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -87,6 +90,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('disciplinas.index')" :active="request()->routeIs('disciplinas.*')">
                 {{ __('Disciplinas') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('turmas.index')" :active="request()->routeIs('turmas.*')">
+                {{ __('Turmas') }}
             </x-responsive-nav-link>
         </div>
 
