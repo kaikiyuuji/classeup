@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             ProfessorSeeder::class,
             DisciplinaSeeder::class,
             TurmaSeeder::class,
+            ProfessorDisciplinaTurmaSeeder::class,
+            MatriculaSeeder::class,
         ]);
     }
 }

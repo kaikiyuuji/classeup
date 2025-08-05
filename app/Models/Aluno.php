@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Aluno extends Model
 {
@@ -33,6 +35,24 @@ class Aluno extends Model
         'data_nascimento' => 'date',
         'ativo' => 'boolean',
     ];
+
+    /**
+     * Relacionamento many-to-many com Turma através da tabela Matricula
+     */
+    public function turmas(): BelongsToMany
+    {
+        return $this->belongsToMany(Turma::class, 'matriculas')
+                    ->withPivot('data_matricula', 'status')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Relacionamento one-to-many com Matricula
+     */
+    public function matriculas(): HasMany
+    {
+        return $this->hasMany(Matricula::class);
+    }
 
     /**
      * Get the full URL for the profile photo.

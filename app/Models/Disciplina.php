@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Disciplina extends Model
 {
@@ -31,4 +32,24 @@ class Disciplina extends Model
         'ativo' => 'boolean',
         'carga_horaria' => 'integer',
     ];
+
+    /**
+     * Relacionamento many-to-many com Professor através da tabela pivot
+     */
+    public function professores(): BelongsToMany
+    {
+        return $this->belongsToMany(Professor::class, 'professor_disciplina_turma')
+                    ->withPivot('turma_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Relacionamento many-to-many com Turma através da tabela pivot
+     */
+    public function turmas(): BelongsToMany
+    {
+        return $this->belongsToMany(Turma::class, 'professor_disciplina_turma')
+                    ->withPivot('professor_id')
+                    ->withTimestamps();
+    }
 }

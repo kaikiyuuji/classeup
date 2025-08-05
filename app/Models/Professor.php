@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Professor extends Model
 {
@@ -45,6 +46,26 @@ class Professor extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Relacionamento many-to-many com Disciplina através da tabela pivot
+     */
+    public function disciplinas(): BelongsToMany
+    {
+        return $this->belongsToMany(Disciplina::class, 'professor_disciplina_turma')
+                    ->withPivot('turma_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Relacionamento many-to-many com Turma através da tabela pivot
+     */
+    public function turmas(): BelongsToMany
+    {
+        return $this->belongsToMany(Turma::class, 'professor_disciplina_turma')
+                    ->withPivot('disciplina_id')
+                    ->withTimestamps();
+    }
 
     /**
      * Get the URL for the professor's profile photo.

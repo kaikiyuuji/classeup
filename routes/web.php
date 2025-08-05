@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\DisciplinaController;
+use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurmaController;
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
     ]);
     Route::resource('disciplinas', DisciplinaController::class);
     Route::resource('turmas', TurmaController::class);
+    
+    // Rotas de Matrículas
+    Route::resource('matriculas', MatriculaController::class);
+    Route::get('turmas/{turma}/matriculas', [MatriculaController::class, 'porTurma'])->name('matriculas.por-turma');
+    Route::get('alunos/{aluno}/matriculas', [MatriculaController::class, 'porAluno'])->name('matriculas.por-aluno');
 });
 
 require __DIR__.'/auth.php';
