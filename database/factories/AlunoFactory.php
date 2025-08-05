@@ -23,7 +23,7 @@ class AlunoFactory extends Factory
             'data_nascimento' => $this->faker->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
             'telefone' => $this->faker->numerify('(##) #####-####'),
             'endereco' => $this->faker->address(),
-            'foto_perfil' => $this->faker->optional(0.3)->imageUrl(200, 200, 'people'),
+            'foto_perfil' => null,
             'ativo' => $this->faker->boolean(85), // 85% chance de estar ativo
         ];
     }
