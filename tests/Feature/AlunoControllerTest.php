@@ -108,7 +108,7 @@ class AlunoControllerTest extends TestCase
             'email' => $aluno->email,
             'cpf' => $aluno->cpf,
             'data_nascimento' => $aluno->data_nascimento->format('Y-m-d'),
-            'ativo' => false,
+            // Não incluir 'ativo' para simular checkbox desmarcado
         ];
 
         $response = $this->actingAs($this->user)
@@ -120,7 +120,7 @@ class AlunoControllerTest extends TestCase
         $this->assertDatabaseHas('alunos', [
             'id' => $aluno->id,
             'nome' => 'Nome Atualizado',
-            'ativo' => false,
+            'ativo' => 0,
         ]);
     }
 

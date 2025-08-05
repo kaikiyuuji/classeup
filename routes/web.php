@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\DisciplinaController;
+use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::resource('alunos', AlunoController::class);
+    Route::resource('professores', ProfessorController::class);
+    Route::resource('disciplinas', DisciplinaController::class);
 });
 
 require __DIR__.'/auth.php';
