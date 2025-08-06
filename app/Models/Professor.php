@@ -48,9 +48,18 @@ class Professor extends Model
     ];
 
     /**
-     * Relacionamento many-to-many com Disciplina através da tabela pivot
+     * Relacionamento many-to-many com Disciplina através da tabela pivot direta
      */
     public function disciplinas(): BelongsToMany
+    {
+        return $this->belongsToMany(Disciplina::class, 'professor_disciplina')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Relacionamento many-to-many com Disciplina através da tabela pivot com turma
+     */
+    public function disciplinasComTurma(): BelongsToMany
     {
         return $this->belongsToMany(Disciplina::class, 'professor_disciplina_turma')
                     ->withPivot('turma_id')

@@ -26,7 +26,15 @@ class RelacionamentosTest extends TestCase
         $disciplina = Disciplina::factory()->create();
         $turma = Turma::factory()->create();
 
-        // Criar associação na tabela pivot
+        // Criar associação na tabela pivot direta professor-disciplina
+        DB::table('professor_disciplina')->insert([
+            'professor_id' => $professor->id,
+            'disciplina_id' => $disciplina->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Criar associação na tabela pivot tripla professor-disciplina-turma
         DB::table('professor_disciplina_turma')->insert([
             'professor_id' => $professor->id,
             'disciplina_id' => $disciplina->id,
@@ -35,10 +43,12 @@ class RelacionamentosTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        // Testar relacionamentos
+        // Testar relacionamentos diretos (professor_disciplina)
         $this->assertTrue($professor->disciplinas->contains($disciplina));
-        $this->assertTrue($professor->turmas->contains($turma));
         $this->assertTrue($disciplina->professores->contains($professor));
+        
+        // Testar relacionamentos através da tabela tripla (professor_disciplina_turma)
+        $this->assertTrue($professor->turmas->contains($turma));
         $this->assertTrue($disciplina->turmas->contains($turma));
         $this->assertTrue($turma->professores->contains($professor));
         $this->assertTrue($turma->disciplinas->contains($disciplina));

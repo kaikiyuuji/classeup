@@ -26,10 +26,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('professores', ProfessorController::class)->parameters([
         'professores' => 'professor'
     ]);
+    Route::post('professores/{professor}/vincular-disciplina', [ProfessorController::class, 'vincularDisciplina'])->name('professores.vincular-disciplina');
+    Route::delete('professores/{professor}/desvincular-disciplina', [ProfessorController::class, 'desvincularDisciplina'])->name('professores.desvincular-disciplina');
     Route::resource('disciplinas', DisciplinaController::class);
     Route::resource('turmas', TurmaController::class);
     Route::post('turmas/{turma}/vincular-alunos', [TurmaController::class, 'vincularAlunos'])->name('turmas.vincular-alunos');
     Route::delete('turmas/{turma}/alunos/{aluno}', [TurmaController::class, 'desvincularAluno'])->name('turmas.desvincular-aluno');
+    Route::post('turmas/{turma}/vincular-professor', [TurmaController::class, 'vincularProfessor'])->name('turmas.vincular-professor');
+    Route::delete('turmas/{turma}/desvincular-professor', [TurmaController::class, 'desvincularProfessor'])->name('turmas.desvincular-professor');
     
 
 });

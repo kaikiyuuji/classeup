@@ -7,9 +7,15 @@ use App\Http\Requests\TurmaStoreRequest;
 use App\Http\Requests\TurmaUpdateRequest;
 use App\Models\Turma;
 use App\Models\Aluno;
+use App\Models\Professor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\VincularAlunosRequest;
+use App\Http\Requests\DesvincularAlunoRequest;
+use App\Http\Requests\VincularProfessorRequest;
+use App\Http\Requests\DesvincularProfessorRequest;
+
 
 class TurmaController extends Controller
 {
@@ -51,14 +57,23 @@ class TurmaController extends Controller
      */
     public function show(Turma $turma): View
     {
-        $turma->load('alunos');
+        $turma->load(['alunos', 'professores', 'disciplinas']);
         
         // Buscar alunos disponíveis (sem turma)
         $alunosDisponiveis = Aluno::whereNull('turma_id')
             ->orderBy('nome')
             ->get();
+            
+        // Buscar professores ativos com suas disciplinas que não estão vinculados à turma
+        $professoresJaVinculados = $turma->professores()->pluck('professor_id')->toArray();
+        $professoresDisponiveis = Professor::with('disciplinas')
+            ->where('ativo', true)
+            ->whereNotIn('id', $professoresJaVinculados)
+            ->whereHas('disciplinas') // Apenas professores que têm disciplinas vinculadas
+            ->orderBy('nome')
+            ->get();
         
-        return view('admin.turmas.show', compact('turma', 'alunosDisponiveis'));
+        return view('admin.turmas.show', compact('turma', 'alunosDisponiveis', 'professoresDisponiveis'));
     }
 
     /**
@@ -101,71 +116,70 @@ class TurmaController extends Controller
     /**
      * Vincular múltiplos alunos à turma.
      */
-    public function vincularAlunos(Request $request, Turma $turma): RedirectResponse
+    public function vincularAlunos(VincularAlunosRequest $request, Turma $turma): RedirectResponse
     {
-        $request->validate([
-            'alunos' => 'required|array|min:1',
-            'alunos.*' => 'exists:alunos,id'
-        ], [
-            'alunos.required' => 'Selecione pelo menos um aluno.',
-            'alunos.min' => 'Selecione pelo menos um aluno.',
-            'alunos.*.exists' => 'Um ou mais alunos selecionados não existem.'
-        ]);
+        // Vincula apenas alunos que ainda não estão na turma
+        $alunosJaVinculados = $turma->alunos()->pluck('aluno_id')->toArray();
+        $alunosParaVincular = array_diff($request->validated()['alunos'], $alunosJaVinculados);
 
-        $alunosIds = $request->input('alunos');
-        
-        // Verificar se a turma tem capacidade suficiente
-        $alunosAtualmenteMatriculados = $turma->alunos()->count();
-        $novosAlunos = count($alunosIds);
-        
-        if (($alunosAtualmenteMatriculados + $novosAlunos) > $turma->capacidade_maxima) {
-            return redirect()
-                ->back()
-                ->withErrors(['capacidade' => 'A turma não possui capacidade suficiente para matricular todos os alunos selecionados.']);
+        if (!empty($alunosParaVincular)) {
+            $turma->alunos()->attach($alunosParaVincular);
+            $quantidadeVinculada = count($alunosParaVincular);
+            return redirect()->route('turmas.show', $turma)
+                ->with('success', "{$quantidadeVinculada} aluno(s) vinculado(s) com sucesso!");
         }
-        
-        // Verificar se os alunos estão disponíveis (sem turma)
-        $alunosIndisponiveis = Aluno::whereIn('id', $alunosIds)
-            ->whereNotNull('turma_id')
-            ->pluck('nome')
-            ->toArray();
-            
-        if (!empty($alunosIndisponiveis)) {
-            return redirect()
-                ->back()
-                ->withErrors(['alunos_indisponiveis' => 'Os seguintes alunos já estão matriculados em outras turmas: ' . implode(', ', $alunosIndisponiveis)]);
-        }
-        
-        // Vincular os alunos à turma
-        Aluno::whereIn('id', $alunosIds)->update(['turma_id' => $turma->id]);
-        
-        $quantidadeAlunos = count($alunosIds);
-        $mensagem = $quantidadeAlunos === 1 
-            ? '1 aluno foi matriculado com sucesso na turma!' 
-            : "{$quantidadeAlunos} alunos foram matriculados com sucesso na turma!";
 
-        return redirect()
-            ->route('turmas.show', $turma)
-            ->with('success', $mensagem);
+        return redirect()->route('turmas.show', $turma)
+            ->with('info', 'Todos os alunos selecionados já estão vinculados à turma.');
     }
 
     /**
      * Desvincular aluno da turma.
      */
-    public function desvincularAluno(Request $request, Turma $turma, Aluno $aluno): RedirectResponse
+    public function desvincularAluno(DesvincularAlunoRequest $request, Turma $turma): RedirectResponse
     {
-        // Verificar se o aluno está realmente vinculado a esta turma
-        if ($aluno->turma_id !== $turma->id) {
-            return redirect()
-                ->back()
-                ->withErrors(['erro' => 'Este aluno não está matriculado nesta turma.']);
-        }
+        $aluno = Aluno::findOrFail($request->validated()['aluno_id']);
         
-        // Desvincular o aluno
-        $aluno->update(['turma_id' => null]);
+        $turma->alunos()->detach($aluno->id);
         
         return redirect()
             ->route('turmas.show', $turma)
-            ->with('success', "Aluno {$aluno->nome} foi desvinculado da turma com sucesso!");
+            ->with('success', "Aluno {$aluno->nome} desvinculado com sucesso!");
+    }
+
+    /**
+     * Vincular professor e disciplina à turma.
+     */
+    public function vincularProfessor(VincularProfessorRequest $request, Turma $turma): RedirectResponse
+    {
+        $professorId = $request->validated()['professor_id'];
+        $disciplinaId = $request->validated()['disciplina_id'];
+        
+        // Criar o vínculo usando Eloquent
+        $turma->professores()->attach($professorId, [
+            'disciplina_id' => $disciplinaId
+        ]);
+        
+        return redirect()
+            ->route('turmas.show', $turma)
+            ->with('success', 'Professor vinculado com sucesso!');
+    }
+
+    /**
+     * Desvincular professor e disciplina da turma.
+     */
+    public function desvincularProfessor(DesvincularProfessorRequest $request, Turma $turma): RedirectResponse
+    {
+        $professorId = $request->validated()['professor_id'];
+        $disciplinaId = $request->validated()['disciplina_id'];
+        
+        // Remover o vínculo usando Eloquent
+        $turma->professores()
+            ->wherePivot('disciplina_id', $disciplinaId)
+            ->detach($professorId);
+        
+        return redirect()
+            ->route('turmas.show', $turma)
+            ->with('success', 'Professor desvinculado com sucesso!');
     }
 }

@@ -329,6 +329,209 @@
                         </div>
                     @endif
 
+                    <!-- Seção de Professores Vinculados -->
+                    @if($turma->professores->count() > 0)
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                </svg>
+                                Professores Vinculados ({{ $turma->professores->count() }})
+                            </h3>
+                            
+                            <div class="space-y-3">
+                                @foreach($turma->professores as $professor)
+                                    <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow duration-200">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-4">
+                                                <div class="flex-shrink-0">
+                                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-medium text-gray-900 truncate">{{ $professor->nome }}</p>
+                                                    <p class="text-xs text-gray-500">{{ $professor->email }}</p>
+                                                    @if($professor->pivot->disciplina_id)
+                                                        @php
+                                                            $disciplina = $turma->disciplinas->where('id', $professor->pivot->disciplina_id)->first();
+                                                        @endphp
+                                                        @if($disciplina)
+                                                            <p class="text-xs text-blue-600 font-medium mt-1">Disciplina: {{ $disciplina->nome }}</p>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <a href="{{ route('professores.show', $professor) }}" 
+                                                   class="text-indigo-600 hover:text-indigo-900 text-xs font-medium px-2 py-1 rounded">
+                                                    Ver
+                                                </a>
+                                                @if($professor->pivot->disciplina_id)
+                                                    <form action="{{ route('turmas.desvincular-professor', $turma) }}" method="POST" class="inline" 
+                                                          onsubmit="return confirm('Tem certeza que deseja desvincular {{ $professor->nome }} desta turma?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="hidden" name="professor_id" value="{{ $professor->id }}">
+                                                        <input type="hidden" name="disciplina_id" value="{{ $professor->pivot->disciplina_id }}">
+                                                        <button type="submit" 
+                                                                class="text-red-600 hover:text-red-900 text-xs font-medium px-2 py-1 rounded hover:bg-red-50">
+                                                            Desvincular
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <div class="text-center py-8">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                </svg>
+                                <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor vinculado</h3>
+                                <p class="mt-1 text-sm text-gray-500">Esta turma ainda não possui professores vinculados.</p>
+                                <div class="mt-6">
+                                    <a href="{{ route('professores.create') }}" 
+                                       class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        Cadastrar Primeiro Professor
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Seção de Vinculação de Professores -->
+                    @if($professoresDisponiveis->count() > 0)
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Vincular Professor à Turma</h3>
+                                <span class="text-sm text-gray-500">{{ $professoresDisponiveis->count() }} professor(es) disponível(is)</span>
+                            </div>
+                            
+                            @if($errors->has('professor_id'))
+                                <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ $errors->first('professor_id') }}
+                                </div>
+                            @endif
+                            
+                            @if($errors->has('disciplina_id'))
+                                <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ $errors->first('disciplina_id') }}
+                                </div>
+                            @endif
+                            
+                            <form action="{{ route('turmas.vincular-professor', $turma) }}" method="POST" id="vincularProfessorForm">
+                                @csrf
+                                
+                                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Seleção de Professor -->
+                                        <div>
+                                            <label for="professor_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                                Selecione o Professor:
+                                            </label>
+                                            <select name="professor_id" id="professor_id" 
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                    onchange="atualizarDisciplinas()" required>
+                                                <option value="">Escolha um professor...</option>
+                                                @foreach($professoresDisponiveis as $professor)
+                                                    <option value="{{ $professor->id }}" 
+                                                            data-disciplinas="{{ $professor->disciplinas->pluck('id')->toJson() }}"
+                                                            {{ old('professor_id') == $professor->id ? 'selected' : '' }}>
+                                                        {{ $professor->nome }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Seleção de Disciplina -->
+                                        <div>
+                                            <label for="disciplina_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                                Selecione a Disciplina:
+                                            </label>
+                                            <select name="disciplina_id" id="disciplina_id" 
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                    required disabled>
+                                                <option value="">Primeiro selecione um professor...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Lista de disciplinas para JavaScript -->
+                                    <script type="application/json" id="disciplinasData">
+                                        {
+                                            @foreach($professoresDisponiveis as $professor)
+                                                "{{ $professor->id }}": [
+                                                    @foreach($professor->disciplinas as $disciplina)
+                                                        {
+                                                            "id": {{ $disciplina->id }},
+                                                            "nome": "{{ $disciplina->nome }}"
+                                                        }@if(!$loop->last),@endif
+                                                    @endforeach
+                                                ]@if(!$loop->last),@endif
+                                            @endforeach
+                                        }
+                                    </script>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-600">
+                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Apenas disciplinas que o professor leciona serão exibidas
+                                    </div>
+                                    
+                                    <button type="submit" 
+                                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                                            id="btnVincularProfessor" disabled>
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        Vincular Professor
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <div class="text-center py-6">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor disponível</h3>
+                                <p class="mt-1 text-sm text-gray-500">Todos os professores já estão vinculados ou não há professores cadastrados.</p>
+                                <div class="mt-4">
+                                    <a href="{{ route('professores.create') }}" 
+                                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        Cadastrar Novo Professor
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Seção de Ações Rápidas -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
@@ -429,6 +632,37 @@
             atualizarContador();
         }
         
+        // Função para atualizar disciplinas baseado no professor selecionado
+        function atualizarDisciplinas() {
+            const professorSelect = document.getElementById('professor_id');
+            const disciplinaSelect = document.getElementById('disciplina_id');
+            const btnVincular = document.getElementById('btnVincularProfessor');
+            
+            // Limpar disciplinas
+            disciplinaSelect.innerHTML = '<option value="">Selecione uma disciplina...</option>';
+            disciplinaSelect.disabled = true;
+            btnVincular.disabled = true;
+            
+            if (professorSelect.value) {
+                // Obter dados das disciplinas do JSON
+                const disciplinasData = JSON.parse(document.getElementById('disciplinasData').textContent);
+                const disciplinasProfessor = disciplinasData[professorSelect.value] || [];
+                
+                if (disciplinasProfessor.length > 0) {
+                    disciplinaSelect.disabled = false;
+                    
+                    disciplinasProfessor.forEach(disciplina => {
+                        const option = document.createElement('option');
+                        option.value = disciplina.id;
+                        option.textContent = disciplina.nome;
+                        disciplinaSelect.appendChild(option);
+                    });
+                } else {
+                    disciplinaSelect.innerHTML = '<option value="">Este professor não possui disciplinas cadastradas</option>';
+                }
+            }
+        }
+        
         // Adicionar event listeners aos checkboxes
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('input[name="alunos[]"]');
@@ -440,6 +674,16 @@
             const buscaInput = document.getElementById('buscaAluno');
             if (buscaInput) {
                 buscaInput.addEventListener('input', filtrarAlunos);
+            }
+            
+            // Event listener para disciplina select
+            const disciplinaSelect = document.getElementById('disciplina_id');
+            const btnVincular = document.getElementById('btnVincularProfessor');
+            
+            if (disciplinaSelect && btnVincular) {
+                disciplinaSelect.addEventListener('change', function() {
+                    btnVincular.disabled = !this.value;
+                });
             }
             
             // Inicializar contador

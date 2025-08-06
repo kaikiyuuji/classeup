@@ -30,13 +30,22 @@
 
     <div class="py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Mensagem de Sucesso -->
+            <!-- Mensagens -->
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                     </svg>
                     {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ session('error') }}
                 </div>
             @endif
 
@@ -222,6 +231,88 @@
                                     </div>
                                 @endif
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Disciplinas -->
+                    <div class="mt-8">
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                                Disciplinas Vinculadas
+                            </h3>
+                            
+                            <!-- Disciplinas Vinculadas -->
+                            @if($disciplinasVinculadas->count() > 0)
+                                <div class="mb-6">
+                                    <h4 class="text-sm font-medium text-gray-700 mb-3">Disciplinas que o professor leciona:</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                        @foreach($disciplinasVinculadas as $disciplina)
+                                            <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                                                <div class="flex items-center">
+                                                    <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                                                    <div>
+                                                        <p class="text-sm font-medium text-gray-900">{{ $disciplina->nome }}</p>
+                                                        <p class="text-xs text-gray-500">{{ $disciplina->codigo }}</p>
+                                                    </div>
+                                                </div>
+                                                <form action="{{ route('professores.desvincular-disciplina', $professor) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="disciplina_id" value="{{ $disciplina->id }}">
+                                                    <button type="submit" 
+                                                            onclick="return confirm('Tem certeza que deseja desvincular esta disciplina?')"
+                                                            class="text-red-600 hover:text-red-800 transition-colors">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <div class="mb-6 text-center py-8">
+                                    <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                    <p class="text-gray-500 text-sm">Nenhuma disciplina vinculada</p>
+                                </div>
+                            @endif
+
+                            <!-- Formulário para Vincular Nova Disciplina -->
+                            @if($disciplinasDisponiveis->count() > 0)
+                                <div class="border-t border-gray-200 pt-6">
+                                    <h4 class="text-sm font-medium text-gray-700 mb-4">Vincular Nova Disciplina:</h4>
+                                    <form action="{{ route('professores.vincular-disciplina', $professor) }}" method="POST" class="flex flex-col sm:flex-row gap-3">
+                                        @csrf
+                                        <div class="flex-1">
+                                            <select name="disciplina_id" 
+                                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" 
+                                                    required>
+                                                <option value="">Selecione uma disciplina...</option>
+                                                @foreach($disciplinasDisponiveis as $disciplina)
+                                                    <option value="{{ $disciplina->id }}">{{ $disciplina->nome }} ({{ $disciplina->codigo }})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" 
+                                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
+                                            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                            </svg>
+                                            Vincular
+                                        </button>
+                                    </form>
+                                </div>
+                            @else
+                                <div class="border-t border-gray-200 pt-6">
+                                    <p class="text-sm text-gray-500 text-center">Todas as disciplinas disponíveis já estão vinculadas a este professor.</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

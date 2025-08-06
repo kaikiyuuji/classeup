@@ -17,12 +17,18 @@ class TurmaFactory extends Factory
      */
     public function definition(): array
     {
-        $niveisEducacionais = array_keys(Turma::getNiveisEducacionais());
+        $niveisEducacionais = ['pré-escola', 'fundamental', 'médio'];
         $turnos = ['matutino', 'vespertino', 'noturno'];
         $nivel = $this->faker->randomElement($niveisEducacionais);
         $turno = $this->faker->randomElement($turnos);
         
-        $nomeNivel = Turma::getNiveisEducacionais()[$nivel];
+        // Mapear nomes para exibição
+        $nomesNiveis = [
+            'pré-escola' => 'Pré-Escola',
+            'fundamental' => 'Fundamental',
+            'médio' => 'Médio'
+        ];
+        $nomeNivel = $nomesNiveis[$nivel];
         
         return [
             'nome' => $nomeNivel . ' ' . ucfirst($turno) . ' - ' . $this->faker->randomLetter() . $this->faker->numberBetween(1, 3),

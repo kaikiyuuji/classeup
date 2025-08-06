@@ -13,19 +13,23 @@ class TurmaSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criar turmas específicas para cada série e turno
-        $series = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        // Criar turmas específicas para cada nível educacional e turno
+        $niveisEducacionais = [
+            'pré-escola' => 'Pré-Escola',
+            'fundamental' => 'Fundamental', 
+            'médio' => 'Médio'
+        ];
         $turnos = ['matutino', 'vespertino', 'noturno'];
         $anoAtual = date('Y');
         
-        foreach ($series as $serie) {
+        foreach ($niveisEducacionais as $nivel => $nomeNivel) {
             foreach ($turnos as $turno) {
-                // Criar 2 turmas por série/turno
-                for ($i = 1; $i <= 2; $i++) {
+                // Criar 3 turmas por nível/turno
+                for ($i = 1; $i <= 3; $i++) {
                     Turma::create([
-                        'nome' => $serie . 'ª ' . ucfirst($turno) . ' - ' . chr(64 + $i), // A, B, C...
+                        'nome' => $nomeNivel . ' ' . ucfirst($turno) . ' - ' . chr(64 + $i), // A, B, C...
                         'ano_letivo' => $anoAtual,
-                        'serie' => $serie,
+                        'serie' => $nivel,
                         'turno' => $turno,
                         'capacidade_maxima' => rand(25, 35),
                         'ativo' => true,

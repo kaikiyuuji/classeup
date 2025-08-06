@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfessorStoreRequest;
 use App\Http\Requests\ProfessorUpdateRequest;
+use App\Models\Disciplina;
 use App\Models\Professor;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProfessorController extends Controller
@@ -54,7 +56,12 @@ class ProfessorController extends Controller
      */
     public function show(Professor $professor): View
     {
-        return view('admin.professores.show', compact('professor'));
+        $disciplinasVinculadas = $professor->disciplinas;
+        $disciplinasDisponiveis = Disciplina::whereNotIn('id', $disciplinasVinculadas->pluck('id'))
+                                          ->orderBy('nome')
+                                          ->get();
+        
+        return view('admin.professores.show', compact('professor', 'disciplinasVinculadas', 'disciplinasDisponiveis'));
     }
 
     /**
@@ -101,6 +108,60 @@ class ProfessorController extends Controller
     }
 
 
+
+    /**
+     * Vincular professor a uma disciplina
+     */
+    public function vincularDisciplina(Request $request, Professor $professor): RedirectResponse
+    {
+        $request->validate([
+            'disciplina_id' => 'required|exists:disciplinas,id'
+        ]);
+        
+        $disciplinaId = $request->disciplina_id;
+        
+        // Verificar se já está vinculado
+        if ($professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
+            return redirect()
+                ->route('professores.show', $professor)
+                ->with('error', 'Professor já está vinculado a esta disciplina!');
+        }
+        
+        $professor->disciplinas()->attach($disciplinaId);
+        
+        $disciplina = Disciplina::find($disciplinaId);
+        
+        return redirect()
+            ->route('professores.show', $professor)
+            ->with('success', "Professor vinculado à disciplina {$disciplina->nome} com sucesso!");
+    }
+    
+    /**
+     * Desvincular professor de uma disciplina
+     */
+    public function desvincularDisciplina(Request $request, Professor $professor): RedirectResponse
+    {
+        $request->validate([
+            'disciplina_id' => 'required|exists:disciplinas,id'
+        ]);
+        
+        $disciplinaId = $request->disciplina_id;
+        
+        // Verificar se está vinculado
+        if (!$professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
+            return redirect()
+                ->route('professores.show', $professor)
+                ->with('error', 'Professor não está vinculado a esta disciplina!');
+        }
+        
+        $professor->disciplinas()->detach($disciplinaId);
+        
+        $disciplina = Disciplina::find($disciplinaId);
+        
+        return redirect()
+            ->route('professores.show', $professor)
+            ->with('success', "Professor desvinculado da disciplina {$disciplina->nome} com sucesso!");
+    }
 
     /**
      * Handle photo upload and return the stored path.
