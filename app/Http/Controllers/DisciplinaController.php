@@ -64,6 +64,10 @@ class DisciplinaController extends Controller
     public function update(DisciplinaUpdateRequest $request, Disciplina $disciplina): RedirectResponse
     {
         $validatedData = $request->validated();
+        
+        // Processar o campo 'ativo' corretamente para radio buttons
+        // Radio buttons sempre enviam um valor quando selecionados
+        $validatedData['ativo'] = $request->input('ativo') === '1';
 
         $disciplina->update($validatedData);
 

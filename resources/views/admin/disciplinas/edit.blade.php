@@ -132,7 +132,7 @@
                                     <input type="radio" 
                                            name="ativo" 
                                            value="1" 
-                                           {{ old('ativo', $disciplina->ativo) == '1' ? 'checked' : '' }}
+                                           {{ old('ativo', $disciplina->ativo ? '1' : '0') == '1' ? 'checked' : '' }}
                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
                                     <span class="ml-2 text-sm text-gray-700 flex items-center">
                                         <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
@@ -143,7 +143,7 @@
                                     <input type="radio" 
                                            name="ativo" 
                                            value="0" 
-                                           {{ old('ativo', $disciplina->ativo) == '0' ? 'checked' : '' }}
+                                           {{ old('ativo', $disciplina->ativo ? '1' : '0') == '0' ? 'checked' : '' }}
                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
                                     <span class="ml-2 text-sm text-gray-700 flex items-center">
                                         <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>

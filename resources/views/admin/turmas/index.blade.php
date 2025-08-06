@@ -50,7 +50,7 @@
                                             Turno
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Capacidade
+                                            Ocupação
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Status
@@ -86,15 +86,45 @@
                                                 {{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                    @if($turma->turno === 'matutino') bg-yellow-100 text-yellow-800
-                                                    @elseif($turma->turno === 'vespertino') bg-orange-100 text-orange-800
-                                                    @else bg-purple-100 text-purple-800 @endif">
-                                                    {{ ucfirst($turma->turno) }}
+                                            @if($turma->turno === 'matutino')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                    Matutino
                                                 </span>
-                                            </td>
+                                            @elseif($turma->turno === 'vespertino')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                                    Vespertino
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                                    Noturno
+                                                </span>
+                                            @endif
+                                        </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $turma->capacidade_maxima }} alunos
+                                                @php
+                                                    $alunosMatriculados = $turma->alunos->count();
+                                                    $capacidade = $turma->capacidade_maxima;
+                                                    $porcentagem = $capacidade > 0 ? round(($alunosMatriculados / $capacidade) * 100, 1) : 0;
+                                                @endphp
+                                                <div class="flex items-center">
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center justify-between text-xs mb-1">
+                                                            <span class="text-gray-600">{{ $alunosMatriculados }}/{{ $capacidade }}</span>
+                                                            <span class="font-medium
+                                                                @if($porcentagem >= 90) text-red-600
+                                                                @elseif($porcentagem >= 75) text-yellow-600
+                                                                @else text-green-600
+                                                                @endif">{{ $porcentagem }}%</span>
+                                                        </div>
+                                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                                            <div class="h-2 rounded-full
+                                                                @if($porcentagem >= 90) bg-red-500
+                                                                @elseif($porcentagem >= 75) bg-yellow-500
+                                                                @else bg-green-500
+                                                                @endif" style="width: {{ min($porcentagem, 100) }}%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @if($turma->ativo)
@@ -114,32 +144,34 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <div class="flex items-center justify-end space-x-2">
+                                                <div class="flex justify-end space-x-2">
                                                     <a href="{{ route('turmas.show', $turma) }}" 
-                                                       class="text-blue-600 hover:text-blue-900 transition-colors duration-200"
-                                                       title="Visualizar">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                       class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                                         </svg>
+                                                        Ver
                                                     </a>
                                                     <a href="{{ route('turmas.edit', $turma) }}" 
-                                                       class="text-indigo-600 hover:text-indigo-900 transition-colors duration-200"
-                                                       title="Editar">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                       class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                         </svg>
+                                                        Editar
                                                     </a>
-                                                    <form action="{{ route('turmas.destroy', $turma) }}" method="POST" class="inline-block"
+                                                    <form action="{{ route('turmas.destroy', $turma) }}" 
+                                                          method="POST" 
+                                                          class="inline"
                                                           onsubmit="return confirm('Tem certeza que deseja excluir esta turma?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" 
-                                                                class="text-red-600 hover:text-red-900 transition-colors duration-200"
-                                                                title="Excluir">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200">
+                                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
+                                                            Excluir
                                                         </button>
                                                     </form>
                                                 </div>
@@ -183,31 +215,84 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
-                                        <div>
-                                            <span class="text-gray-500">Turno:</span>
-                                            <span class="ml-1 font-medium">{{ ucfirst($turma->turno) }}</span>
+                                    <div class="mt-3 space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-500 text-sm">Turno:</span>
+                                            @if($turma->turno === 'matutino')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    Matutino
+                                                </span>
+                                            @elseif($turma->turno === 'vespertino')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M17.293 13.293A8 8 0 716.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                                    </svg>
+                                                    Vespertino
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M17.293 13.293A8 8 0 716.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                                    </svg>
+                                                    Noturno
+                                                </span>
+                                            @endif
                                         </div>
+                                        
                                         <div>
-                                            <span class="text-gray-500">Capacidade:</span>
-                                            <span class="ml-1 font-medium">{{ $turma->capacidade_maxima }}</span>
+                                            <div class="flex items-center justify-between text-sm mb-2">
+                                                <span class="text-gray-500">Ocupação:</span>
+                                                @php
+                                                    $alunosMatriculados = $turma->alunos->count();
+                                                    $capacidade = $turma->capacidade_maxima;
+                                                    $porcentagem = $capacidade > 0 ? round(($alunosMatriculados / $capacidade) * 100, 1) : 0;
+                                                @endphp
+                                                <span class="font-medium
+                                                    @if($porcentagem >= 90) text-red-600
+                                                    @elseif($porcentagem >= 75) text-yellow-600
+                                                    @else text-green-600
+                                                    @endif">{{ $alunosMatriculados }}/{{ $capacidade }} ({{ $porcentagem }}%)</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                                <div class="h-2 rounded-full
+                                                    @if($porcentagem >= 90) bg-red-500
+                                                    @elseif($porcentagem >= 75) bg-yellow-500
+                                                    @else bg-green-500
+                                                    @endif" style="width: {{ min($porcentagem, 100) }}%"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     
                                     <div class="mt-4 flex justify-end space-x-2">
                                         <a href="{{ route('turmas.show', $turma) }}" 
-                                           class="text-blue-600 hover:text-blue-900 text-sm font-medium">
-                                            Visualizar
+                                           class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            Ver
                                         </a>
                                         <a href="{{ route('turmas.edit', $turma) }}" 
-                                           class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                           class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
                                             Editar
                                         </a>
-                                        <form action="{{ route('turmas.destroy', $turma) }}" method="POST" class="inline-block"
+                                        <form action="{{ route('turmas.destroy', $turma) }}" 
+                                              method="POST" 
+                                              class="inline"
                                               onsubmit="return confirm('Tem certeza que deseja excluir esta turma?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium">
+                                            <button type="submit" 
+                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
                                                 Excluir
                                             </button>
                                         </form>

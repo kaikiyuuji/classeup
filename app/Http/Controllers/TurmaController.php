@@ -24,7 +24,8 @@ class TurmaController extends Controller
      */
     public function index(): View
     {
-        $turmas = Turma::orderBy('nome')
+        $turmas = Turma::with('alunos')
+            ->orderBy('nome')
             ->paginate(15);
 
         return view('admin.turmas.index', compact('turmas'));
@@ -119,11 +120,12 @@ class TurmaController extends Controller
     public function vincularAlunos(VincularAlunosRequest $request, Turma $turma): RedirectResponse
     {
         // Vincula apenas alunos que ainda não estão na turma
-        $alunosJaVinculados = $turma->alunos()->pluck('aluno_id')->toArray();
+        $alunosJaVinculados = $turma->alunos()->pluck('id')->toArray();
         $alunosParaVincular = array_diff($request->validated()['alunos'], $alunosJaVinculados);
 
         if (!empty($alunosParaVincular)) {
-            $turma->alunos()->attach($alunosParaVincular);
+            // Atualiza o turma_id dos alunos selecionados
+            Aluno::whereIn('id', $alunosParaVincular)->update(['turma_id' => $turma->id]);
             $quantidadeVinculada = count($alunosParaVincular);
             return redirect()->route('turmas.show', $turma)
                 ->with('success', "{$quantidadeVinculada} aluno(s) vinculado(s) com sucesso!");
@@ -136,11 +138,10 @@ class TurmaController extends Controller
     /**
      * Desvincular aluno da turma.
      */
-    public function desvincularAluno(DesvincularAlunoRequest $request, Turma $turma): RedirectResponse
+    public function desvincularAluno(DesvincularAlunoRequest $request, Turma $turma, Aluno $aluno): RedirectResponse
     {
-        $aluno = Aluno::findOrFail($request->validated()['aluno_id']);
-        
-        $turma->alunos()->detach($aluno->id);
+        // Remove a vinculação definindo turma_id como null
+        $aluno->update(['turma_id' => null]);
         
         return redirect()
             ->route('turmas.show', $turma)

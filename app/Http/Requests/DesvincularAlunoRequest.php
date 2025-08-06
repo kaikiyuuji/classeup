@@ -22,7 +22,7 @@ class DesvincularAlunoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'aluno_id' => 'required|exists:alunos,id'
+            // Não há campos no request, validação é feita via route model binding
         ];
     }
 
@@ -34,8 +34,7 @@ class DesvincularAlunoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'aluno_id.required' => 'Aluno é obrigatório.',
-            'aluno_id.exists' => 'Aluno selecionado não existe.'
+            // Mensagens customizadas para validação via route model binding
         ];
     }
 
@@ -57,15 +56,16 @@ class DesvincularAlunoRequest extends FormRequest
      */
     private function validateAlunoVinculado($validator): void
     {
-        if (!$this->aluno_id) {
+        $turma = $this->route('turma');
+        $aluno = $this->route('aluno');
+        
+        if (!$aluno || !$turma) {
             return;
         }
-
-        $turma = $this->route('turma');
         
-        if (!$turma->alunos()->where('aluno_id', $this->aluno_id)->exists()) {
+        if ($aluno->turma_id !== $turma->id) {
             $validator->errors()->add(
-                'aluno_id', 
+                'aluno', 
                 'Este aluno não está vinculado a esta turma.'
             );
         }

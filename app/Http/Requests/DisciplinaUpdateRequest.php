@@ -64,8 +64,7 @@ class DisciplinaUpdateRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'ativo' => $this->has('ativo'),
-        ]);
+        // Para radio buttons, o valor já vem correto ('0' ou '1')
+        // Não precisamos modificar o campo 'ativo'
     }
 }

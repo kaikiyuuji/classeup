@@ -70,8 +70,8 @@ class VincularAlunosRequest extends FormRequest
         $novosAlunos = count($this->alunos);
         $totalAposVinculacao = $alunosAtivos + $novosAlunos;
         
-        if ($totalAposVinculacao > $turma->capacidade) {
-            $vagasDisponiveis = $turma->capacidade - $alunosAtivos;
+        if ($totalAposVinculacao > $turma->capacidade_maxima) {
+            $vagasDisponiveis = $turma->capacidade_maxima - $alunosAtivos;
             $validator->errors()->add(
                 'capacidade', 
                 "A turma não tem capacidade suficiente. Vagas disponíveis: {$vagasDisponiveis}. Alunos selecionados: {$novosAlunos}."
