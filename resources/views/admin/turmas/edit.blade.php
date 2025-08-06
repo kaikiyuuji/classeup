@@ -80,18 +80,18 @@
                                     @enderror
                                 </div>
 
-                                <!-- Série -->
+                                <!-- Nível Educacional -->
                                 <div>
-                                    <label for="serie" class="block text-sm font-semibold text-gray-700 mb-2">Série *</label>
+                                    <label for="serie" class="block text-sm font-semibold text-gray-700 mb-2">Nível Educacional *</label>
                                     <select name="serie" id="serie" 
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
                                             required>
-                                        <option value="">Selecione a série</option>
-                                        @for($i = 1; $i <= 9; $i++)
-                                            <option value="{{ $i }}" {{ old('serie', $turma->serie) == $i ? 'selected' : '' }}>
-                                                {{ $i }}ª Série
+                                        <option value="">Selecione o nível educacional</option>
+                                        @foreach(App\Models\Turma::getNiveisEducacionais() as $valor => $label)
+                                            <option value="{{ $valor }}" {{ old('serie', $turma->serie) == $valor ? 'selected' : '' }}>
+                                                {{ $label }}
                                             </option>
-                                        @endfor
+                                        @endforeach
                                     </select>
                                     @error('serie')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">

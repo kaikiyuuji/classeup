@@ -74,13 +74,19 @@
                                     @enderror
                                 </div>
 
-                                <!-- Série -->
+                                <!-- Nível Educacional -->
                                 <div>
-                                    <label for="serie" class="block text-sm font-semibold text-gray-700 mb-2">Série *</label>
-                                    <input type="text" name="serie" id="serie" value="{{ old('serie') }}" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                           placeholder="Digite a série (ex: 1º Ano, 2º Ano)"
-                                           required>
+                                    <label for="serie" class="block text-sm font-semibold text-gray-700 mb-2">Nível Educacional *</label>
+                                    <select name="serie" id="serie" 
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                            required>
+                                        <option value="">Selecione o nível educacional</option>
+                                        @foreach(App\Models\Turma::getNiveisEducacionais() as $valor => $label)
+                                            <option value="{{ $valor }}" {{ old('serie') == $valor ? 'selected' : '' }}>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     @error('serie')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

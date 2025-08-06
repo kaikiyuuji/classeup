@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Turma;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TurmaUpdateRequest extends FormRequest
@@ -24,7 +25,7 @@ class TurmaUpdateRequest extends FormRequest
         return [
             'nome' => 'required|string|max:255',
             'ano_letivo' => 'required|integer|min:2020|max:2030',
-            'serie' => 'required|string|max:255',
+            'serie' => 'required|in:' . implode(',', array_keys(Turma::getNiveisEducacionais())),
             'turno' => 'required|in:matutino,vespertino,noturno',
             'capacidade_maxima' => 'required|integer|min:1|max:50',
             'ativo' => 'boolean',
@@ -45,8 +46,8 @@ class TurmaUpdateRequest extends FormRequest
             'ano_letivo.integer' => 'O ano letivo deve ser um número inteiro.',
             'ano_letivo.min' => 'O ano letivo deve ser no mínimo 2020.',
             'ano_letivo.max' => 'O ano letivo deve ser no máximo 2030.',
-            'serie.required' => 'A série é obrigatória.',
-            'serie.max' => 'A série não pode ter mais de 255 caracteres.',
+            'serie.required' => 'O nível educacional é obrigatório.',
+            'serie.in' => 'O nível educacional deve ser: pré-escola, fundamental ou médio.',
             'turno.required' => 'O turno é obrigatório.',
             'turno.in' => 'O turno deve ser matutino, vespertino ou noturno.',
             'capacidade_maxima.required' => 'A capacidade máxima é obrigatória.',

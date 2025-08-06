@@ -44,9 +44,9 @@ class TurmaControllerTest extends TestCase
     public function test_store_creates_new_turma(): void
     {
         $turmaData = [
-            'nome' => '1ª Matutino - A',
+            'nome' => 'Fundamental Matutino - A',
             'ano_letivo' => 2024,
-            'serie' => '1',
+            'serie' => 'fundamental',
             'turno' => 'matutino',
             'capacidade_maxima' => 30,
             'ativo' => true,
@@ -105,7 +105,7 @@ class TurmaControllerTest extends TestCase
         $updateData = [
             'nome' => '2ª Vespertino - B',
             'ano_letivo' => 2024,
-            'serie' => '2',
+            'serie' => 'médio',
             'turno' => 'vespertino',
             'capacidade_maxima' => 35,
             'ativo' => '0', // Enviando como string para simular formulário
@@ -121,7 +121,7 @@ class TurmaControllerTest extends TestCase
             'id' => $turma->id,
             'nome' => '2ª Vespertino - B',
             'ano_letivo' => 2024,
-            'serie' => '2',
+            'serie' => 'médio',
             'turno' => 'vespertino',
             'capacidade_maxima' => 35,
         ]);
@@ -130,7 +130,7 @@ class TurmaControllerTest extends TestCase
         $turma->refresh();
         $this->assertEquals('2ª Vespertino - B', $turma->nome);
         $this->assertEquals(2024, $turma->ano_letivo);
-        $this->assertEquals('2', $turma->serie);
+        $this->assertEquals('médio', $turma->serie);
         $this->assertEquals('vespertino', $turma->turno);
         $this->assertEquals(35, $turma->capacidade_maxima);
     }
@@ -153,7 +153,7 @@ class TurmaControllerTest extends TestCase
         $turmaData = [
             'nome' => 'Turma Teste',
             'ano_letivo' => 2024,
-            'serie' => 15, // Série inválida
+            'serie' => 'inválido', // Nível educacional inválido
             'turno' => 'matutino',
             'capacidade_maxima' => 30,
             'ativo' => true,
@@ -170,7 +170,7 @@ class TurmaControllerTest extends TestCase
         $turmaData = [
             'nome' => 'Turma Teste',
             'ano_letivo' => 2024,
-            'serie' => 1,
+            'serie' => 'fundamental',
             'turno' => 'invalido', // Turno inválido
             'capacidade_maxima' => 30,
             'ativo' => true,
@@ -187,7 +187,7 @@ class TurmaControllerTest extends TestCase
         $turmaData = [
             'nome' => 'Turma Teste',
             'ano_letivo' => 2024,
-            'serie' => 1,
+            'serie' => 'fundamental',
             'turno' => 'matutino',
             'capacidade_maxima' => 100, // Capacidade muito alta
             'ativo' => true,

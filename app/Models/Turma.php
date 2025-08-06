@@ -13,6 +13,13 @@ class Turma extends Model
     use HasFactory;
 
     /**
+     * Constantes para os níveis educacionais
+     */
+    public const NIVEL_PRE_ESCOLA = 'pré-escola';
+    public const NIVEL_FUNDAMENTAL = 'fundamental';
+    public const NIVEL_MEDIO = 'médio';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -25,6 +32,20 @@ class Turma extends Model
         'capacidade_maxima',
         'ativo',
     ];
+
+    /**
+     * Retorna as opções de níveis educacionais
+     *
+     * @return array
+     */
+    public static function getNiveisEducacionais(): array
+    {
+        return [
+            self::NIVEL_PRE_ESCOLA => 'Pré-escola',
+            self::NIVEL_FUNDAMENTAL => 'Fundamental',
+            self::NIVEL_MEDIO => 'Médio',
+        ];
+    }
 
     /**
      * The attributes that should be cast.

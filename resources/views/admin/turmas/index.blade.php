@@ -44,7 +44,7 @@
                                             Ano Letivo
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Série
+                                            Nível Educacional
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Turno
@@ -83,7 +83,7 @@
                                                 {{ $turma->ano_letivo }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $turma->serie }}
+                                                {{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -167,7 +167,7 @@
                                             </div>
                                             <div>
                                                 <h3 class="text-sm font-medium text-gray-900">{{ $turma->nome }}</h3>
-                                                <p class="text-sm text-gray-500">{{ $turma->serie }} - {{ $turma->ano_letivo }}</p>
+                                                <p class="text-sm text-gray-500">{{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }} - {{ $turma->ano_letivo }}</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-2">

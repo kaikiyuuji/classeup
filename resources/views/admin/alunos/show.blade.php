@@ -232,7 +232,7 @@
                                         <div class="flex-1">
                                             <h4 class="text-sm font-semibold text-gray-900">{{ $aluno->turma->nome }}</h4>
                                             <div class="flex items-center space-x-4 text-xs text-gray-500 mt-1">
-                                                <span>{{ $aluno->turma->serie }}ª Série</span>
+                                                <span>{{ App\Models\Turma::getNiveisEducacionais()[$aluno->turma->serie] ?? $aluno->turma->serie }}</span>
                                                 <span>•</span>
                                                 <span>{{ ucfirst($aluno->turma->turno) }}</span>
                                                 <span>•</span>
