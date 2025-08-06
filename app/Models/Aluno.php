@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Aluno extends Model
 {
@@ -16,6 +15,9 @@ class Aluno extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'numero_matricula',
+        'data_matricula',
+        'status_matricula',
         'nome',
         'email',
         'cpf',
@@ -23,7 +25,7 @@ class Aluno extends Model
         'telefone',
         'endereco',
         'foto_perfil',
-        'ativo',
+        'turma_id',
     ];
 
     /**
@@ -32,26 +34,17 @@ class Aluno extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'data_matricula' => 'date',
         'data_nascimento' => 'date',
-        'ativo' => 'boolean',
     ];
 
     /**
-     * Relacionamento many-to-many com Turma através da tabela Matricula
+     * Relacionamento many-to-one com Turma
+     * Um aluno pertence a uma única turma
      */
-    public function turmas(): BelongsToMany
+    public function turma(): BelongsTo
     {
-        return $this->belongsToMany(Turma::class, 'matriculas')
-                    ->withPivot('data_matricula', 'status')
-                    ->withTimestamps();
-    }
-
-    /**
-     * Relacionamento one-to-many com Matricula
-     */
-    public function matriculas(): HasMany
-    {
-        return $this->hasMany(Matricula::class);
+        return $this->belongsTo(Turma::class);
     }
 
     /**
@@ -70,5 +63,65 @@ class Aluno extends Model
 
         // Otherwise, generate storage URL
         return asset('storage/' . $this->foto_perfil);
+    }
+
+    /**
+     * Gera um número de matrícula único baseado no ano
+     */
+    public static function gerarNumeroMatricula(int $ano = null): string
+    {
+        $ano = $ano ?? date('Y');
+        
+        // Busca o último número de matrícula do ano
+        $ultimaMatricula = static::where('numero_matricula', 'like', $ano . '%')
+            ->orderBy('numero_matricula', 'desc')
+            ->first();
+        
+        if ($ultimaMatricula) {
+            // Extrai o número sequencial e incrementa
+            $ultimoNumero = (int) substr($ultimaMatricula->numero_matricula, 4);
+            $proximoNumero = $ultimoNumero + 1;
+        } else {
+            // Primeiro aluno do ano
+            $proximoNumero = 1;
+        }
+        
+        return $ano . str_pad($proximoNumero, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Verifica se a matrícula está ativa
+     */
+    public function isMatriculaAtiva(): bool
+    {
+        return $this->status_matricula === 'ativa';
+    }
+
+    /**
+     * Ativa a matrícula do aluno
+     */
+    public function ativarMatricula(): void
+    {
+        $this->update([
+            'status_matricula' => 'ativa'
+        ]);
+    }
+
+    /**
+     * Inativa a matrícula do aluno
+     */
+    public function inativarMatricula(): void
+    {
+        $this->update([
+            'status_matricula' => 'inativa'
+        ]);
+    }
+
+    /**
+     * Verifica se o aluno está ativo (baseado no status da matrícula)
+     */
+    public function isAtivo(): bool
+    {
+        return $this->isMatriculaAtiva();
     }
 }

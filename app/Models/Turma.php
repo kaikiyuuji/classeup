@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
 class Turma extends Model
 {
     use HasFactory;
@@ -57,20 +58,11 @@ class Turma extends Model
     }
 
     /**
-     * Relacionamento many-to-many com Aluno através da tabela Matricula
+     * Relacionamento one-to-many com Aluno
+     * Uma turma tem muitos alunos
      */
-    public function alunos(): BelongsToMany
+    public function alunos(): HasMany
     {
-        return $this->belongsToMany(Aluno::class, 'matriculas')
-                    ->withPivot('data_matricula', 'status')
-                    ->withTimestamps();
-    }
-
-    /**
-     * Relacionamento one-to-many com Matricula
-     */
-    public function matriculas(): HasMany
-    {
-        return $this->hasMany(Matricula::class);
+        return $this->hasMany(Aluno::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Aluno;
+use App\Models\Turma;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -50,7 +51,6 @@ class AlunoControllerTest extends TestCase
             'data_nascimento' => '1990-01-01',
             'telefone' => '(11) 99999-9999',
             'endereco' => 'Rua Exemplo, 123',
-            'ativo' => true,
         ];
 
         $response = $this->actingAs($this->user)
@@ -108,7 +108,7 @@ class AlunoControllerTest extends TestCase
             'email' => $aluno->email,
             'cpf' => $aluno->cpf,
             'data_nascimento' => $aluno->data_nascimento->format('Y-m-d'),
-            // Não incluir 'ativo' para simular checkbox desmarcado
+            'status_matricula' => 'inativa',
         ];
 
         $response = $this->actingAs($this->user)
@@ -120,7 +120,7 @@ class AlunoControllerTest extends TestCase
         $this->assertDatabaseHas('alunos', [
             'id' => $aluno->id,
             'nome' => 'Nome Atualizado',
-            'ativo' => 0,
+            'status_matricula' => 'inativa',
         ]);
     }
 
@@ -147,5 +147,54 @@ class AlunoControllerTest extends TestCase
         $this->get(route('alunos.create'))->assertRedirect(route('login'));
         $this->get(route('alunos.show', $aluno))->assertRedirect(route('login'));
         $this->get(route('alunos.edit', $aluno))->assertRedirect(route('login'));
+    }
+
+    public function test_can_update_aluno_turma()
+    {
+        $aluno = Aluno::factory()->create();
+        $turma = Turma::factory()->create(['ativo' => true]);
+
+        $updateData = [
+            'nome' => $aluno->nome,
+            'email' => $aluno->email,
+            'cpf' => $aluno->cpf,
+            'data_nascimento' => $aluno->data_nascimento->format('Y-m-d'),
+            'telefone' => $aluno->telefone,
+            'endereco' => $aluno->endereco,
+            'status_matricula' => $aluno->status_matricula,
+            'turma_id' => $turma->id
+        ];
+
+        $response = $this->actingAs($this->user)
+            ->put(route('alunos.update', $aluno), $updateData);
+
+        $response->assertRedirect(route('alunos.show', $aluno))
+            ->assertSessionHas('success');
+
+        $aluno->refresh();
+        $this->assertEquals($turma->id, $aluno->turma_id);
+    }
+
+    public function test_cannot_assign_aluno_to_inactive_turma()
+    {
+        $aluno = Aluno::factory()->create();
+        $turma = Turma::factory()->create(['ativo' => false]);
+
+        $updateData = [
+            'nome' => $aluno->nome,
+            'email' => $aluno->email,
+            'cpf' => $aluno->cpf,
+            'data_nascimento' => $aluno->data_nascimento->format('Y-m-d'),
+            'telefone' => $aluno->telefone,
+            'endereco' => $aluno->endereco,
+            'status_matricula' => $aluno->status_matricula,
+            'turma_id' => $turma->id
+        ];
+
+        $response = $this->actingAs($this->user)
+            ->put(route('alunos.update', $aluno), $updateData);
+
+        $response->assertRedirect()
+            ->assertSessionHasErrors(['turma_id']);
     }
 }

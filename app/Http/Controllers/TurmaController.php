@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TurmaStoreRequest;
 use App\Http\Requests\TurmaUpdateRequest;
 use App\Models\Turma;
+use App\Models\Aluno;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TurmaController extends Controller
@@ -49,7 +51,14 @@ class TurmaController extends Controller
      */
     public function show(Turma $turma): View
     {
-        return view('admin.turmas.show', compact('turma'));
+        $turma->load('alunos');
+        
+        // Buscar alunos disponíveis (sem turma)
+        $alunosDisponiveis = Aluno::whereNull('turma_id')
+            ->orderBy('nome')
+            ->get();
+        
+        return view('admin.turmas.show', compact('turma', 'alunosDisponiveis'));
     }
 
     /**
@@ -87,5 +96,76 @@ class TurmaController extends Controller
         return redirect()
             ->route('turmas.index')
             ->with('success', 'Turma excluída com sucesso!');
+    }
+
+    /**
+     * Vincular múltiplos alunos à turma.
+     */
+    public function vincularAlunos(Request $request, Turma $turma): RedirectResponse
+    {
+        $request->validate([
+            'alunos' => 'required|array|min:1',
+            'alunos.*' => 'exists:alunos,id'
+        ], [
+            'alunos.required' => 'Selecione pelo menos um aluno.',
+            'alunos.min' => 'Selecione pelo menos um aluno.',
+            'alunos.*.exists' => 'Um ou mais alunos selecionados não existem.'
+        ]);
+
+        $alunosIds = $request->input('alunos');
+        
+        // Verificar se a turma tem capacidade suficiente
+        $alunosAtualmenteMatriculados = $turma->alunos()->count();
+        $novosAlunos = count($alunosIds);
+        
+        if (($alunosAtualmenteMatriculados + $novosAlunos) > $turma->capacidade_maxima) {
+            return redirect()
+                ->back()
+                ->withErrors(['capacidade' => 'A turma não possui capacidade suficiente para matricular todos os alunos selecionados.']);
+        }
+        
+        // Verificar se os alunos estão disponíveis (sem turma)
+        $alunosIndisponiveis = Aluno::whereIn('id', $alunosIds)
+            ->whereNotNull('turma_id')
+            ->pluck('nome')
+            ->toArray();
+            
+        if (!empty($alunosIndisponiveis)) {
+            return redirect()
+                ->back()
+                ->withErrors(['alunos_indisponiveis' => 'Os seguintes alunos já estão matriculados em outras turmas: ' . implode(', ', $alunosIndisponiveis)]);
+        }
+        
+        // Vincular os alunos à turma
+        Aluno::whereIn('id', $alunosIds)->update(['turma_id' => $turma->id]);
+        
+        $quantidadeAlunos = count($alunosIds);
+        $mensagem = $quantidadeAlunos === 1 
+            ? '1 aluno foi matriculado com sucesso na turma!' 
+            : "{$quantidadeAlunos} alunos foram matriculados com sucesso na turma!";
+
+        return redirect()
+            ->route('turmas.show', $turma)
+            ->with('success', $mensagem);
+    }
+
+    /**
+     * Desvincular aluno da turma.
+     */
+    public function desvincularAluno(Request $request, Turma $turma, Aluno $aluno): RedirectResponse
+    {
+        // Verificar se o aluno está realmente vinculado a esta turma
+        if ($aluno->turma_id !== $turma->id) {
+            return redirect()
+                ->back()
+                ->withErrors(['erro' => 'Este aluno não está matriculado nesta turma.']);
+        }
+        
+        // Desvincular o aluno
+        $aluno->update(['turma_id' => null]);
+        
+        return redirect()
+            ->route('turmas.show', $turma)
+            ->with('success', "Aluno {$aluno->nome} foi desvinculado da turma com sucesso!");
     }
 }

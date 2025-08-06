@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AlunoStoreRequest;
 use App\Http\Requests\AlunoUpdateRequest;
 use App\Models\Aluno;
+use App\Models\Turma;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AlunoController extends Controller
@@ -16,7 +18,8 @@ class AlunoController extends Controller
      */
     public function index(): View
     {
-        $alunos = Aluno::orderBy('nome')
+        $alunos = Aluno::with('turma')
+            ->orderBy('nome')
             ->paginate(15);
 
         return view('admin.alunos.index', compact('alunos'));
@@ -25,9 +28,15 @@ class AlunoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('admin.alunos.create');
+        $turmas = Turma::where('ativo', true)
+            ->orderBy('nome')
+            ->get();
+            
+        $turmaSelecionada = $request->get('turma_id');
+            
+        return view('admin.alunos.create', compact('turmas', 'turmaSelecionada'));
     }
 
     /**
@@ -42,6 +51,11 @@ class AlunoController extends Controller
             $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
         }
         
+        // Gerar dados de matrícula automaticamente
+        $validatedData['numero_matricula'] = Aluno::gerarNumeroMatricula();
+        $validatedData['data_matricula'] = now()->format('Y-m-d');
+        $validatedData['status_matricula'] = 'ativa';
+        
         Aluno::create($validatedData);
 
         return redirect()
@@ -54,6 +68,8 @@ class AlunoController extends Controller
      */
     public function show(Aluno $aluno): View
     {
+        $aluno->load('turma');
+            
         return view('admin.alunos.show', compact('aluno'));
     }
 
@@ -62,7 +78,11 @@ class AlunoController extends Controller
      */
     public function edit(Aluno $aluno): View
     {
-        return view('admin.alunos.edit', compact('aluno'));
+        $turmas = Turma::where('ativo', true)
+            ->orderBy('nome')
+            ->get();
+            
+        return view('admin.alunos.edit', compact('aluno', 'turmas'));
     }
 
     /**
@@ -99,6 +119,8 @@ class AlunoController extends Controller
             ->route('alunos.index')
             ->with('success', 'Aluno excluído com sucesso!');
     }
+
+
 
 
 

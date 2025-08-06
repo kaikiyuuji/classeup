@@ -62,12 +62,7 @@
                                 @endif
                                 
                                 <!-- Badge de Status -->
-                                <div class="absolute -bottom-2 -right-2">
-                                    <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full shadow-sm
-                                        {{ $aluno->ativo ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                        {{ $aluno->ativo ? 'Ativo' : 'Inativo' }}
-                                    </span>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -118,6 +113,26 @@
                                 </div>
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                    <dt class="text-sm font-medium text-gray-600">Número de Matrícula</dt>
+                                    <dd class="text-sm text-gray-900 font-mono font-semibold text-blue-600">{{ $aluno->numero_matricula }}</dd>
+                                </div>
+
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                    <dt class="text-sm font-medium text-gray-600">Data de Matrícula</dt>
+                                    <dd class="text-sm text-gray-900">{{ $aluno->data_matricula?->format('d/m/Y') }}</dd>
+                                </div>
+
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                    <dt class="text-sm font-medium text-gray-600">Status da Matrícula</dt>
+                                    <dd>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full
+                                            {{ $aluno->isMatriculaAtiva() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            {{ ucfirst($aluno->status_matricula) }}
+                                        </span>
+                                    </dd>
+                                </div>
+
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <dt class="text-sm font-medium text-gray-600">CPF</dt>
                                     <dd class="text-sm text-gray-900 font-mono">{{ $aluno->cpf }}</dd>
                                 </div>
@@ -134,15 +149,7 @@
                                     </dd>
                                 </div>
 
-                                <div class="flex justify-between items-center py-2">
-                                    <dt class="text-sm font-medium text-gray-600">Status</dt>
-                                    <dd>
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                            {{ $aluno->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ $aluno->ativo ? 'Ativo' : 'Inativo' }}
-                                        </span>
-                                    </dd>
-                                </div>
+
                             </dl>
                         </div>
 
@@ -201,6 +208,61 @@
                             </div>
                         </div>
                     @endif
+
+                    <!-- Turma -->
+                    <div class="mt-8">
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                                Turma
+                            </h3>
+                            
+                            @if($aluno->turma)
+                                <div class="p-4 bg-white rounded-lg border border-gray-200">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="text-sm font-semibold text-gray-900">{{ $aluno->turma->nome }}</h4>
+                                            <div class="flex items-center space-x-4 text-xs text-gray-500 mt-1">
+                                                <span>{{ $aluno->turma->serie }}ª Série</span>
+                                                <span>•</span>
+                                                <span>{{ ucfirst($aluno->turma->turno) }}</span>
+                                                <span>•</span>
+                                                <span>{{ $aluno->turma->ano_letivo }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <a href="{{ route('turmas.show', $aluno->turma) }}" 
+                                               class="inline-flex items-center px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded-md transition-colors duration-200">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                                Ver Turma
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="text-center py-8">
+                                    <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    <p class="text-gray-500 text-sm">Este aluno não está vinculado a nenhuma turma.</p>
+                                </div>
+                            @endif
+                            
+
+                        </div>
+                    </div>
 
                     <!-- Ações -->
                     <div class="mt-8 pt-6 border-t border-gray-200">

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\DisciplinaController;
-use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurmaController;
@@ -22,16 +21,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::resource('alunos', AlunoController::class);
+    
+    
     Route::resource('professores', ProfessorController::class)->parameters([
         'professores' => 'professor'
     ]);
     Route::resource('disciplinas', DisciplinaController::class);
     Route::resource('turmas', TurmaController::class);
+    Route::post('turmas/{turma}/vincular-alunos', [TurmaController::class, 'vincularAlunos'])->name('turmas.vincular-alunos');
+    Route::delete('turmas/{turma}/alunos/{aluno}', [TurmaController::class, 'desvincularAluno'])->name('turmas.desvincular-aluno');
     
-    // Rotas de Matrículas
-    Route::resource('matriculas', MatriculaController::class);
-    Route::get('turmas/{turma}/matriculas', [MatriculaController::class, 'porTurma'])->name('matriculas.por-turma');
-    Route::get('alunos/{aluno}/matriculas', [MatriculaController::class, 'porAluno'])->name('matriculas.por-aluno');
+
 });
 
 require __DIR__.'/auth.php';

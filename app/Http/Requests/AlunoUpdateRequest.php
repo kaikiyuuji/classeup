@@ -41,7 +41,16 @@ class AlunoUpdateRequest extends FormRequest
             'telefone' => 'nullable|string|max:15',
             'endereco' => 'nullable|string|max:500',
             'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'ativo' => 'boolean',
+            'status_matricula' => 'required|in:ativa,inativa',
+            'turma_id' => [
+                'nullable',
+                'exists:turmas,id',
+                function ($attribute, $value, $fail) {
+                    if ($value && !\App\Models\Turma::where('id', $value)->where('ativo', true)->exists()) {
+                        $fail('A turma selecionada não está ativa.');
+                    }
+                },
+            ],
         ];
     }
 
@@ -69,6 +78,7 @@ class AlunoUpdateRequest extends FormRequest
             'foto_perfil.image' => 'A foto de perfil deve ser uma imagem.',
             'foto_perfil.mimes' => 'A foto de perfil deve ser do tipo: jpeg, png, jpg ou gif.',
             'foto_perfil.max' => 'A foto de perfil não pode ser maior que 2MB.',
+            'turma_id.exists' => 'A turma selecionada não existe.',
         ];
     }
 

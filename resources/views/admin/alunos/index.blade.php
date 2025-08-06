@@ -41,10 +41,13 @@
                                             Aluno
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Matrícula
+                                        </th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Contato
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            CPF
+                                            Turmas
                                         </th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Status
@@ -70,9 +73,12 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">{{ $aluno->nome }}</div>
-                                                        <div class="text-sm text-gray-500">ID: #{{ $aluno->id }}</div>
+                                                        <div class="text-sm text-gray-500">{{ $aluno->cpf }}</div>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm font-mono font-semibold text-blue-600">{{ $aluno->numero_matricula }}</div>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-900">{{ $aluno->email }}</div>
@@ -80,16 +86,22 @@
                                                     <div class="text-sm text-gray-500">{{ $aluno->telefone }}</div>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
-                                                {{ $aluno->cpf }}
+                                            <td class="px-6 py-4">
+                                                @if($aluno->turma)
+                                                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                        {{ $aluno->turma->nome }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-xs text-gray-400 italic">Nenhuma turma</span>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                    {{ $aluno->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                    {{ $aluno->isMatriculaAtiva() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                                     <svg class="w-1.5 h-1.5 mr-1.5" fill="currentColor" viewBox="0 0 8 8">
                                                         <circle cx="4" cy="4" r="3"/>
                                                     </svg>
-                                                    {{ $aluno->ativo ? 'Ativo' : 'Inativo' }}
+                                                    {{ ucfirst($aluno->status_matricula) }}
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -151,16 +163,26 @@
                                             <div class="flex-1 min-w-0">
                                                 <p class="text-sm font-medium text-gray-900 truncate">{{ $aluno->nome }}</p>
                                                 <p class="text-sm text-gray-500 truncate">{{ $aluno->email }}</p>
-                                                <p class="text-xs text-gray-400 font-mono">{{ $aluno->cpf }}</p>
+                                                <p class="text-xs text-gray-400">{{ $aluno->cpf }}</p>
+                                                <p class="text-xs font-mono font-semibold text-blue-600">{{ $aluno->numero_matricula }}</p>
+                                                @if($aluno->turma)
+                                                    <div class="flex flex-wrap gap-1 mt-1">
+                                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                            {{ $aluno->turma->nome }}
+                                                        </span>
+                                                    </div>
+                                                @else
+                                                    <p class="text-xs text-gray-400 italic mt-1">Nenhuma turma</p>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="flex flex-col items-end space-y-2">
                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                                {{ $aluno->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ $aluno->isMatriculaAtiva() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                                 <svg class="w-1.5 h-1.5 mr-1" fill="currentColor" viewBox="0 0 8 8">
                                                     <circle cx="4" cy="4" r="3"/>
                                                 </svg>
-                                                {{ $aluno->ativo ? 'Ativo' : 'Inativo' }}
+                                                {{ ucfirst($aluno->status_matricula) }}
                                             </span>
                                         </div>
                                     </div>
@@ -206,9 +228,7 @@
                     </div>
                 @else
                     <div class="text-center py-12">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                        </svg>
+                        <img src="{{ asset('icons/alunos.svg') }}" alt="Ícone Alunos" class="mx-auto h-12 w-12 opacity-40">
                         <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum aluno cadastrado</h3>
                         <p class="mt-1 text-sm text-gray-500">Comece criando seu primeiro aluno.</p>
                         <div class="mt-6">

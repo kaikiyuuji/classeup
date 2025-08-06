@@ -97,6 +97,52 @@
                             </div>
                         </div>
 
+                        <!-- Informações de Matrícula -->
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Informações de Matrícula
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Número da Matrícula -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Número da Matrícula</label>
+                                    <div class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-sm font-mono font-semibold text-blue-600">
+                                        {{ $aluno->numero_matricula }}
+                                    </div>
+                                </div>
+
+                                <!-- Data da Matrícula -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Data da Matrícula</label>
+                                    <div class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-sm text-gray-900">
+                                        {{ $aluno->data_matricula?->format('d/m/Y') }}
+                                    </div>
+                                </div>
+
+                                <!-- Status da Matrícula -->
+                                <div>
+                                    <label for="status_matricula" class="block text-sm font-semibold text-gray-700 mb-2">Status da Matrícula</label>
+                                    <select name="status_matricula" id="status_matricula" 
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                        <option value="ativa" {{ $aluno->status_matricula === 'ativa' ? 'selected' : '' }}>Ativa</option>
+                                        <option value="inativa" {{ $aluno->status_matricula === 'inativa' ? 'selected' : '' }}>Inativa</option>
+                                    </select>
+                                    @error('status_matricula')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            {{ $message }}
+                                        </p>    
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Informações de Contato -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
@@ -230,34 +276,39 @@
                             </div>
                         </div>
 
-                        <!-- Status -->
+                        <!-- Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
-                                Status do Aluno
+                                Turma
                             </h3>
                             
-                            <div class="flex items-center">
-                                <input type="checkbox" 
-                                       name="ativo" 
-                                       id="ativo" 
-                                       value="1"
-                                       {{ old('ativo', $aluno->ativo) ? 'checked' : '' }}
-                                       class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                <label for="ativo" class="ml-3 block text-sm font-medium text-gray-900">
-                                    Aluno ativo
-                                </label>
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Turma -->
+                                <div>
+                                    <label for="turma_id" class="block text-sm font-semibold text-gray-700 mb-2">Turma</label>
+                                    <select name="turma_id" id="turma_id" 
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                        <option value="">Selecione uma turma</option>
+                                        @foreach($turmas as $turma)
+                                            <option value="{{ $turma->id }}" 
+                                                {{ old('turma_id', $aluno->turma_id) == $turma->id ? 'selected' : '' }}>
+                                                {{ $turma->nome }} - {{ $turma->serie }}ª Série ({{ ucfirst($turma->turno) }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('turma_id')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
                             </div>
-                            @error('ativo')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    {{ $message }}
-                                </p>
-                            @enderror
                         </div>
 
                         <!-- Informações de Auditoria -->

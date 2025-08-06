@@ -9,7 +9,7 @@ use App\Models\Professor;
 use App\Models\Disciplina;
 use App\Models\Turma;
 use App\Models\Aluno;
-use App\Models\Matricula;
+
 use Illuminate\Support\Facades\DB;
 
 class RelacionamentosTest extends TestCase
@@ -45,32 +45,18 @@ class RelacionamentosTest extends TestCase
     }
 
     /**
-     * Testa o relacionamento Aluno-Turma através de Matricula
+     * Testa o relacionamento Aluno-Turma (one-to-many)
      */
-    public function test_aluno_turma_matricula_relationship(): void
+    public function test_aluno_turma_relationship(): void
     {
         // Criar dados de teste
-        $aluno = Aluno::factory()->create();
         $turma = Turma::factory()->create();
-
-        // Criar matrícula
-        $matricula = Matricula::create([
-            'aluno_id' => $aluno->id,
-            'turma_id' => $turma->id,
-            'data_matricula' => now(),
-            'status' => 'ativa',
-        ]);
+        $aluno = Aluno::factory()->create(['turma_id' => $turma->id]);
 
         // Testar relacionamentos
-        $this->assertTrue($aluno->turmas->contains($turma));
+        $this->assertEquals($turma->id, $aluno->turma_id);
+        $this->assertEquals($turma->id, $aluno->turma->id);
         $this->assertTrue($turma->alunos->contains($aluno));
-        $this->assertTrue($aluno->matriculas->contains($matricula));
-        $this->assertTrue($turma->matriculas->contains($matricula));
-        
-        // Testar dados do pivot
-        $alunoTurma = $aluno->turmas->first();
-        $this->assertEquals('ativa', $alunoTurma->pivot->status);
-        $this->assertNotNull($alunoTurma->pivot->data_matricula);
     }
 
     /**
@@ -103,49 +89,48 @@ class RelacionamentosTest extends TestCase
     }
 
     /**
-     * Testa a constraint de unicidade na tabela matriculas
+     * Testa os métodos de matrícula do modelo Aluno
      */
-    public function test_matricula_unique_constraint(): void
+    public function test_aluno_matricula_methods(): void
     {
-        $aluno = Aluno::factory()->create();
-        $turma = Turma::factory()->create();
-
-        // Primeira matrícula deve funcionar
-        Matricula::create([
-            'aluno_id' => $aluno->id,
-            'turma_id' => $turma->id,
-            'data_matricula' => now(),
-            'status' => 'ativa',
-        ]);
-
-        // Segunda matrícula com os mesmos aluno e turma deve falhar
-        $this->expectException(\Illuminate\Database\QueryException::class);
-        Matricula::create([
-            'aluno_id' => $aluno->id,
-            'turma_id' => $turma->id,
-            'data_matricula' => now(),
-            'status' => 'ativa',
-        ]);
+        $aluno = Aluno::factory()->matriculaAtiva()->create();
+        
+        // Testar se a matrícula está ativa
+        $this->assertTrue($aluno->isMatriculaAtiva());
+        
+        // Inativar matrícula
+        $aluno->inativarMatricula();
+        $aluno->refresh();
+        
+        $this->assertFalse($aluno->isMatriculaAtiva());
+        $this->assertEquals('inativa', $aluno->status_matricula);
+        $this->assertFalse($aluno->isAtivo());
+        
+        // Ativar matrícula novamente
+        $aluno->ativarMatricula();
+        $aluno->refresh();
+        
+        $this->assertTrue($aluno->isMatriculaAtiva());
+        $this->assertEquals('ativa', $aluno->status_matricula);
+        $this->assertTrue($aluno->isAtivo());
     }
 
     /**
-     * Testa os diferentes status de matrícula
+     * Testa a geração de número de matrícula
      */
-    public function test_matricula_status_enum(): void
+    public function test_gerar_numero_matricula(): void
     {
-        $aluno = Aluno::factory()->create();
-        $turma = Turma::factory()->create();
-
-        $statusValidos = ['ativa', 'inativa', 'transferida', 'cancelada'];
-
-        foreach ($statusValidos as $status) {
-            $matricula = Matricula::factory()->create([
-                'aluno_id' => $aluno->id,
-                'turma_id' => Turma::factory()->create()->id,
-                'status' => $status,
-            ]);
-
-            $this->assertEquals($status, $matricula->status);
-        }
+        $ano = date('Y');
+        
+        // Primeiro número de matrícula do ano
+        $numeroMatricula1 = Aluno::gerarNumeroMatricula($ano);
+        $this->assertEquals($ano . '0001', $numeroMatricula1);
+        
+        // Criar um aluno com esse número
+        Aluno::factory()->create(['numero_matricula' => $numeroMatricula1]);
+        
+        // Próximo número deve ser incrementado
+        $numeroMatricula2 = Aluno::gerarNumeroMatricula($ano);
+        $this->assertEquals($ano . '0002', $numeroMatricula2);
     }
 }

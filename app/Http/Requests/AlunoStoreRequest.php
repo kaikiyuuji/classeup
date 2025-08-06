@@ -29,7 +29,7 @@ class AlunoStoreRequest extends FormRequest
             'telefone' => 'nullable|string|max:15',
             'endereco' => 'nullable|string|max:500',
             'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'ativo' => 'boolean',
+            'turma_id' => 'nullable|exists:turmas,id',
         ];
     }
 
@@ -57,6 +57,7 @@ class AlunoStoreRequest extends FormRequest
             'foto_perfil.image' => 'A foto de perfil deve ser uma imagem.',
             'foto_perfil.mimes' => 'A foto de perfil deve ser do tipo: jpeg, png, jpg ou gif.',
             'foto_perfil.max' => 'A foto de perfil não pode ser maior que 2MB.',
+            'turma_id.exists' => 'A turma selecionada não existe.',
         ];
     }
 

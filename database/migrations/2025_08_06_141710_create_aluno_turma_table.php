@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('matriculas', function (Blueprint $table) {
+        Schema::create('aluno_turma', function (Blueprint $table) {
             $table->id();
             $table->foreignId('aluno_id')->constrained('alunos')->onDelete('cascade');
             $table->foreignId('turma_id')->constrained('turmas')->onDelete('cascade');
-            $table->date('data_matricula');
-            $table->enum('status', ['ativa', 'inativa', 'transferida', 'cancelada'])->default('ativa');
             $table->timestamps();
             
-            // Evitar múltiplas matrículas ativas do mesmo aluno na mesma turma
-            $table->unique(['aluno_id', 'turma_id']);
+            // Evitar duplicatas na mesma associação
+            $table->unique(['aluno_id', 'turma_id'], 'aluno_turma_unique');
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('matriculas');
+        Schema::dropIfExists('aluno_turma');
     }
 };

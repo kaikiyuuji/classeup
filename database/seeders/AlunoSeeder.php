@@ -21,14 +21,12 @@ class AlunoSeeder extends Seeder
             'nome' => 'João Silva',
             'email' => 'joao.silva@exemplo.com',
             'cpf' => '12345678901',
-            'ativo' => true,
         ]);
         
         Aluno::factory()->create([
             'nome' => 'Maria Santos',
             'email' => 'maria.santos@exemplo.com',
             'cpf' => '98765432109',
-            'ativo' => true,
         ]);
         
         // Cria alguns alunos inativos
