@@ -134,4 +134,12 @@ class Aluno extends Model
     {
         return $this->hasMany(Avaliacao::class);
     }
+
+    /**
+     * Relacionamento com User
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

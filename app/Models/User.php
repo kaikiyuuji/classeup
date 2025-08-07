@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'tipo_usuario',
+        'professor_id',
+        'aluno_id',
     ];
 
     /**
@@ -44,5 +47,45 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relacionamento com Professor
+     */
+    public function professor()
+    {
+        return $this->belongsTo(Professor::class);
+    }
+
+    /**
+     * Relacionamento com Aluno
+     */
+    public function aluno()
+    {
+        return $this->belongsTo(Aluno::class);
+    }
+
+    /**
+     * Verifica se o usuário é admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->tipo_usuario === 'admin';
+    }
+
+    /**
+     * Verifica se o usuário é professor
+     */
+    public function isProfessor(): bool
+    {
+        return $this->tipo_usuario === 'professor';
+    }
+
+    /**
+     * Verifica se o usuário é aluno
+     */
+    public function isAluno(): bool
+    {
+        return $this->tipo_usuario === 'aluno';
     }
 }

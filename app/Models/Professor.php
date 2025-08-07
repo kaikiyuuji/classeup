@@ -107,4 +107,12 @@ class Professor extends Model
     {
         return $query->where('ativo', false);
     }
+
+    /**
+     * Relacionamento com User
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }
