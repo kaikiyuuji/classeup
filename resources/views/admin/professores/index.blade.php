@@ -7,7 +7,7 @@
                 </h2>
                 <p class="text-sm text-gray-600 mt-1">Visualize e gerencie todos os professores cadastrados</p>
             </div>
-            <a href="{{ route('professores.create') }}" 
+            <a href="{{ route('admin.professores.create') }}" 
                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 <x-icons.plus class="w-4 h-4 mr-2" />
                 Novo Professor
@@ -129,7 +129,7 @@
                         <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor cadastrado</h3>
                         <p class="mt-1 text-sm text-gray-500">Comece criando seu primeiro professor.</p>
                         <div class="mt-6">
-                            <a href="{{ route('professores.create') }}" 
+                            <a href="{{ route('admin.professores.create') }}" 
                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 <x-icons.plus class="w-4 h-4 mr-2" />
                                 Cadastrar Primeiro Professor

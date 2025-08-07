@@ -14,7 +14,7 @@
                         <p class="text-gray-600 mt-2">Gerencie a presença dos alunos e visualize relatórios</p>
                     </div>
                     <div class="flex gap-3">
-                        <a href="{{ route('faltas.relatorio-aluno') }}" 
+                        <a href="{{ route('admin.faltas.relatorio-aluno') }}" 
                            class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors shadow-sm font-medium">
                             <x-icons.chart-bar class="w-5 h-5 mr-2" />Ver Relatórios
                         </a>
@@ -37,7 +37,7 @@
                                     <p class="text-yellow-800 font-medium mb-1">Nenhuma turma disponível</p>
                                     <p class="text-yellow-700 text-sm">
                                         Nenhuma turma com professor e disciplina vinculados encontrada.
-                                        <a href="{{ route('turmas.index') }}" class="underline hover:no-underline font-medium">
+                                        <a href="{{ route('admin.turmas.index') }}" class="underline hover:no-underline font-medium">
                                             Clique aqui para gerenciar turmas.
                                         </a>
                                     </p>
@@ -68,7 +68,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <a href="{{ route('faltas.chamada', ['turma' => $vinculo->turma_id, 'disciplina' => $vinculo->disciplina_id]) }}?professor_id={{ $vinculo->professor_id }}" 
+                                                <a href="{{ route('admin.faltas.chamada', ['turma' => $vinculo->turma_id, 'disciplina' => $vinculo->disciplina_id]) }}?professor_id={{ $vinculo->professor_id }}" 
                                                    class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors font-medium shadow-sm">
                                                     <x-icons.clipboard class="w-4 h-4 mr-2" />
                                                     Fazer Chamada

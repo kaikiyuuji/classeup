@@ -8,7 +8,7 @@
                 </h2>
                 <p class="text-gray-600 mt-1">{{ $turma->nome }} - {{ $disciplina->nome }}</p>
             </div>
-            <a href="{{ route('faltas.index') }}" 
+            <a href="{{ route('admin.faltas.index') }}" 
                class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
                 <x-icons.arrow-left class="w-4 h-4 mr-2" />
                 Voltar
@@ -80,7 +80,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('faltas.store') }}" method="POST" id="chamadaForm">
+            <form action="{{ route('admin.faltas.store') }}" method="POST" id="chamadaForm">
                 @csrf
                 <input type="hidden" name="turma_id" value="{{ $turma->id }}">
                 <input type="hidden" name="disciplina_id" value="{{ $disciplina->id }}">

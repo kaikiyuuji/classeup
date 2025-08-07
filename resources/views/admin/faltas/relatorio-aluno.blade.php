@@ -9,7 +9,7 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-800">Relatório de Faltas por Aluno</h1>
-                <a href="{{ route('faltas.index') }}" 
+                <a href="{{ route('admin.faltas.index') }}" 
                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
                     <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
                 </a>
@@ -18,7 +18,7 @@
 
         <div class="p-6">
             <!-- Formulário de Busca -->
-            <form method="GET" action="{{ route('faltas.relatorio-aluno') }}" class="mb-6">
+            <form method="GET" action="{{ route('admin.faltas.relatorio-aluno') }}" class="mb-6">
                 <div class="grid grid-cols-4 gap-4">
                     <div>
                         <label for="matricula" class="block text-sm font-medium text-gray-700 mb-2">
@@ -174,12 +174,12 @@
                                         
                                         <div class="flex gap-2 ml-4">
                                             @if(!$falta->justificada)
-                                                <a href="{{ route('faltas.justificar', $falta->id) }}" 
+                                                <a href="{{ route('admin.faltas.justificar', $falta->id) }}" 
                                                    class="text-blue-600 hover:text-blue-800 text-sm">
                                                     <x-icons.edit class="w-4 h-4 mr-1" />Justificar
                                                 </a>
                                             @else
-                                                <form action="{{ route('faltas.remover-justificativa', $falta->id) }}" 
+                                                <form action="{{ route('admin.faltas.remover-justificativa', $falta->id) }}" 
                                                       method="POST" 
                                                       class="inline"
                                                       onsubmit="return confirm('Tem certeza que deseja remover a justificativa?')">

@@ -7,7 +7,7 @@
                 </h2>
                 <p class="text-sm text-gray-600 mt-1">Preencha as informações da disciplina</p>
             </div>
-            <a href="{{ route('disciplinas.index') }}" 
+            <a href="{{ route('admin.disciplinas.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -21,7 +21,7 @@
         <div class="max-w-4xl mx-auto px-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
-                    <form action="{{ route('disciplinas.store') }}" method="POST" class="space-y-8">
+                    <form action="{{ route('admin.disciplinas.store') }}" method="POST" class="space-y-8">
                         @csrf
 
                         <!-- Informações da Disciplina -->
@@ -128,7 +128,7 @@
 
                         <!-- Botões de Ação -->
                         <div class="flex justify-end gap-4 pt-6 border-t border-gray-200">
-                            <a href="{{ route('disciplinas.index') }}" 
+                            <a href="{{ route('admin.disciplinas.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                 <x-icons.x class="w-4 h-4 mr-2" />
                                 Cancelar

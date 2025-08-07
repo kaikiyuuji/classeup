@@ -15,7 +15,7 @@
                     <x-icons.edit class="w-4 h-4 mr-2" />
                     Editar
                 </a>
-                <a href="{{ route('professores.index') }}" 
+                <a href="{{ route('admin.professores.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <x-icons.back class="w-4 h-4 mr-2" />
                     Voltar
@@ -310,7 +310,7 @@
 
                             <!-- Botões de Ação -->
                             <div class="flex space-x-3">
-                                <a href="{{ route('professores.index') }}" 
+                                <a href="{{ route('admin.professores.index') }}" 
                                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                                     <x-icons.back class="w-4 h-4 mr-2" />
                                     Voltar à Lista

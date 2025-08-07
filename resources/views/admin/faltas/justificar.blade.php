@@ -9,7 +9,7 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-800">Justificar Falta</h1>
-                <a href="{{ route('faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
+                <a href="{{ route('admin.faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
                     <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
                 </a>
@@ -53,7 +53,7 @@
             </div>
 
             <!-- Formulário de Justificativa -->
-            <form action="{{ route('faltas.processar-justificativa', $falta->id) }}" method="POST">
+            <form action="{{ route('admin.faltas.processar-justificativa', $falta->id) }}" method="POST">
                 @csrf
                 
                 <div class="mb-6">
@@ -92,7 +92,7 @@
 
                 <!-- Botões de Ação -->
                 <div class="flex justify-end gap-3">
-                    <a href="{{ route('faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
+                    <a href="{{ route('admin.faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
                         Cancelar
                     </a>

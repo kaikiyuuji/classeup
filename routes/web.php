@@ -71,6 +71,18 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
         Route::patch('/desativar/{user}', [UserController::class, 'desativarUsuario'])->name('desativar');
     });
     
+    // Gerenciamento de Faltas Administrativo
+    Route::prefix('faltas')->name('faltas.')->group(function () {
+        Route::get('/', [FaltaController::class, 'index'])->name('index');
+        Route::get('/chamada/{turma}/{disciplina}', [FaltaController::class, 'chamada'])->name('chamada');
+        Route::post('/chamada', [FaltaController::class, 'store'])->name('store');
+        Route::get('/relatorio', [FaltaController::class, 'relatorioProfessor'])->name('relatorio');
+        Route::get('/relatorio-aluno/{matricula?}', [FaltaController::class, 'relatorioAluno'])->name('relatorio-aluno');
+        Route::get('/justificar/{falta}', [FaltaController::class, 'justificar'])->name('justificar');
+        Route::post('/justificar/{falta}', [FaltaController::class, 'processarJustificativa'])->name('processar-justificativa');
+        Route::delete('/justificar/{falta}', [FaltaController::class, 'removerJustificativa'])->name('remover-justificativa');
+    });
+
     // Relatórios Administrativos
     Route::prefix('relatorios')->name('relatorios.')->group(function () {
         Route::get('/', [AlunoController::class, 'relatoriosAdmin'])->name('index');

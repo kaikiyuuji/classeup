@@ -15,7 +15,7 @@
                     <x-icons.edit class="w-4 h-4 mr-2" />
                     Editar
                 </a>
-                <a href="{{ route('turmas.index') }}" 
+                <a href="{{ route('admin.turmas.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <x-icons.back class="w-4 h-4 mr-2" />
                     Voltar
@@ -211,7 +211,7 @@
                                         <div class="text-gray-500 text-sm mb-2">
                                             Nenhum aluno disponível para vinculação
                                         </div>
-                                        <a href="{{ route('alunos.create') }}" 
+                                        <a href="{{ route('admin.alunos.create') }}" 
                                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                                             <x-icons.plus class="w-4 h-4 mr-2" />
                                             Cadastrar Primeiro Aluno
@@ -231,7 +231,7 @@
                                         <div class="text-gray-500 text-sm mb-2">
                                             Nenhum professor disponível para vinculação
                                         </div>
-                                        <a href="{{ route('professores.create') }}" 
+                                        <a href="{{ route('admin.professores.create') }}" 
                                            class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                                             <x-icons.plus class="w-4 h-4 mr-2" />
                                             Cadastrar Primeiro Professor

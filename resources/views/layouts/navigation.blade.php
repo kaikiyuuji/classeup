@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('admin.turmas.index')" :active="request()->routeIs('admin.turmas.*')">
                         {{ __('Turmas') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.faltas.index')" :active="request()->routeIs('admin.faltas.*')">
+                        {{ __('Faltas') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -93,6 +96,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.turmas.index')" :active="request()->routeIs('admin.turmas.*')">
                 {{ __('Turmas') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.faltas.index')" :active="request()->routeIs('admin.faltas.*')">
+                {{ __('Faltas') }}
             </x-responsive-nav-link>
         </div>
 

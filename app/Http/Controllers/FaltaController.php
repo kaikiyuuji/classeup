@@ -89,7 +89,7 @@ class FaltaController extends Controller
         
         $this->processarChamada($request);
         
-        return redirect()->route('faltas.index')->with('success', 'Chamada registrada com sucesso!');
+        return redirect()->route('admin.faltas.index')->with('success', 'Chamada registrada com sucesso!');
     }
 
     /**
@@ -136,7 +136,7 @@ class FaltaController extends Controller
         $falta = Falta::findOrFail($id);
         $falta->justificar($request->observacoes);
         
-        return redirect()->route('faltas.relatorio-aluno', ['matricula' => $falta->matricula])
+        return redirect()->route('admin.faltas.relatorio-aluno', ['matricula' => $falta->matricula])
                         ->with('success', 'Falta justificada com sucesso!');
     }
 

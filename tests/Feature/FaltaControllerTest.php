@@ -49,7 +49,7 @@ class FaltaControllerTest extends TestCase
 
     public function test_pode_acessar_lista_de_faltas(): void
     {
-        $response = $this->actingAs($this->user)->get(route('faltas.index'));
+        $response = $this->actingAs($this->user)->get(route('admin.faltas.index'));
         
         $response->assertStatus(200)
                  ->assertViewIs('admin.faltas.index')
@@ -64,7 +64,7 @@ class FaltaControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-                         ->get(route('faltas.chamada', [
+                         ->get(route('admin.faltas.chamada', [
                              'turma' => $this->turma->id,
                              'disciplina' => $this->disciplina->id
                          ]));
@@ -84,7 +84,7 @@ class FaltaControllerTest extends TestCase
         $dataFalta = '2025-08-07';
         
         $response = $this->actingAs($this->user)
-                         ->post(route('faltas.store'), [
+                         ->post(route('admin.faltas.store'), [
                              'turma_id' => $this->turma->id,
                              'disciplina_id' => $this->disciplina->id,
                              'professor_id' => $this->professor->id,
@@ -107,7 +107,7 @@ class FaltaControllerTest extends TestCase
     public function test_pode_acessar_relatorio_de_aluno(): void
     {
         $response = $this->actingAs($this->user)
-                         ->get(route('faltas.relatorio-aluno', [
+                         ->get(route('admin.faltas.relatorio-aluno', [
                              'matricula' => $this->aluno->numero_matricula
                          ]));
         
@@ -125,7 +125,7 @@ class FaltaControllerTest extends TestCase
         ]);
         
         $response = $this->actingAs($this->user)
-                         ->get(route('faltas.justificar', $falta));
+                         ->get(route('admin.faltas.justificar', $falta));
         
         $response->assertStatus(200)
                  ->assertViewIs('admin.faltas.justificar')
@@ -144,7 +144,7 @@ class FaltaControllerTest extends TestCase
         $observacao = 'Consulta médica com atestado';
         
         $response = $this->actingAs($this->user)
-                         ->post(route('faltas.processar-justificativa', $falta), [
+                         ->post(route('admin.faltas.processar-justificativa', $falta), [
                              'observacoes' => $observacao
                          ]);
         
@@ -167,7 +167,7 @@ class FaltaControllerTest extends TestCase
         ]);
         
         $response = $this->actingAs($this->user)
-                         ->delete(route('faltas.remover-justificativa', $falta));
+                         ->delete(route('admin.faltas.remover-justificativa', $falta));
         
         $response->assertRedirect()
                  ->assertSessionHas('success');
@@ -180,7 +180,7 @@ class FaltaControllerTest extends TestCase
     public function test_validacao_de_dados_obrigatorios_no_registro(): void
     {
         $response = $this->actingAs($this->user)
-                         ->post(route('faltas.store'), []);
+                         ->post(route('admin.faltas.store'), []);
         
         $response->assertSessionHasErrors([
             'turma_id',
@@ -192,10 +192,10 @@ class FaltaControllerTest extends TestCase
 
     public function test_nao_permite_acesso_sem_autenticacao(): void
     {
-        $response = $this->get(route('faltas.index'));
+        $response = $this->get(route('admin.faltas.index'));
         $response->assertRedirect(route('login'));
         
-        $response = $this->get(route('faltas.chamada', [
+        $response = $this->get(route('admin.faltas.chamada', [
             'turma' => $this->turma->id,
             'disciplina' => $this->disciplina->id
         ]));

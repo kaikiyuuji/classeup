@@ -13,7 +13,7 @@
                     <x-icons.edit class="w-4 h-4 mr-2" />
                     Editar
                 </a>
-                <a href="{{ route('disciplinas.index') }}" 
+                <a href="{{ route('admin.disciplinas.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                     <x-icons.arrow-left class="w-4 h-4 mr-2" />
                     Voltar
@@ -145,7 +145,7 @@
                         </form>
                         
                         <div class="flex gap-4">
-                            <a href="{{ route('disciplinas.index') }}" 
+                            <a href="{{ route('admin.disciplinas.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                 Voltar à Lista
                             </a>
