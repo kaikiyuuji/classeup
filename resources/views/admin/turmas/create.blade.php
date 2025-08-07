@@ -9,9 +9,7 @@
             </div>
             <a href="{{ route('turmas.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
+                <x-icons.arrow-left class="w-4 h-4 mr-2" />
                 Voltar
             </a>
         </div>
@@ -27,9 +25,7 @@
                         <!-- Informações da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H7m5 0v-5a2 2 0 00-2-2H8a2 2 0 00-2 2v5m5 0V9a2 2 0 012-2h2a2 2 0 012 2v12"></path>
-                                </svg>
+                                <x-icons.document class="w-5 h-5 mr-2 text-blue-600" />
                                 Informações da Turma
                             </h3>
                             
@@ -43,9 +39,7 @@
                                            required>
                                     @error('nome')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -66,9 +60,7 @@
                                     </select>
                                     @error('ano_letivo')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -89,9 +81,7 @@
                                     </select>
                                     @error('serie')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -110,9 +100,7 @@
                                     </select>
                                     @error('turno')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -128,9 +116,7 @@
                                            required>
                                     @error('capacidade_maxima')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -141,9 +127,7 @@
                         <!-- Status -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+                                <x-icons.check-circle class="w-5 h-5 mr-2 text-green-600" />
                                 Status
                             </h3>
                             
@@ -168,9 +152,7 @@
                             </a>
                             <button type="submit" 
                                     class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                                <x-icons.check class="w-4 h-4 mr-2" />
                                 Cadastrar Turma
                             </button>
                         </div>

@@ -10,17 +10,12 @@
             <div class="flex flex-col sm:flex-row gap-2">
                 <a href="{{ route('turmas.show', $turma) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    </svg>
+                    <x-icons.eye class="w-4 h-4 mr-2" />
                     Ver Detalhes
                 </a>
                 <a href="{{ route('turmas.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
+                    <x-icons.arrow-left class="w-4 h-4 mr-2" />
                     Voltar
                 </a>
             </div>
@@ -38,9 +33,7 @@
                         <!-- Informações da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
+                                <x-icons.book-open class="w-5 h-5 mr-2 text-indigo-600" />
                                 Informações da Turma
                             </h3>
                             
@@ -54,9 +47,7 @@
                                            required>
                                     @error('nome')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -72,9 +63,7 @@
                                            required>
                                     @error('ano_letivo')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -95,9 +84,7 @@
                                     </select>
                                     @error('serie')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -117,9 +104,7 @@
                                     </select>
                                     @error('turno')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -148,9 +133,7 @@
                         <!-- Status da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+                                <x-icons.check-circle class="w-5 h-5 mr-2 text-green-600" />
                                 Status da Turma
                             </h3>
                             
@@ -170,9 +153,7 @@
                                 </p>
                                 @error('ativo')
                                     <p class="mt-2 text-sm text-red-600 flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                        </svg>
+                                        <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                         {{ $message }}
                                     </p>
                                 @enderror
@@ -183,16 +164,12 @@
                         <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
                             <a href="{{ route('turmas.show', $turma) }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
+                                <x-icons.x class="w-4 h-4 mr-2" />
                                 Cancelar
                             </a>
                             <button type="submit" 
                                     class="inline-flex justify-center items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                                <x-icons.check class="w-4 h-4 mr-2" />
                                 Atualizar Turma
                             </button>
                         </div>

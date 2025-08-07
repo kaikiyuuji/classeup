@@ -130,13 +130,12 @@
                         <div class="flex flex-col sm:flex-row justify-end gap-4 pt-6 border-t border-gray-200">
                             <a href="{{ route('disciplinas.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                                <x-icons.x class="w-4 h-4 mr-2" />
                                 Cancelar
                             </a>
                             <button type="submit" 
                                     class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm transition-colors duration-200">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                                <x-icons.plus class="w-5 h-5 mr-2" />
                                 Cadastrar Disciplina
                             </button>
                         </div>

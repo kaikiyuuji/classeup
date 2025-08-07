@@ -14,7 +14,7 @@
                 </div>
                 <a href="{{ route('faltas.index') }}" 
                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Voltar
+                    <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
                 </a>
             </div>
         </div>
@@ -98,7 +98,7 @@
                     @if($alunos->isEmpty())
                         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                             <p class="text-yellow-700">
-                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                <x-icons.exclamation-triangle class="w-5 h-5 mr-2" />
                                 Nenhum aluno encontrado nesta turma.
                             </p>
                         </div>
@@ -114,7 +114,7 @@
                                                      class="w-10 h-10 rounded-full object-cover">
                                             @else
                                                 <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                                    <i class="fas fa-user text-gray-600"></i>
+                                                    <x-icons.user class="w-5 h-5 text-gray-600" />
                                                 </div>
                                             @endif
                                         </div>
@@ -153,7 +153,7 @@
                     </button>
                     <button type="submit" 
                             class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-save mr-2"></i>Salvar Chamada
+                        <x-icons.save class="w-4 h-4 mr-2" />Salvar Chamada
                     </button>
                 </div>
             </form>

@@ -9,9 +9,7 @@
             </div>
             <a href="{{ route('professores.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
+                <x-icons.arrow-left class="w-4 h-4 mr-2" />
                 Voltar
             </a>
         </div>
@@ -27,9 +25,7 @@
                         <!-- Informações Pessoais -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
+                                <x-icons.user class="w-5 h-5 mr-2 text-purple-600" />
                                 Informações Pessoais
                             </h3>
                             
@@ -43,9 +39,7 @@
                                            required>
                                     @error('nome')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -60,9 +54,21 @@
                                            required>
                                     @error('cpf')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Data de Nascimento -->
+                                <div>
+                                    <label for="data_nascimento" class="block text-sm font-semibold text-gray-700 mb-2">Data de Nascimento *</label>
+                                    <input type="date" name="data_nascimento" id="data_nascimento" value="{{ old('data_nascimento') }}" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                                           required>
+                                    @error('data_nascimento')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -77,9 +83,7 @@
                                            required>
                                     @error('especialidade')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -90,9 +94,7 @@
                         <!-- Informações de Contato -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
+                                <x-icons.mail class="w-5 h-5 mr-2 text-green-600" />
                                 Informações de Contato
                             </h3>
                             
@@ -106,9 +108,7 @@
                                            required>
                                     @error('email')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -122,9 +122,21 @@
                                            placeholder="(11) 99999-9999">
                                     @error('telefone')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Endereço -->
+                                <div class="md:col-span-2">
+                                    <label for="endereco" class="block text-sm font-semibold text-gray-700 mb-2">Endereço</label>
+                                    <textarea name="endereco" id="endereco" rows="3" 
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
+                                              placeholder="Digite o endereço completo do professor">{{ old('endereco') }}</textarea>
+                                    @error('endereco')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -135,9 +147,7 @@
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
                                         <div class="space-y-1 text-center">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
+                                            <x-icons.photo class="mx-auto h-12 w-12 text-gray-400" />
                                             <div class="flex text-sm text-gray-600">
                                                 <label for="foto_perfil" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Enviar uma foto</span>
@@ -154,9 +164,7 @@
                                             <div class="flex items-center justify-between mb-3">
                                                 <p class="text-sm font-medium text-blue-700">📷 Preview da imagem selecionada</p>
                                                 <button type="button" onclick="removeImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 hover:bg-red-200 rounded-md transition-colors duration-200">
-                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                                    </svg>
+                                                    <x-icons.x class="w-3 h-3 mr-1" />
                                                     Remover
                                                 </button>
                                             </div>
@@ -185,9 +193,7 @@
                                     </div>
                                     @error('foto_perfil')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -198,9 +204,7 @@
                         <!-- Informações Acadêmicas -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
+                                <x-icons.book-open class="w-5 h-5 mr-2 text-blue-600" />
                                 Informações Acadêmicas
                             </h3>
                             
@@ -214,9 +218,7 @@
                                               required>{{ old('formacao') }}</textarea>
                                     @error('formacao')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
+                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -227,9 +229,7 @@
                         <!-- Status -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+                                <x-icons.check-circle class="w-5 h-5 mr-2 text-purple-600" />
                                 Status do Professor
                             </h3>
                             
@@ -246,9 +246,7 @@
                             </div>
                             @error('ativo')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
                                     {{ $message }}
                                 </p>
                             @enderror
@@ -257,17 +255,13 @@
                         <!-- Botões de Ação -->
                         <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200">
                             <a href="{{ route('professores.index') }}" 
-                               class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
+                               class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                                <x-icons.x class="w-5 h-5 mr-2" />
                                 Cancelar
                             </a>
                             <button type="submit" 
                                     class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                                <x-icons.check class="w-4 h-4 mr-2" />
                                 Cadastrar Professor
                             </button>
                         </div>

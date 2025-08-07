@@ -11,7 +11,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Relatório de Faltas por Aluno</h1>
                 <a href="{{ route('faltas.index') }}" 
                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Voltar
+                    <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
                 </a>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     <div class="flex items-end">
                         <button type="submit" 
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-search mr-2"></i>Buscar
+                            <x-icons.search class="w-4 h-4 mr-2" />Buscar
                         </button>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
             @if($matricula && !$aluno)
                 <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                     <p class="text-red-700">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <x-icons.exclamation class="w-5 h-5 mr-2" />
                         Aluno com matrícula "{{ $matricula }}" não encontrado.
                     </p>
                 </div>
@@ -82,7 +82,7 @@
                                  class="w-16 h-16 rounded-full object-cover mr-4">
                         @else
                             <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mr-4">
-                                <i class="fas fa-user text-gray-600 text-xl"></i>
+                                <x-icons.user class="w-5 h-5 text-gray-600" />
                             </div>
                         @endif
                         <div>
@@ -97,7 +97,7 @@
                 <div class="grid md:grid-cols-3 gap-4 mb-6">
                     <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div class="flex items-center">
-                            <i class="fas fa-times-circle text-red-500 text-2xl mr-3"></i>
+                            <x-icons.x-circle class="w-8 h-8 text-red-500 mr-3" />
                             <div>
                                 <p class="text-sm text-gray-600">Total de Faltas</p>
                                 <p class="text-2xl font-bold text-red-600">{{ $faltas->count() }}</p>
@@ -107,7 +107,7 @@
                     
                     <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                         <div class="flex items-center">
-                            <i class="fas fa-exclamation-triangle text-yellow-500 text-2xl mr-3"></i>
+                            <x-icons.exclamation-triangle class="w-8 h-8 text-yellow-500 mr-3" />
                             <div>
                                 <p class="text-sm text-gray-600">Faltas Não Justificadas</p>
                                 <p class="text-2xl font-bold text-yellow-600">{{ $faltas->where('justificada', false)->count() }}</p>
@@ -117,7 +117,7 @@
                     
                     <div class="bg-green-50 border border-green-200 rounded-lg p-4">
                         <div class="flex items-center">
-                            <i class="fas fa-check-circle text-green-500 text-2xl mr-3"></i>
+                            <x-icons.check-circle class="w-8 h-8 text-green-500 mr-3" />
                             <div>
                                 <p class="text-sm text-gray-600">Faltas Justificadas</p>
                                 <p class="text-2xl font-bold text-green-600">{{ $faltas->where('justificada', true)->count() }}</p>
@@ -130,7 +130,7 @@
                 @if($faltas->isEmpty())
                     <div class="bg-green-50 border border-green-200 rounded-lg p-4">
                         <p class="text-green-700">
-                            <i class="fas fa-check-circle mr-2"></i>
+                            <x-icons.check-circle class="w-5 h-5 mr-2" />
                             Nenhuma falta encontrada no período selecionado.
                         </p>
                     </div>
@@ -158,14 +158,14 @@
                                             <div class="flex items-center">
                                                 @if($falta->justificada)
                                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                        <i class="fas fa-check mr-1"></i>Justificada
+                                                        <x-icons.check class="w-3 h-3 mr-1" />Justificada
                                                     </span>
                                                     @if($falta->observacoes)
                                                         <span class="ml-2 text-sm text-gray-600">{{ $falta->observacoes }}</span>
                                                     @endif
                                                 @else
                                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                        <i class="fas fa-times mr-1"></i>Não Justificada
+                                                        <x-icons.x class="w-3 h-3 mr-1" />Não Justificada
                                                     </span>
                                                 @endif
                                             </div>
@@ -175,7 +175,7 @@
                                             @if(!$falta->justificada)
                                                 <a href="{{ route('faltas.justificar', $falta->id) }}" 
                                                    class="text-blue-600 hover:text-blue-800 text-sm">
-                                                    <i class="fas fa-edit mr-1"></i>Justificar
+                                                    <x-icons.edit class="w-4 h-4 mr-1" />Justificar
                                                 </a>
                                             @else
                                                 <form action="{{ route('faltas.remover-justificativa', $falta->id) }}" 
@@ -186,7 +186,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" 
                                                             class="text-red-600 hover:text-red-800 text-sm">
-                                                        <i class="fas fa-times mr-1"></i>Remover Justificativa
+                                                        <x-icons.x class="w-4 h-4 mr-1" />Remover Justificativa
                                                     </button>
                                                 </form>
                                             @endif

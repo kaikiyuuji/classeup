@@ -11,7 +11,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Controle de Faltas</h1>
                 <a href="{{ route('faltas.relatorio-aluno') }}" 
                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    <i class="fas fa-chart-bar mr-2"></i>Relatórios
+                    <x-icons.chart-bar class="w-4 h-4 mr-2 inline" />Relatórios
                 </a>
             </div>
         </div>
@@ -23,7 +23,7 @@
                 @if($turmasComVinculo->isEmpty())
                     <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                         <div class="flex items-center">
-                            <i class="fas fa-exclamation-triangle text-yellow-500 mr-3"></i>
+                            <x-icons.exclamation class="w-5 h-5 text-yellow-500 mr-3" />
                             <p class="text-yellow-700">
                                 Nenhuma turma com professor e disciplina vinculados encontrada.
                                 <a href="{{ route('professores.index') }}" class="underline hover:text-yellow-800">
@@ -37,7 +37,7 @@
                         @foreach($turmasComVinculo as $turmaNome => $vinculos)
                             <div class="border border-gray-200 rounded-lg p-4">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                                    <i class="fas fa-users mr-2 text-blue-500"></i>
+                                    <x-icons.users class="w-5 h-5 mr-2 text-blue-500 inline" />
                                     {{ $turmaNome }}
                                     <span class="text-sm font-normal text-gray-500">
                                         ({{ $vinculos->first()->serie }})
@@ -56,7 +56,7 @@
                                             
                                             <a href="{{ route('faltas.chamada', ['turma' => $vinculo->turma_id, 'disciplina' => $vinculo->disciplina_id]) }}?professor_id={{ $vinculo->professor_id }}" 
                                                class="inline-flex items-center text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors">
-                                                <i class="fas fa-clipboard-check mr-1"></i>
+                                                <x-icons.clipboard class="w-4 h-4 mr-1" />
                                                 Fazer Chamada
                                             </a>
                                         </div>

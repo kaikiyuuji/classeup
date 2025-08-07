@@ -11,7 +11,7 @@
                 <h1 class="text-2xl font-bold text-gray-800">Justificar Falta</h1>
                 <a href="{{ route('faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Voltar
+                    <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
                 </a>
             </div>
         </div>
@@ -20,7 +20,7 @@
             <!-- Informações da Falta -->
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <h3 class="font-semibold text-red-800 mb-3">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <x-icons.exclamation class="w-5 h-5 mr-2" />
                     Detalhes da Falta
                 </h3>
                 
@@ -98,7 +98,7 @@
                     </a>
                     <button type="submit" 
                             class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-check mr-2"></i>Justificar Falta
+                        <x-icons.check class="w-4 h-4 mr-2" />Justificar Falta
                     </button>
                 </div>
             </form>

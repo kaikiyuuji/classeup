@@ -12,16 +12,12 @@
             <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                 <a href="{{ route('turmas.edit', $turma) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                    </svg>
+                    <x-icons.edit class="w-4 h-4 mr-2" />
                     Editar
                 </a>
                 <a href="{{ route('turmas.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
+                    <x-icons.back class="w-4 h-4 mr-2" />
                     Voltar
                 </a>
             </div>
@@ -33,9 +29,7 @@
             <!-- Mensagem de Sucesso -->
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
+                    <x-icons.check-circle class="w-5 h-5 mr-2" />
                     {{ session('success') }}
                 </div>
             @endif
@@ -56,9 +50,7 @@
                                     <span>{{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }}</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
+                                    <x-icons.clock class="w-4 h-4 mr-2" />
                                     <span>{{ ucfirst($turma->turno) }}</span>
                                 </div>
 
@@ -74,9 +66,7 @@
                         <!-- Informações da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
+                                <x-icons.book class="w-5 h-5 mr-2 text-indigo-600" />
                                 Informações da Turma
                             </h3>
                             
@@ -116,9 +106,7 @@
                         <!-- Informações de Capacidade -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
+                                <x-icons.users class="w-5 h-5 mr-2 text-indigo-600" />
                                 Capacidade e Ocupação
                             </h3>
                             
@@ -201,9 +189,7 @@
                                 <div class="mt-6">
                                     <a href="{{ route('alunos.create') }}" 
                                        class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
+                                        <x-icons.plus class="w-4 h-4 mr-2" />
                                         Cadastrar Primeiro Aluno
                                     </a>
                                 </div>
@@ -221,27 +207,21 @@
                             
                             @if($errors->has('capacidade'))
                                 <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <x-icons.exclamation class="w-5 h-5 mr-2 text-red-600" />
                                     {{ $errors->first('capacidade') }}
                                 </div>
                             @endif
                             
                             @if($errors->has('alunos_indisponiveis'))
                                 <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <x-icons.exclamation class="w-5 h-5 mr-2 text-red-600" />
                                     {{ $errors->first('alunos_indisponiveis') }}
                                 </div>
                             @endif
                             
                             @if($errors->has('alunos'))
                                 <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <x-icons.exclamation class="w-5 h-5 mr-2 text-red-600" />
                                     {{ $errors->first('alunos') }}
                                 </div>
                             @endif
@@ -312,9 +292,7 @@
                                 <div class="mt-4">
                                     <a href="{{ route('alunos.create') }}" 
                                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
+                                        <x-icons.plus class="w-4 h-4 mr-2" />
                                         Cadastrar Novo Aluno
                                     </a>
                                 </div>
@@ -326,11 +304,7 @@
                     @if($turma->professores->count() > 0)
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                                </svg>
+                                <x-icons.academic-cap class="w-5 h-5 mr-2 text-indigo-600" />
                                 Professores Vinculados ({{ $turma->professores->count() }})
                             </h3>
                             
@@ -341,9 +315,7 @@
                                             <div class="flex items-center space-x-4">
                                                 <div class="flex-shrink-0">
                                                     <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                                        </svg>
+                                                        <x-icons.user class="w-5 h-5 text-blue-600" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
@@ -386,18 +358,13 @@
                     @else
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <div class="text-center py-8">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                                </svg>
+                                <x-icons.academic-cap class="mx-auto h-12 w-12 text-gray-400" />
                                 <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor vinculado</h3>
                                 <p class="mt-1 text-sm text-gray-500">Esta turma ainda não possui professores vinculados.</p>
                                 <div class="mt-6">
                                     <a href="{{ route('professores.create') }}" 
                                        class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
+                                        <x-icons.plus class="w-4 h-4 mr-2" />
                                         Cadastrar Primeiro Professor
                                     </a>
                                 </div>
@@ -415,18 +382,14 @@
                             
                             @if($errors->has('professor_id'))
                                 <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <x-icons.exclamation class="w-5 h-5 mr-2 text-red-600" />
                                     {{ $errors->first('professor_id') }}
                                 </div>
                             @endif
                             
                             @if($errors->has('disciplina_id'))
                                 <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
+                                    <x-icons.exclamation class="w-5 h-5 mr-2 text-red-600" />
                                     {{ $errors->first('disciplina_id') }}
                                 </div>
                             @endif
@@ -487,18 +450,14 @@
                                 
                                 <div class="flex items-center justify-between">
                                     <div class="text-sm text-gray-600">
-                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
+                                        <x-icons.info class="w-4 h-4 inline mr-1" />
                                         Apenas disciplinas que o professor leciona serão exibidas
                                     </div>
                                     
                                     <button type="submit" 
                                             class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors duration-200"
                                             id="btnVincularProfessor" disabled>
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
+                                        <x-icons.plus class="w-4 h-4 mr-2" />
                                         Vincular Professor
                                     </button>
                                 </div>
@@ -507,17 +466,13 @@
                     @else
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <div class="text-center py-6">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
+                                <x-icons.user class="mx-auto h-12 w-12 text-gray-400" />
                                 <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor disponível</h3>
                                 <p class="mt-1 text-sm text-gray-500">Todos os professores já estão vinculados ou não há professores cadastrados.</p>
                                 <div class="mt-4">
                                     <a href="{{ route('professores.create') }}" 
                                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                        </svg>
+                                        <x-icons.plus class="w-4 h-4 mr-2" />
                                         Cadastrar Novo Professor
                                     </a>
                                 </div>
@@ -530,20 +485,16 @@
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
                         <div class="flex flex-wrap gap-3">
                             <a href="{{ route('turmas.edit', $turma) }}" 
-                               class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                                Editar Turma
-                            </a>
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                        <x-icons.edit class="w-4 h-4 mr-2" />
+                        Editar Turma
+                    </a>
                             
                             <a href="{{ route('alunos.create', ['turma_id' => $turma->id]) }}" 
-                               class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Matricular Aluno
-                            </a>
+                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                        <x-icons.plus class="w-4 h-4 mr-2" />
+                        Matricular Aluno
+                    </a>
                             
 
                         </div>
