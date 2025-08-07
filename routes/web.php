@@ -38,4 +38,10 @@ Route::middleware('auth')->group(function () {
 
 });
 
+// Rotas para avaliações dos alunos
+Route::middleware('auth')->group(function () {
+    Route::get('/alunos/{aluno}/boletim', [AlunoController::class, 'boletim'])->name('alunos.boletim');
+    Route::put('/alunos/{aluno}/avaliacoes/{avaliacao}', [AlunoController::class, 'atualizarAvaliacao'])->name('alunos.avaliacoes.update');
+});
+
 require __DIR__.'/auth.php';

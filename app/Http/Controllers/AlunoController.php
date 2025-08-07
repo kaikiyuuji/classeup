@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AlunoStoreRequest;
 use App\Http\Requests\AlunoUpdateRequest;
+use App\Http\Requests\AvaliacaoUpdateRequest;
 use App\Models\Aluno;
+use App\Models\Avaliacao;
 use App\Models\Turma;
+use App\Services\AvaliacaoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -136,5 +139,31 @@ class AlunoController extends Controller
         $path = $file->storeAs('alunos', $filename, 'public');
         
         return $path;
+    }
+
+    /**
+     * Exibe o boletim de avaliações do aluno
+     */
+    public function boletim(Aluno $aluno, AvaliacaoService $avaliacaoService): View
+    {
+        $avaliacoes = $avaliacaoService->obterAvaliacoesDoAluno($aluno);
+        
+        return view('admin.alunos.notas.boletim', compact('aluno', 'avaliacoes'));
+    }
+
+    /**
+     * Atualiza as notas de uma avaliação específica
+     */
+    public function atualizarAvaliacao(
+        AvaliacaoUpdateRequest $request, 
+        Aluno $aluno, 
+        Avaliacao $avaliacao,
+        AvaliacaoService $avaliacaoService
+    ): RedirectResponse {
+        $avaliacaoService->atualizarNotas($avaliacao, $request->validated());
+        
+        return redirect()
+            ->route('alunos.boletim', $aluno)
+            ->with('success', 'Notas atualizadas com sucesso!');
     }
 }

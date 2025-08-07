@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Aluno extends Model
 {
@@ -123,5 +124,14 @@ class Aluno extends Model
     public function isAtivo(): bool
     {
         return $this->isMatriculaAtiva();
+    }
+
+    /**
+     * Relacionamento one-to-many com Avaliacao
+     * Um aluno tem muitas avaliações
+     */
+    public function avaliacoes(): HasMany
+    {
+        return $this->hasMany(Avaliacao::class);
     }
 }
