@@ -24,6 +24,7 @@ class User extends Authenticatable
         'tipo_usuario',
         'professor_id',
         'aluno_id',
+        'email_verified_at',
     ];
 
     /**

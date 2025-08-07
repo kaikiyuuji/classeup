@@ -6,6 +6,7 @@ use App\Http\Controllers\FaltaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurmaController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // ========================================
@@ -59,6 +60,16 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
     Route::get('matriculas', [TurmaController::class, 'matriculas'])->name('matriculas.index');
     Route::post('matriculas/{aluno}', [TurmaController::class, 'matricularAluno'])->name('matriculas.store');
     Route::delete('matriculas/{aluno}', [TurmaController::class, 'desmatricularAluno'])->name('matriculas.destroy');
+    
+    // Gerenciamento de Usuários
+    Route::prefix('usuarios')->name('usuarios.')->group(function () {
+        Route::get('/professores', [UserController::class, 'professores'])->name('professores');
+        Route::get('/alunos', [UserController::class, 'alunos'])->name('alunos');
+        Route::post('/vincular-professor/{professor}', [UserController::class, 'vinculaProfessor'])->name('vincular-professor');
+        Route::post('/vincular-aluno/{aluno}', [UserController::class, 'vinculaAluno'])->name('vincular-aluno');
+        Route::patch('/ativar/{user}', [UserController::class, 'ativarUsuario'])->name('ativar');
+        Route::patch('/desativar/{user}', [UserController::class, 'desativarUsuario'])->name('desativar');
+    });
     
     // Relatórios Administrativos
     Route::prefix('relatorios')->name('relatorios.')->group(function () {

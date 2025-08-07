@@ -15,20 +15,17 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('alunos.index')" :active="request()->routeIs('alunos.*')">
+                    <x-nav-link :href="route('admin.alunos.index')" :active="request()->routeIs('admin.alunos.*')">
                         {{ __('Alunos') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('professores.index')" :active="request()->routeIs('professores.*')">
+                    <x-nav-link :href="route('admin.professores.index')" :active="request()->routeIs('admin.professores.*')">
                         {{ __('Professores') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('disciplinas.index')" :active="request()->routeIs('disciplinas.*')">
+                    <x-nav-link :href="route('admin.disciplinas.index')" :active="request()->routeIs('admin.disciplinas.*')">
                         {{ __('Disciplinas') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('turmas.index')" :active="request()->routeIs('turmas.*')">
+                    <x-nav-link :href="route('admin.turmas.index')" :active="request()->routeIs('admin.turmas.*')">
                         {{ __('Turmas') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('faltas.index')" :active="request()->routeIs('faltas.*')">
-                        {{ __('Faltas') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -85,16 +82,16 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('alunos.index')" :active="request()->routeIs('alunos.*')">
+            <x-responsive-nav-link :href="route('admin.alunos.index')" :active="request()->routeIs('admin.alunos.*')">
                 {{ __('Alunos') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('professores.index')" :active="request()->routeIs('professores.*')">
+            <x-responsive-nav-link :href="route('admin.professores.index')" :active="request()->routeIs('admin.professores.*')">
                 {{ __('Professores') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('disciplinas.index')" :active="request()->routeIs('disciplinas.*')">
+            <x-responsive-nav-link :href="route('admin.disciplinas.index')" :active="request()->routeIs('admin.disciplinas.*')">
                 {{ __('Disciplinas') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('turmas.index')" :active="request()->routeIs('turmas.*')">
+            <x-responsive-nav-link :href="route('admin.turmas.index')" :active="request()->routeIs('admin.turmas.*')">
                 {{ __('Turmas') }}
             </x-responsive-nav-link>
         </div>
