@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\DisciplinaController;
+use App\Http\Controllers\FaltaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurmaController;
@@ -35,6 +36,16 @@ Route::middleware('auth')->group(function () {
     Route::post('turmas/{turma}/vincular-professor', [TurmaController::class, 'vincularProfessor'])->name('turmas.vincular-professor');
     Route::delete('turmas/{turma}/desvincular-professor', [TurmaController::class, 'desvincularProfessor'])->name('turmas.desvincular-professor');
     
+    // Rotas para o módulo de faltas
+    Route::prefix('faltas')->name('faltas.')->group(function () {
+        Route::get('/', [FaltaController::class, 'index'])->name('index');
+        Route::get('/chamada/{turma}/{disciplina}', [FaltaController::class, 'chamada'])->name('chamada');
+        Route::post('/chamada', [FaltaController::class, 'store'])->name('store');
+        Route::get('/relatorio-aluno', [FaltaController::class, 'relatorioAluno'])->name('relatorio-aluno');
+        Route::get('/justificar/{falta}', [FaltaController::class, 'justificar'])->name('justificar');
+        Route::post('/justificar/{falta}', [FaltaController::class, 'processarJustificativa'])->name('processar-justificativa');
+        Route::delete('/justificar/{falta}', [FaltaController::class, 'removerJustificativa'])->name('remover-justificativa');
+    });
 
 });
 
