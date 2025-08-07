@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex justify-between items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
                     Editar Disciplina
@@ -18,7 +18,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-8">
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
                     <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -162,8 +162,8 @@
                         </div>
 
                         <!-- Botões de Ação -->
-                        <div class="flex flex-col sm:flex-row justify-between gap-4 pt-6 border-t border-gray-200">
-                            <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex justify-between gap-4 pt-6 border-t border-gray-200">
+                            <div class="flex gap-4">
                                 <a href="{{ route('disciplinas.show', $disciplina) }}" 
                                    class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                     <x-icons.x class="w-5 h-5 mr-2" />

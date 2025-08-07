@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex justify-between items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
                     {{ __('Gerenciar Professores') }}
@@ -16,7 +16,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-8">
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
                     <x-icons.check-circle class="w-5 h-5 mr-2 text-green-600" />
@@ -27,9 +27,8 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
 
                 @if($professores->count() > 0)
-                    <!-- Desktop Table View -->
-                    <div class="hidden lg:block">
-                        <div class="overflow-hidden">
+                    <!-- Table View -->
+                    <div class="overflow-hidden">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -120,67 +119,8 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Card View -->
-                    <div class="lg:hidden">
-                        <div class="space-y-4 p-4">
-                            @foreach($professores as $professor)
-                                <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="flex-shrink-0">
-                                                @if($professor->foto_perfil_url)
-                                    <img class="h-12 w-12 rounded-full object-cover" src="{{ $professor->foto_perfil_url }}" alt="{{ $professor->nome }}">
-                                                @else
-                                                    <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                                                        <span class="text-purple-600 font-medium">{{ substr($professor->nome, 0, 2) }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-sm font-medium text-gray-900 truncate">{{ $professor->nome }}</p>
-                                                <p class="text-sm text-gray-500 truncate">{{ $professor->email }}</p>
-                                                <p class="text-xs text-gray-400">{{ $professor->especialidade }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col items-end space-y-2">
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                                {{ $professor->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                <x-icons.circle class="w-1.5 h-1.5 mr-1" />
-                                                {{ $professor->ativo ? 'Ativo' : 'Inativo' }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4 flex justify-end space-x-2">
-                                        <a href="{{ route('professores.show', $professor) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
-                                            <x-icons.eye class="w-3 h-3 mr-1" />
-                                            Ver
-                                        </a>
-                                        <a href="{{ route('professores.edit', $professor) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200">
-                                            <x-icons.edit class="w-3 h-3 mr-1" />
-                                            Editar
-                                        </a>
-                                        <form action="{{ route('professores.destroy', $professor) }}" 
-                                              method="POST" 
-                                              class="inline"
-                                              onsubmit="return confirm('Tem certeza que deseja excluir este professor?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200">
-                                                <x-icons.trash class="w-3 h-3 mr-1" />
-                                                Excluir
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
                     <!-- Pagination -->
-                    <div class="px-4 py-3 border-t border-gray-200 sm:px-6">
+                    <div class="px-8 py-3 border-t border-gray-200">
                         {{ $professores->links() }}
                     </div>
                 @else

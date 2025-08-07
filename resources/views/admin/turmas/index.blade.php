@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex justify-between items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
                     {{ __('Gerenciar Turmas') }}
@@ -16,7 +16,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-8">
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
                     <x-icons.check-circle class="w-5 h-5 mr-2 text-green-600" />
@@ -27,8 +27,8 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
 
                 @if($turmas->count() > 0)
-                    <!-- Desktop Table View -->
-                    <div class="hidden lg:block">
+                    <!-- Table View -->
+                    <div>
                         <div class="overflow-hidden">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -166,109 +166,7 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Card View -->
-                    <div class="lg:hidden">
-                        <div class="space-y-4 p-4">
-                            @foreach($turmas as $turma)
-                                <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="flex-shrink-0">
-                                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                                    <x-icons.building class="w-5 h-5 text-blue-600" />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-sm font-medium text-gray-900">{{ $turma->nome }}</h3>
-                                                <p class="text-sm text-gray-500">{{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }} - {{ $turma->ano_letivo }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center space-x-2">
-                                            @if($turma->ativo)
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Ativa
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                    Inativa
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-3 space-y-3">
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-gray-500 text-sm">Turno:</span>
-                                            @if($turma->turno === 'matutino')
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    <x-icons.sun class="w-3 h-3 mr-1" />
-                                                    Matutino
-                                                </span>
-                                            @elseif($turma->turno === 'vespertino')
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                                    <x-icons.moon class="w-3 h-3 mr-1" />
-                                                    Vespertino
-                                                </span>
-                                            @else
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                                    <x-icons.moon class="w-3 h-3 mr-1" />
-                                                    Noturno
-                                                </span>
-                                            @endif
-                                        </div>
-                                        
-                                        <div>
-                                            <div class="flex items-center justify-between text-sm mb-2">
-                                                <span class="text-gray-500">Ocupação:</span>
-                                                @php
-                                                    $alunosMatriculados = $turma->alunos->count();
-                                                    $capacidade = $turma->capacidade_maxima;
-                                                    $porcentagem = $capacidade > 0 ? round(($alunosMatriculados / $capacidade) * 100, 1) : 0;
-                                                @endphp
-                                                <span class="font-medium
-                                                    @if($porcentagem >= 90) text-red-600
-                                                    @elseif($porcentagem >= 75) text-yellow-600
-                                                    @else text-green-600
-                                                    @endif">{{ $alunosMatriculados }}/{{ $capacidade }} ({{ $porcentagem }}%)</span>
-                                            </div>
-                                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                                <div class="h-2 rounded-full
-                                                    @if($porcentagem >= 90) bg-red-500
-                                                    @elseif($porcentagem >= 75) bg-yellow-500
-                                                    @else bg-green-500
-                                                    @endif" style="width: {{ min($porcentagem, 100) }}%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-4 flex justify-end space-x-2">
-                                        <a href="{{ route('turmas.show', $turma) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50">
-                                            <x-icons.eye class="w-3 h-3 mr-1" />
-                                            Ver
-                                        </a>
-                                        <a href="{{ route('turmas.edit', $turma) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200">
-                                            <x-icons.edit class="w-3 h-3 mr-1" />
-                                            Editar
-                                        </a>
-                                        <form action="{{ route('turmas.destroy', $turma) }}" 
-                                              method="POST" 
-                                              class="inline"
-                                              onsubmit="return confirm('Tem certeza que deseja excluir esta turma?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200">
-                                                <x-icons.trash class="w-3 h-3 mr-1" />
-                                                Excluir
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
+
 
                     <!-- Pagination -->
                     @if($turmas->hasPages())

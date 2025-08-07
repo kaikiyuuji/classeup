@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex justify-between items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
                     {{ __('Editar Aluno') }}
                 </h2>
                 <p class="text-sm text-gray-600 mt-1">{{ $aluno->nome }}</p>
             </div>
-            <div class="flex flex-col sm:flex-row gap-2">
+            <div class="flex gap-2">
                 <a href="{{ route('alunos.show', $aluno) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
                     <form action="{{ route('alunos.update', $aluno) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
@@ -44,9 +44,9 @@
                                 Informações Pessoais
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <!-- Nome -->
-                                <div class="md:col-span-2">
+                                <div class="col-span-2">
                                     <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo *</label>
                                     <input type="text" name="nome" id="nome" value="{{ old('nome', $aluno->nome) }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
@@ -106,7 +106,7 @@
                                 Informações de Matrícula
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <!-- Número da Matrícula -->
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Número da Matrícula</label>
@@ -152,7 +152,7 @@
                                 Informações de Contato
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <!-- Email -->
                                 <div>
                                     <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
@@ -187,7 +187,7 @@
                                 </div>
 
                                 <!-- Foto de Perfil -->
-                                <div>
+                                <div class="col-span-2">
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     
                                     @if($aluno->foto_perfil_url)
@@ -257,7 +257,7 @@
                                 </div>
 
                                 <!-- Endereço -->
-                                <div class="md:col-span-2">
+                                <div class="col-span-2">
                                     <label for="endereco" class="block text-sm font-semibold text-gray-700 mb-2">Endereço</label>
                                     <textarea name="endereco" id="endereco" rows="3" 
                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
@@ -312,7 +312,7 @@
                         <!-- Informações de Auditoria -->
                         <div class="bg-gray-50 p-4 rounded-md">
                             <h4 class="text-sm font-medium text-gray-700 mb-2">Informações do Registro</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                            <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
                                 <div>
                                     <span class="font-medium">Criado em:</span> 
                                     {{ $aluno->created_at->format('d/m/Y H:i') }}
@@ -325,7 +325,7 @@
                         </div>
 
                         <!-- Botões de Ação -->
-                        <div class="flex flex-col sm:flex-row items-center justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-8 border-t border-gray-200">
+                        <div class="flex items-center justify-end gap-4 pt-8 border-t border-gray-200">
                             <a href="{{ route('alunos.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                 <x-icons.x class="w-5 h-5 mr-2" />

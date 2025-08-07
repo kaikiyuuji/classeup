@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <div class="flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
                     Detalhes da Turma
@@ -9,7 +9,7 @@
                     Visualize e gerencie as informações da turma {{ $turma->nome }}
                 </p>
             </div>
-            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <div class="flex space-x-3">
                 <a href="{{ route('turmas.edit', $turma) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <x-icons.edit class="w-4 h-4 mr-2" />
@@ -25,7 +25,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto px-8">
             <!-- Mensagem de Sucesso -->
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
@@ -39,13 +39,13 @@
                 <div class="px-6 py-8">
 
                     <!-- Cabeçalho da Turma -->
-                    <div class="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8 mb-8">
+                    <div class="flex items-start space-x-8 mb-8">
 
 
                         <!-- Informações Principais -->
-                        <div class="flex-1 text-center lg:text-left">
+                        <div class="flex-1 text-left">
                             <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $turma->nome }}</h1>
-                            <div class="flex flex-col sm:flex-row items-center lg:items-start space-y-2 sm:space-y-0 sm:space-x-4 text-gray-600">
+                            <div class="flex items-start space-x-4 text-gray-600">
                                 <div class="flex items-center">
                                     <span>{{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }}</span>
                                 </div>
@@ -62,7 +62,7 @@
                     </div>
 
                     <!-- Informações Detalhadas -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-2 gap-8">
                         <!-- Informações da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
@@ -398,7 +398,7 @@
                                 @csrf
                                 
                                 <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-2 gap-4">
                                         <!-- Seleção de Professor -->
                                         <div>
                                             <label for="professor_id" class="block text-sm font-medium text-gray-700 mb-2">

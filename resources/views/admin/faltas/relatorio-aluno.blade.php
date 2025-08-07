@@ -19,7 +19,7 @@
         <div class="p-6">
             <!-- Formulário de Busca -->
             <form method="GET" action="{{ route('faltas.relatorio-aluno') }}" class="mb-6">
-                <div class="grid md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-4 gap-4">
                     <div>
                         <label for="matricula" class="block text-sm font-medium text-gray-700 mb-2">
                             Matrícula do Aluno:
@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- Resumo de Faltas -->
-                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="grid grid-cols-3 gap-4 mb-6">
                     <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div class="flex items-center">
                             <x-icons.x-circle class="w-8 h-8 text-red-500 mr-3" />

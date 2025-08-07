@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <div class="flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
                     Detalhes do Professor
@@ -9,7 +9,7 @@
                     Visualize e gerencie as informações do professor {{ $professor->nome }}
                 </p>
             </div>
-            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <div class="flex space-x-3">
                 <a href="{{ route('professores.edit', $professor) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <x-icons.edit class="w-4 h-4 mr-2" />
@@ -25,7 +25,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto px-8">
             <!-- Mensagens -->
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
@@ -46,7 +46,7 @@
                 <div class="px-6 py-8">
 
                     <!-- Cabeçalho do Perfil -->
-                    <div class="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8 mb-8">
+                    <div class="flex items-start space-x-8 mb-8">
                         <!-- Foto de Perfil -->
                         <div class="flex-shrink-0">
                             <div class="relative">
@@ -73,9 +73,9 @@
                         </div>
 
                         <!-- Informações Principais -->
-                        <div class="flex-1 text-center lg:text-left">
+                        <div class="flex-1 text-left">
                             <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $professor->nome }}</h1>
-                            <div class="flex flex-col sm:flex-row items-center lg:items-start space-y-2 sm:space-y-0 sm:space-x-4 text-gray-600">
+                            <div class="flex items-start space-x-4 text-gray-600">
                                 <div class="flex items-center">
                                     <x-icons.mail class="w-4 h-4 mr-2" />
                                     <a href="mailto:{{ $professor->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
@@ -98,7 +98,7 @@
                     </div>
 
                     <!-- Informações Detalhadas -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-2 gap-8">
                         <!-- Informações Pessoais -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
@@ -183,7 +183,7 @@
                                 Informações de Contato
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <dl class="space-y-4">
                                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                         <dt class="text-sm font-medium text-gray-600">Email</dt>
@@ -230,7 +230,7 @@
                             @if($disciplinasVinculadas->count() > 0)
                                 <div class="mb-6">
                                     <h4 class="text-sm font-medium text-gray-700 mb-3">Disciplinas que o professor leciona:</h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    <div class="grid grid-cols-3 gap-3">
                                         @foreach($disciplinasVinculadas as $disciplina)
                                             <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between">
                                                 <div class="flex items-center">
@@ -265,7 +265,7 @@
                             @if($disciplinasDisponiveis->count() > 0)
                                 <div class="border-t border-gray-200 pt-6">
                                     <h4 class="text-sm font-medium text-gray-700 mb-4">Vincular Nova Disciplina:</h4>
-                                    <form action="{{ route('professores.vincular-disciplina', $professor) }}" method="POST" class="flex flex-col sm:flex-row gap-3">
+                                    <form action="{{ route('professores.vincular-disciplina', $professor) }}" method="POST" class="flex gap-3">
                                         @csrf
                                         <div class="flex-1">
                                             <select name="disciplina_id" 
@@ -294,7 +294,7 @@
 
                     <!-- Ações -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
-                        <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                        <div class="flex justify-between items-center">
                             <!-- Botão de Exclusão -->
                             <form action="{{ route('professores.destroy', $professor) }}" 
                                   method="POST" 

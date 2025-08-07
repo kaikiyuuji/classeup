@@ -4,7 +4,7 @@
             {{ __('Controle de Faltas') }}
         </h2>
     </x-slot>
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-8 py-6">
     <div class="bg-white rounded-lg shadow-md">
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex justify-between items-center">
@@ -44,7 +44,7 @@
                                     </span>
                                 </h3>
                                 
-                                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <div class="grid grid-cols-3 gap-3">
                                     @foreach($vinculos as $vinculo)
                                         <div class="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
                                             <div class="flex justify-between items-start mb-2">

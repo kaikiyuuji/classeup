@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex justify-between items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
-                    {{ __('Cadastrar Novo Professor') }}
+                    Cadastrar Professor
                 </h2>
-                <p class="text-sm text-gray-600 mt-1">Preencha as informações do professor</p>
+                <p class="text-sm text-gray-600 mt-1">Preencha as informações do novo professor</p>
             </div>
             <a href="{{ route('professores.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
@@ -16,7 +16,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
                     <form action="{{ route('professores.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
@@ -29,9 +29,9 @@
                                 Informações Pessoais
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <!-- Nome -->
-                                <div class="md:col-span-2">
+                                <div class="col-span-2">
                                     <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo *</label>
                                     <input type="text" name="nome" id="nome" value="{{ old('nome') }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
@@ -98,7 +98,7 @@
                                 Informações de Contato
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <!-- Email -->
                                 <div>
                                     <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
@@ -129,7 +129,7 @@
                                 </div>
 
                                 <!-- Endereço -->
-                                <div class="md:col-span-2">
+                                <div class="col-span-2">
                                     <label for="endereco" class="block text-sm font-semibold text-gray-700 mb-2">Endereço</label>
                                     <textarea name="endereco" id="endereco" rows="3" 
                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
@@ -143,7 +143,7 @@
                                 </div>
 
                                 <!-- Foto de Perfil -->
-                                <div class="md:col-span-2">
+                                <div class="col-span-2">
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
                                         <div class="space-y-1 text-center">
@@ -253,7 +253,7 @@
                         </div>
 
                         <!-- Botões de Ação -->
-                        <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200">
+                        <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
                             <a href="{{ route('professores.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                 <x-icons.x class="w-5 h-5 mr-2" />

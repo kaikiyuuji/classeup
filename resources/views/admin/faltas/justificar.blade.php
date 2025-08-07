@@ -24,7 +24,7 @@
                     Detalhes da Falta
                 </h3>
                 
-                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-600">Aluno:</p>
                         <p class="font-medium text-gray-800">{{ $falta->aluno->nome }}</p>
@@ -45,7 +45,7 @@
                         <p class="font-medium text-gray-800">{{ $falta->disciplina->nome }}</p>
                     </div>
                     
-                    <div class="md:col-span-2">
+                    <div class="col-span-2">
                         <p class="text-gray-600">Professor:</p>
                         <p class="font-medium text-gray-800">{{ $falta->professor->nome }}</p>
                     </div>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <div class="flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
                     Detalhes do Aluno
@@ -9,7 +9,7 @@
                     Visualize e gerencie as informações do aluno {{ $aluno->nome }}
                 </p>
             </div>
-            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <div class="flex space-x-3">
                 <a href="{{ route('alunos.boletim', $aluno) }}" 
                        class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,7 +36,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto px-8">
             <!-- Mensagem de Sucesso -->
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
@@ -52,7 +52,7 @@
                 <div class="px-6 py-8">
 
                     <!-- Cabeçalho do Perfil -->
-                    <div class="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8 mb-8">
+                    <div class="flex items-start space-x-8 mb-8">
                         <!-- Foto de Perfil -->
                         <div class="flex-shrink-0">
                             <div class="relative">
@@ -74,9 +74,9 @@
                         </div>
 
                         <!-- Informações Principais -->
-                        <div class="flex-1 text-center lg:text-left">
+                        <div class="flex-1">
                             <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $aluno->nome }}</h1>
-                            <div class="flex flex-col sm:flex-row items-center lg:items-start space-y-2 sm:space-y-0 sm:space-x-4 text-gray-600">
+                            <div class="flex items-start space-x-4 text-gray-600">
                                 <div class="flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -103,7 +103,7 @@
                     </div>
 
                     <!-- Informações Detalhadas -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-2 gap-8">
                         <!-- Informações Pessoais -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
@@ -292,7 +292,7 @@
                                 $faltasNaoJustificadas = $faltasRecentes->where('justificada', false)->count();
                             @endphp
                             
-                            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                            <div class="grid grid-cols-3 gap-4 mb-6">
                                 <div class="bg-white rounded-lg p-4 border border-gray-200">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0">
@@ -404,7 +404,7 @@
 
                     <!-- Ações -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
-                        <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                        <div class="flex justify-between items-center">
                             <!-- Botão de Exclusão -->
                             <form action="{{ route('alunos.destroy', $aluno) }}" 
                                   method="POST" 

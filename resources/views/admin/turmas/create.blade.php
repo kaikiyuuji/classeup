@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex justify-between items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
                     {{ __('Cadastrar Nova Turma') }}
                 </h2>
-                <p class="text-sm text-gray-600 mt-1">Preencha as informações da turma</p>
+                <p class="text-sm text-gray-600 mt-1">Preencha as informações para criar uma nova turma</p>
             </div>
             <a href="{{ route('turmas.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
@@ -16,7 +16,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
                     <form action="{{ route('turmas.store') }}" method="POST" class="space-y-8">
@@ -29,9 +29,9 @@
                                 Informações da Turma
                             </h3>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
                                 <!-- Nome -->
-                                <div class="md:col-span-2">
+                                <div class="col-span-2">
                                     <label for="nome" class="block text-sm font-semibold text-gray-700 mb-2">Nome da Turma *</label>
                                     <input type="text" name="nome" id="nome" value="{{ old('nome') }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
@@ -145,7 +145,7 @@
                         </div>
 
                         <!-- Botões de Ação -->
-                        <div class="flex flex-col sm:flex-row justify-end gap-4 pt-6 border-t border-gray-200">
+                        <div class="flex gap-4 pt-6 border-t border-gray-200">
                             <a href="{{ route('turmas.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200">
                                 Cancelar
