@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('turmas.index')" :active="request()->routeIs('turmas.*')">
                         {{ __('Turmas') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('faltas.index')" :active="request()->routeIs('faltas.*')">
+                        {{ __('Faltas') }}
+                    </x-nav-link>
                 </div>
             </div>
 

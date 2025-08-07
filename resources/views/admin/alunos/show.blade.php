@@ -390,7 +390,7 @@
                                 </div>
                             @endif
                             
-                            <div class="flex justify-end">
+                            <div class="flex justify-end mt-4">
                                 <a href="{{ route('faltas.relatorio-aluno', ['matricula' => $aluno->numero_matricula]) }}" 
                                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

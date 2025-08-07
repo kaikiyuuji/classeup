@@ -1,53 +1,78 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Chamada - ') }}{{ $turma->nome }} - {{ $disciplina->nome }}
-        </h2>
-    </x-slot>
-<div class="container mx-auto px-4 py-6">
-    <div class="bg-white rounded-lg shadow-md">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">Chamada - {{ $turma->nome }}</h1>
-                    <p class="text-gray-600">{{ $disciplina->nome }} - Prof. {{ $professor->nome }}</p>
-                </div>
-                <a href="{{ route('faltas.index') }}" 
-                   class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
-                </a>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-bold text-2xl text-gray-900">
+                    <x-icons.clipboard class="w-6 h-6 mr-2 text-blue-600 inline" />
+                    Fazer Chamada
+                </h2>
+                <p class="text-gray-600 mt-1">{{ $turma->nome }} - {{ $disciplina->nome }}</p>
             </div>
+            <a href="{{ route('faltas.index') }}" 
+               class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
+                <x-icons.arrow-left class="w-4 h-4 mr-2" />
+                Voltar
+            </a>
         </div>
+    </x-slot>
+
+<div class="py-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-xl">
+            <!-- Cabeçalho da Turma -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                            <x-icons.users class="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white">{{ $turma->nome }}</h1>
+                            <p class="text-blue-100">{{ $disciplina->nome }} • Prof. {{ $professor->nome }}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-blue-100 text-sm">Total de Alunos</p>
+                        <p class="text-white text-2xl font-bold">{{ $alunos->count() }}</p>
+                    </div>
+                </div>
+            </div>
 
         <div class="p-6">
             <!-- Mensagens de Alerta -->
             @if(session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    {{ session('success') }}
+                <div class="mb-6 bg-green-50 border-l-4 border-green-400 text-green-800 px-6 py-4 rounded-r-lg shadow-sm">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <p class="font-medium">{{ session('success') }}</p>
+                    </div>
                 </div>
             @endif
 
             @if(session('warning'))
-                <div class="mb-6 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
+                <div class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 px-6 py-4 rounded-r-lg shadow-sm">
                     <div class="flex items-center mb-3">
-                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ session('warning') }}
+                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <p class="font-medium">{{ session('warning') }}</p>
                     </div>
                     @if(session('mostrar_confirmacao'))
-                        <div class="flex gap-3">
+                        <div class="flex gap-3 mt-4">
                             <button type="button" 
                                     onclick="confirmarReenvio()" 
-                                    class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                 Sim, confirmar reenvio
                             </button>
                             <button type="button" 
                                     onclick="cancelarReenvio()" 
-                                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                 Cancelar
                             </button>
                         </div>
@@ -61,82 +86,115 @@
                 <input type="hidden" name="disciplina_id" value="{{ $disciplina->id }}">
                 <input type="hidden" name="professor_id" value="{{ $professor->id }}">
                 
-                <!-- Seleção de Data -->
-                <div class="mb-6">
-                    <label for="data_falta" class="block text-sm font-medium text-gray-700 mb-2">
-                        Data da Aula:
-                    </label>
-                    <input type="date" 
-                           id="data_falta" 
-                           name="data_falta" 
-                           value="{{ $data }}" 
-                           max="{{ now()->format('Y-m-d') }}"
-                           class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                           onchange="atualizarChamada()">
+                <!-- Controles da Chamada -->
+                <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Seleção de Data -->
+                        <div>
+                            <label for="data_falta" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <x-icons.calendar class="w-4 h-4 mr-1 inline" />
+                                Data da Aula
+                            </label>
+                            <input type="date" 
+                                   id="data_falta" 
+                                   name="data_falta" 
+                                   value="{{ $data }}" 
+                                   max="{{ now()->format('Y-m-d') }}"
+                                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium"
+                                   onchange="atualizarChamada()">
+                        </div>
+
+                        <!-- Ações Rápidas -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                <x-icons.lightning-bolt class="w-4 h-4 mr-1 inline" />
+                                Ações Rápidas
+                            </label>
+                            <div class="flex gap-3">
+                                <button type="button" 
+                                        onclick="marcarTodos(false)" 
+                                        class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center justify-center">
+                                    <x-icons.check class="w-4 h-4 mr-2" />
+                                    Todos Presentes
+                                </button>
+                                <button type="button" 
+                                        onclick="marcarTodos(true)" 
+                                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center justify-center">
+                                    <x-icons.x class="w-4 h-4 mr-2" />
+                                    Todos Faltosos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Lista de Alunos -->
                 <div class="mb-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            Lista de Alunos ({{ $alunos->count() }} alunos)
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                            <x-icons.users class="w-5 h-5 mr-2 text-blue-600" />
+                            Lista de Alunos
+                            <span class="ml-2 bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                                {{ $alunos->count() }} alunos
+                            </span>
                         </h3>
-                        <div class="flex gap-2">
-                            <button type="button" 
-                                    onclick="marcarTodos(true)" 
-                                    class="text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition-colors">
-                                Marcar Todos como Faltosos
-                            </button>
-                            <button type="button" 
-                                    onclick="marcarTodos(false)" 
-                                    class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition-colors">
-                                Marcar Todos como Presentes
-                            </button>
-                        </div>
                     </div>
                     
                     @if($alunos->isEmpty())
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <p class="text-yellow-700">
-                                <x-icons.exclamation-triangle class="w-5 h-5 mr-2" />
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg p-6 text-center">
+                            <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <x-icons.exclamation-triangle class="w-8 h-8 text-yellow-600" />
+                            </div>
+                            <p class="text-yellow-800 font-medium text-lg">
                                 Nenhum aluno encontrado nesta turma.
+                            </p>
+                            <p class="text-yellow-600 text-sm mt-2">
+                                Verifique se há alunos matriculados nesta turma.
                             </p>
                         </div>
                     @else
-                        <div class="grid gap-2">
+                        <div class="grid gap-4">
                             @foreach($alunos as $aluno)
-                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 mr-4">
-                                            @if($aluno->foto_perfil)
-                                                <img src="{{ Storage::url($aluno->foto_perfil) }}" 
-                                                     alt="{{ $aluno->nome }}" 
-                                                     class="w-10 h-10 rounded-full object-cover">
-                                            @else
-                                                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                                    <x-icons.user class="w-5 h-5 text-gray-600" />
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div>
-                                            <p class="font-medium text-gray-800">{{ $aluno->nome }}</p>
-                                            <p class="text-sm text-gray-600">Matrícula: {{ $aluno->numero_matricula }}</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="flex items-center">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="checkbox" 
-                                                   name="faltas[]" 
-                                                   value="{{ $aluno->numero_matricula }}"
-                                                   class="sr-only falta-checkbox"
-                                                   {{ in_array($aluno->numero_matricula, $faltasExistentes) ? 'checked' : '' }}>
-                                            <div class="relative">
-                                                <div class="w-12 h-6 bg-green-400 rounded-full shadow-inner transition-colors duration-200 ease-in-out checkbox-bg"></div>
-                                                <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow transition-transform duration-200 ease-in-out checkbox-dot"></div>
+                                <div class="bg-white border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 mr-4">
+                                                @if($aluno->foto_perfil)
+                                                    <img src="{{ Storage::url($aluno->foto_perfil) }}" 
+                                                         alt="{{ $aluno->nome }}" 
+                                                         class="w-12 h-12 rounded-full object-cover border-2 border-gray-200">
+                                                @else
+                                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                                                        <x-icons.user class="w-6 h-6 text-white" />
+                                                    </div>
+                                                @endif
                                             </div>
-                                            <span class="ml-3 text-sm font-medium status-text text-green-600">Presente</span>
-                                        </label>
+                                            <div>
+                                                <p class="font-semibold text-gray-900 text-lg">{{ $aluno->nome }}</p>
+                                                <p class="text-sm text-gray-600 flex items-center">
+                                                    <x-icons.identification class="w-4 h-4 mr-1" />
+                                                    {{ $aluno->numero_matricula }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <label class="flex items-center cursor-pointer group">
+                                                <input type="checkbox" 
+                                                       name="faltas[]" 
+                                                       value="{{ $aluno->numero_matricula }}"
+                                                       class="sr-only falta-checkbox"
+                                                       {{ in_array($aluno->numero_matricula, $faltasExistentes) ? 'checked' : '' }}>
+                                                <div class="relative">
+                                                    <div class="w-14 h-7 bg-green-400 rounded-full shadow-inner transition-colors duration-200 ease-in-out checkbox-bg group-hover:shadow-lg"></div>
+                                                    <div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow transition-transform duration-200 ease-in-out checkbox-dot"></div>
+                                                </div>
+                                                <div class="ml-4 text-right">
+                                                    <span class="block text-sm font-bold status-text text-green-600">Presente</span>
+                                                    <span class="block text-xs text-gray-500">Clique para alterar</span>
+                                                </div>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -145,16 +203,26 @@
                 </div>
 
                 <!-- Botões de Ação -->
-                <div class="flex justify-end gap-3">
-                    <button type="button" 
-                            onclick="window.history.back()" 
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit" 
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
-                        <x-icons.save class="w-4 h-4 mr-2" />Salvar Chamada
-                    </button>
+                <div class="bg-gray-50 rounded-xl p-6 mt-8">
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-600">
+                            <p class="font-medium">Lembre-se:</p>
+                            <p>Verifique a presença de todos os alunos antes de salvar.</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <button type="button" 
+                                    onclick="window.history.back()" 
+                                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center">
+                                <x-icons.x class="w-4 h-4 mr-2" />
+                                Cancelar
+                            </button>
+                            <button type="submit" 
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center">
+                                <x-icons.save class="w-5 h-5 mr-2" />
+                                Salvar Chamada
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -177,15 +245,15 @@ function atualizarEstiloCheckbox(checkbox) {
     
     if (checkbox.checked) {
         bg.classList.remove('bg-green-400');
-        bg.classList.add('bg-red-400');
-        dot.classList.add('translate-x-6');
+        bg.classList.add('bg-red-500');
+        dot.classList.add('translate-x-7');
         statusText.textContent = 'Faltoso';
         statusText.classList.remove('text-green-600');
         statusText.classList.add('text-red-600');
     } else {
-        bg.classList.remove('bg-red-400');
+        bg.classList.remove('bg-red-500');
         bg.classList.add('bg-green-400');
-        dot.classList.remove('translate-x-6');
+        dot.classList.remove('translate-x-7');
         statusText.textContent = 'Presente';
         statusText.classList.remove('text-red-600');
         statusText.classList.add('text-green-600');

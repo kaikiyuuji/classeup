@@ -56,8 +56,9 @@
                     
                     <div class="flex items-end">
                         <button type="submit" 
-                                class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-                            <x-icons.search class="w-4 h-4 mr-2" />Buscar
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center justify-center">
+                            <x-icons.search class="w-5 h-5 mr-2" />
+                            Buscar Relatório
                         </button>
                     </div>
                 </div>
