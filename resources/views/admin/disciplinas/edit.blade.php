@@ -30,7 +30,7 @@
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
-                    <form action="{{ route('disciplinas.update', $disciplina) }}" method="POST" class="space-y-6">
+                    <form action="{{ route('admin.disciplinas.update', $disciplina) }}" method="POST" class="space-y-6">
                         @csrf
                         @method('PUT')
 
@@ -164,7 +164,7 @@
                         <!-- Botões de Ação -->
                         <div class="flex justify-between gap-4 pt-6 border-t border-gray-200">
                             <div class="flex gap-4">
-                                <a href="{{ route('disciplinas.show', $disciplina) }}" 
+                                <a href="{{ route('admin.disciplinas.show', $disciplina) }}" 
                                    class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                     <x-icons.x class="w-5 h-5 mr-2" />
                                     Cancelar

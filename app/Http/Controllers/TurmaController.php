@@ -49,7 +49,7 @@ class TurmaController extends Controller
         Turma::create($validatedData);
 
         return redirect()
-            ->route('turmas.index')
+            ->route('admin.turmas.index')
             ->with('success', 'Turma criada com sucesso!');
     }
 
@@ -98,7 +98,7 @@ class TurmaController extends Controller
         $turma->update($validatedData);
 
         return redirect()
-            ->route('turmas.show', $turma)
+            ->route('admin.turmas.show', $turma)
             ->with('success', 'Turma atualizada com sucesso!');
     }
 
@@ -110,7 +110,7 @@ class TurmaController extends Controller
         $turma->delete();
 
         return redirect()
-            ->route('turmas.index')
+            ->route('admin.turmas.index')
             ->with('success', 'Turma excluída com sucesso!');
     }
 
@@ -127,11 +127,11 @@ class TurmaController extends Controller
             // Atualiza o turma_id dos alunos selecionados
             Aluno::whereIn('id', $alunosParaVincular)->update(['turma_id' => $turma->id]);
             $quantidadeVinculada = count($alunosParaVincular);
-            return redirect()->route('turmas.show', $turma)
+            return redirect()->route('admin.turmas.show', $turma)
                 ->with('success', "{$quantidadeVinculada} aluno(s) vinculado(s) com sucesso!");
         }
 
-        return redirect()->route('turmas.show', $turma)
+        return redirect()->route('admin.turmas.show', $turma)
             ->with('info', 'Todos os alunos selecionados já estão vinculados à turma.');
     }
 
@@ -144,7 +144,7 @@ class TurmaController extends Controller
         $aluno->update(['turma_id' => null]);
         
         return redirect()
-            ->route('turmas.show', $turma)
+            ->route('admin.turmas.show', $turma)
             ->with('success', "Aluno {$aluno->nome} desvinculado com sucesso!");
     }
 
@@ -162,7 +162,7 @@ class TurmaController extends Controller
         ]);
         
         return redirect()
-            ->route('turmas.show', $turma)
+            ->route('admin.turmas.show', $turma)
             ->with('success', 'Professor vinculado com sucesso!');
     }
 
@@ -180,7 +180,7 @@ class TurmaController extends Controller
             ->detach($professorId);
         
         return redirect()
-            ->route('turmas.show', $turma)
+            ->route('admin.turmas.show', $turma)
             ->with('success', 'Professor desvinculado com sucesso!');
     }
 }

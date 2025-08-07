@@ -10,7 +10,7 @@
                 </p>
             </div>
             <div class="flex space-x-3">
-                <a href="{{ route('professores.edit', $professor) }}" 
+                <a href="{{ route('admin.professores.edit', $professor) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <x-icons.edit class="w-4 h-4 mr-2" />
                     Editar
@@ -240,7 +240,7 @@
                                                         <p class="text-xs text-gray-500">{{ $disciplina->codigo }}</p>
                                                     </div>
                                                 </div>
-                                                <form action="{{ route('professores.desvincular-disciplina', $professor) }}" method="POST" class="inline">
+                                                <form action="{{ route('admin.professores.desvincular-disciplina', $professor) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="disciplina_id" value="{{ $disciplina->id }}">
@@ -265,7 +265,7 @@
                             @if($disciplinasDisponiveis->count() > 0)
                                 <div class="border-t border-gray-200 pt-6">
                                     <h4 class="text-sm font-medium text-gray-700 mb-4">Vincular Nova Disciplina:</h4>
-                                    <form action="{{ route('professores.vincular-disciplina', $professor) }}" method="POST" class="flex gap-3">
+                                    <form action="{{ route('admin.professores.vincular-disciplina', $professor) }}" method="POST" class="flex gap-3">
                                         @csrf
                                         <div class="flex-1">
                                             <select name="disciplina_id" 
@@ -296,7 +296,7 @@
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex justify-between items-center">
                             <!-- Botão de Exclusão -->
-                            <form action="{{ route('professores.destroy', $professor) }}" 
+                            <form action="{{ route('admin.professores.destroy', $professor) }}" 
                                   method="POST" 
                                   onsubmit="return confirm('Tem certeza que deseja excluir este professor? Esta ação não pode ser desfeita.')">
                                 @csrf
@@ -315,7 +315,7 @@
                                     <x-icons.back class="w-4 h-4 mr-2" />
                                     Voltar à Lista
                                 </a>
-                                <a href="{{ route('professores.edit', $professor) }}" 
+                                <a href="{{ route('admin.professores.edit', $professor) }}" 
                                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                                     <x-icons.edit class="w-4 h-4 mr-2" />
                                     Editar Professor

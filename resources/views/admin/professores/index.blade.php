@@ -88,17 +88,17 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end space-x-2">
-                                                    <a href="{{ route('professores.show', $professor) }}" 
-                                                       class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                    <a href="{{ route('admin.professores.show', $professor) }}" 
+                                                   class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         <x-icons.eye class="w-3 h-3 mr-1" />
                                                         Ver
                                                     </a>
-                                                    <a href="{{ route('professores.edit', $professor) }}" 
+                                                    <a href="{{ route('admin.professores.edit', $professor) }}" 
                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         <x-icons.edit class="w-3 h-3 mr-1" />
                                                         Editar
                                                     </a>
-                                                    <form action="{{ route('professores.destroy', $professor) }}" 
+                                                    <form action="{{ route('admin.professores.destroy', $professor) }}" 
                                                           method="POST" 
                                                           class="inline"
                                                           onsubmit="return confirm('Tem certeza que deseja excluir este professor?')">

@@ -24,7 +24,7 @@ class DisciplinaControllerTest extends TestCase
     {
         $disciplinas = Disciplina::factory()->count(3)->create();
 
-        $response = $this->actingAs($this->user)->get(route('disciplinas.index'));
+        $response = $this->actingAs($this->user)->get(route('admin.disciplinas.index'));
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.disciplinas.index');
@@ -37,7 +37,7 @@ class DisciplinaControllerTest extends TestCase
 
     public function test_create_displays_form(): void
     {
-        $response = $this->actingAs($this->user)->get(route('disciplinas.create'));
+        $response = $this->actingAs($this->user)->get(route('admin.disciplinas.create'));
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.disciplinas.create');
@@ -53,9 +53,9 @@ class DisciplinaControllerTest extends TestCase
             'ativo' => '1',
         ];
 
-        $response = $this->actingAs($this->user)->post(route('disciplinas.store'), $disciplinaData);
+        $response = $this->actingAs($this->user)->post(route('admin.disciplinas.store'), $disciplinaData);
 
-        $response->assertRedirect(route('disciplinas.index'));
+        $response->assertRedirect(route('admin.disciplinas.index'));
         $response->assertSessionHas('success', 'Disciplina criada com sucesso!');
         
         $this->assertDatabaseHas('disciplinas', [
@@ -71,7 +71,7 @@ class DisciplinaControllerTest extends TestCase
     {
         $disciplina = Disciplina::factory()->create();
 
-        $response = $this->actingAs($this->user)->get(route('disciplinas.show', $disciplina));
+        $response = $this->actingAs($this->user)->get(route('admin.disciplinas.show', $disciplina));
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.disciplinas.show');
@@ -84,7 +84,7 @@ class DisciplinaControllerTest extends TestCase
     {
         $disciplina = Disciplina::factory()->create();
 
-        $response = $this->actingAs($this->user)->get(route('disciplinas.edit', $disciplina));
+        $response = $this->actingAs($this->user)->get(route('admin.disciplinas.edit', $disciplina));
 
         $response->assertStatus(200);
         $response->assertViewIs('admin.disciplinas.edit');
@@ -109,9 +109,9 @@ class DisciplinaControllerTest extends TestCase
             // Não incluir 'ativo' simula checkbox desmarcado
         ];
 
-        $response = $this->actingAs($this->user)->put(route('disciplinas.update', $disciplina), $updateData);
+        $response = $this->actingAs($this->user)->put(route('admin.disciplinas.update', $disciplina), $updateData);
 
-        $response->assertRedirect(route('disciplinas.show', $disciplina));
+        $response->assertRedirect(route('admin.disciplinas.show', $disciplina));
         $response->assertSessionHas('success', 'Disciplina atualizada com sucesso!');
         
         $disciplina->refresh();
@@ -126,9 +126,9 @@ class DisciplinaControllerTest extends TestCase
     {
         $disciplina = Disciplina::factory()->create();
 
-        $response = $this->actingAs($this->user)->delete(route('disciplinas.destroy', $disciplina));
+        $response = $this->actingAs($this->user)->delete(route('admin.disciplinas.destroy', $disciplina));
 
-        $response->assertRedirect(route('disciplinas.index'));
+        $response->assertRedirect(route('admin.disciplinas.index'));
         $response->assertSessionHas('success', 'Disciplina excluída com sucesso!');
         $this->assertDatabaseMissing('disciplinas', ['id' => $disciplina->id]);
     }
@@ -137,12 +137,12 @@ class DisciplinaControllerTest extends TestCase
     {
         $disciplina = Disciplina::factory()->create();
 
-        $this->get(route('disciplinas.index'))->assertRedirect(route('login'));
-        $this->get(route('disciplinas.create'))->assertRedirect(route('login'));
-        $this->post(route('disciplinas.store'))->assertRedirect(route('login'));
-        $this->get(route('disciplinas.show', $disciplina))->assertRedirect(route('login'));
-        $this->get(route('disciplinas.edit', $disciplina))->assertRedirect(route('login'));
-        $this->put(route('disciplinas.update', $disciplina))->assertRedirect(route('login'));
-        $this->delete(route('disciplinas.destroy', $disciplina))->assertRedirect(route('login'));
+        $this->get(route('admin.disciplinas.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.disciplinas.create'))->assertRedirect(route('login'));
+        $this->post(route('admin.disciplinas.store'))->assertRedirect(route('login'));
+        $this->get(route('admin.disciplinas.show', $disciplina))->assertRedirect(route('login'));
+        $this->get(route('admin.disciplinas.edit', $disciplina))->assertRedirect(route('login'));
+        $this->put(route('admin.disciplinas.update', $disciplina))->assertRedirect(route('login'));
+        $this->delete(route('admin.disciplinas.destroy', $disciplina))->assertRedirect(route('login'));
     }
 }

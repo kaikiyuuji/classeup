@@ -25,7 +25,7 @@ class ProfessorControllerTest extends TestCase
         $professores = Professor::factory(3)->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('professores.index'));
+            ->get(route('admin.professores.index'));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.professores.index')
@@ -35,7 +35,7 @@ class ProfessorControllerTest extends TestCase
     public function test_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('professores.create'));
+            ->get(route('admin.professores.create'));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.professores.create');
@@ -56,9 +56,9 @@ class ProfessorControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('professores.store'), $professorData);
+            ->post(route('admin.professores.store'), $professorData);
 
-        $response->assertRedirect(route('professores.index'))
+        $response->assertRedirect(route('admin.professores.index'))
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('professores', [
@@ -72,7 +72,7 @@ class ProfessorControllerTest extends TestCase
     public function test_store_validates_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('professores.store'), []);
+            ->post(route('admin.professores.store'), []);
 
         $response->assertSessionHasErrors([
             'nome', 'email', 'cpf', 'data_nascimento', 'especialidade', 'formacao'
@@ -84,7 +84,7 @@ class ProfessorControllerTest extends TestCase
         $professor = Professor::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('professores.show', $professor));
+            ->get(route('admin.professores.show', $professor));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.professores.show')
@@ -96,7 +96,7 @@ class ProfessorControllerTest extends TestCase
         $professor = Professor::factory()->create();
         
         $response = $this->actingAs($this->user)
-            ->get(route('professores.edit', $professor));
+            ->get(route('admin.professores.edit', $professor));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.professores.edit')
@@ -117,9 +117,9 @@ class ProfessorControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('professores.update', $professor), $updateData);
+            ->put(route('admin.professores.update', $professor), $updateData);
 
-        $response->assertRedirect(route('professores.show', $professor))
+        $response->assertRedirect(route('admin.professores.show', $professor))
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('professores', [
@@ -137,9 +137,9 @@ class ProfessorControllerTest extends TestCase
         $professor = Professor::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('professores.destroy', $professor));
+            ->delete(route('admin.professores.destroy', $professor));
 
-        $response->assertRedirect(route('professores.index'))
+        $response->assertRedirect(route('admin.professores.index'))
             ->assertSessionHas('success');
 
         $this->assertDatabaseMissing('professores', [
@@ -151,9 +151,9 @@ class ProfessorControllerTest extends TestCase
     {
         $professor = Professor::factory()->create();
 
-        $this->get(route('professores.index'))->assertRedirect(route('login'));
-        $this->get(route('professores.create'))->assertRedirect(route('login'));
-        $this->get(route('professores.show', $professor))->assertRedirect(route('login'));
-        $this->get(route('professores.edit', $professor))->assertRedirect(route('login'));
+        $this->get(route('admin.professores.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.professores.create'))->assertRedirect(route('login'));
+        $this->get(route('admin.professores.show', $professor))->assertRedirect(route('login'));
+        $this->get(route('admin.professores.edit', $professor))->assertRedirect(route('login'));
     }
 }

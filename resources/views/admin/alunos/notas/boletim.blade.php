@@ -23,7 +23,7 @@
                     </p>
                 </div>
                 <div class="flex space-x-3">
-                    <a href="{{ route('alunos.show', $aluno) }}" 
+                    <a href="{{ route('admin.alunos.show', $aluno) }}" 
                        class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-md transition-colors duration-200">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -74,7 +74,7 @@
                             </td>
                             
                             <!-- Form para atualizar notas -->
-                            <form id="form-{{ $avaliacao->id }}" action="{{ route('alunos.avaliacoes.update', [$aluno, $avaliacao]) }}" method="POST" class="contents">
+                            <form id="form-{{ $avaliacao->id }}" action="{{ route('admin.alunos.avaliacoes.update', [$aluno, $avaliacao]) }}" method="POST" class="contents">
                                 @csrf
                                 @method('PUT')
                                 

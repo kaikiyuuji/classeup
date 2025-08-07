@@ -38,7 +38,7 @@ class DisciplinaController extends Controller
 
         Disciplina::create($validatedData);
 
-        return redirect()->route('disciplinas.index')
+        return redirect()->route('admin.disciplinas.index')
             ->with('success', 'Disciplina criada com sucesso!');
     }
 
@@ -71,7 +71,7 @@ class DisciplinaController extends Controller
 
         $disciplina->update($validatedData);
 
-        return redirect()->route('disciplinas.show', $disciplina)
+        return redirect()->route('admin.disciplinas.show', $disciplina)
             ->with('success', 'Disciplina atualizada com sucesso!');
     }
 
@@ -82,7 +82,7 @@ class DisciplinaController extends Controller
     {
         $disciplina->delete();
 
-        return redirect()->route('disciplinas.index')
+        return redirect()->route('admin.disciplinas.index')
             ->with('success', 'Disciplina excluída com sucesso!');
     }
 }

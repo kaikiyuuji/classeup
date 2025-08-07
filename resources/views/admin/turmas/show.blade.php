@@ -10,7 +10,7 @@
                 </p>
             </div>
             <div class="flex space-x-3">
-                <a href="{{ route('turmas.edit', $turma) }}" 
+                <a href="{{ route('admin.turmas.edit', $turma) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                     <x-icons.edit class="w-4 h-4 mr-2" />
                     Editar
@@ -159,11 +159,11 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <a href="{{ route('alunos.show', $aluno) }}" 
+                                                <a href="{{ route('admin.alunos.show', $aluno) }}" 
                                                    class="text-indigo-600 hover:text-indigo-900 text-xs font-medium px-2 py-1 rounded">
                                                     Ver
                                                 </a>
-                                                <form action="{{ route('turmas.desvincular-aluno', [$turma, $aluno]) }}" method="POST" class="inline" 
+                                                <form action="{{ route('admin.turmas.desvincular-aluno', [$turma, $aluno]) }}" method="POST" class="inline" 
                                                       onsubmit="return confirm('Tem certeza que deseja desvincular {{ $aluno->nome }} desta turma?')">
                                                     @csrf
                                                     @method('DELETE')
@@ -274,12 +274,12 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                                <a href="{{ route('professores.show', $professor) }}" 
+                                                <a href="{{ route('admin.professores.show', $professor) }}" 
                                                    class="text-indigo-600 hover:text-indigo-900 text-xs font-medium px-2 py-1 rounded">
                                                     Ver
                                                 </a>
                                                 @if($professor->pivot->disciplina_id)
-                                                    <form action="{{ route('turmas.desvincular-professor', $turma) }}" method="POST" class="inline" 
+                                                    <form action="{{ route('admin.turmas.desvincular-professor', $turma) }}" method="POST" class="inline" 
                                                           onsubmit="return confirm('Tem certeza que deseja desvincular {{ $professor->nome }} desta turma?')">
                                                         @csrf
                                                         @method('DELETE')
@@ -311,7 +311,7 @@
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ route('turmas.edit', $turma) }}" 
+                            <a href="{{ route('admin.turmas.edit', $turma) }}" 
                                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                                 <x-icons.edit class="w-4 h-4 mr-2" />
                                 Editar Turma
@@ -355,7 +355,7 @@
                         </div>
                     @endif
                     
-                    <form action="{{ route('turmas.vincular-alunos', $turma) }}" method="POST" id="vincularAlunosForm">
+                    <form action="{{ route('admin.turmas.vincular-alunos', $turma) }}" method="POST" id="vincularAlunosForm">
                         @csrf
                         
                         <!-- Campo de Busca -->
@@ -453,7 +453,7 @@
                         </div>
                     @endif
                     
-                    <form action="{{ route('turmas.vincular-professor', $turma) }}" method="POST" id="vincularProfessorForm">
+                    <form action="{{ route('admin.turmas.vincular-professor', $turma) }}" method="POST" id="vincularProfessorForm">
                         @csrf
                         
                         <div class="bg-gray-50 rounded-lg p-6 mb-6">

@@ -10,14 +10,14 @@
                 </p>
             </div>
             <div class="flex space-x-3">
-                <a href="{{ route('alunos.boletim', $aluno) }}" 
+                <a href="{{ route('admin.alunos.boletim', $aluno) }}" 
                        class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         Boletim
                     </a>
-                    <a href="{{ route('alunos.edit', $aluno) }}" 
+                    <a href="{{ route('admin.alunos.edit', $aluno) }}" 
                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -247,7 +247,7 @@
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <a href="{{ route('turmas.show', $aluno->turma) }}" 
+                                            <a href="{{ route('admin.turmas.show', $aluno->turma) }}" 
                                                class="inline-flex items-center px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded-md transition-colors duration-200">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -406,7 +406,7 @@
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex justify-between items-center">
                             <!-- Botão de Exclusão -->
-                            <form action="{{ route('alunos.destroy', $aluno) }}" 
+                            <form action="{{ route('admin.alunos.destroy', $aluno) }}" 
                                   method="POST" 
                                   onsubmit="return confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.')">
                                 @csrf
@@ -429,7 +429,7 @@
                                     </svg>
                                     Voltar à Lista
                                 </a>
-                                <a href="{{ route('alunos.edit', $aluno) }}" 
+                                <a href="{{ route('admin.alunos.edit', $aluno) }}" 
                                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>

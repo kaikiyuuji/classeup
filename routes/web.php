@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\FaltaController;
 use App\Http\Controllers\ProfessorController;
@@ -21,9 +22,23 @@ Route::get('/', function () {
 // ROTAS AUTENTICADAS GERAIS
 // ========================================
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Rota principal do dashboard que redireciona baseado no tipo de usuário
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+// Rotas específicas para cada tipo de dashboard
+Route::get('/dashboard/admin', [DashboardController::class, 'admin'])
+    ->middleware(['auth', 'check.admin'])
+    ->name('dashboard.admin');
+    
+Route::get('/dashboard/professor', [DashboardController::class, 'professor'])
+    ->middleware(['auth', 'check.professor'])
+    ->name('dashboard.professor');
+    
+Route::get('/dashboard/aluno', [DashboardController::class, 'aluno'])
+    ->middleware(['auth', 'check.aluno'])
+    ->name('dashboard.aluno');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,7 +52,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->group(function () {
     // CRUD de Alunos
-    Route::resource('alunos', AlunoController::class)->except(['show']);
+    Route::resource('alunos', AlunoController::class);
+    Route::get('alunos/{aluno}/boletim', [AlunoController::class, 'boletim'])->name('alunos.boletim');
+    Route::post('alunos/{aluno}/notas', [AlunoController::class, 'atualizarNotas'])->name('alunos.atualizar-notas');
     
     // CRUD de Professores
     Route::resource('professores', ProfessorController::class)->parameters([

@@ -98,7 +98,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end space-x-2">
-                                                    <a href="{{ route('disciplinas.show', $disciplina) }}" 
+                                                    <a href="{{ route('admin.disciplinas.show', $disciplina) }}" 
                                                        class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -106,14 +106,14 @@
                                                         </svg>
                                                         Ver
                                                     </a>
-                                                    <a href="{{ route('disciplinas.edit', $disciplina) }}" 
+                                                    <a href="{{ route('admin.disciplinas.edit', $disciplina) }}" 
                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                         </svg>
                                                         Editar
                                                     </a>
-                                                    <form action="{{ route('disciplinas.destroy', $disciplina) }}" 
+                                                    <form action="{{ route('admin.disciplinas.destroy', $disciplina) }}" 
                                                           method="POST" 
                                                           class="inline"
                                                           onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina?')">

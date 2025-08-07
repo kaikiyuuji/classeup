@@ -26,7 +26,7 @@ class AlunoControllerTest extends TestCase
         $alunos = Aluno::factory(3)->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('alunos.index'));
+            ->get(route('admin.alunos.index'));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.alunos.index')
@@ -36,7 +36,7 @@ class AlunoControllerTest extends TestCase
     public function test_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('alunos.create'));
+            ->get(route('admin.alunos.create'));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.alunos.create');
@@ -54,9 +54,9 @@ class AlunoControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('alunos.store'), $alunoData);
+            ->post(route('admin.alunos.store'), $alunoData);
 
-        $response->assertRedirect(route('alunos.index'))
+        $response->assertRedirect(route('admin.alunos.index'))
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('alunos', [
@@ -69,7 +69,7 @@ class AlunoControllerTest extends TestCase
     public function test_store_validates_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('alunos.store'), []);
+            ->post(route('admin.alunos.store'), []);
 
         $response->assertSessionHasErrors([
             'nome', 'email', 'cpf', 'data_nascimento'
@@ -81,7 +81,7 @@ class AlunoControllerTest extends TestCase
         $aluno = Aluno::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('alunos.show', $aluno));
+            ->get(route('admin.alunos.show', $aluno));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.alunos.show')
@@ -93,7 +93,7 @@ class AlunoControllerTest extends TestCase
         $aluno = Aluno::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('alunos.edit', $aluno));
+            ->get(route('admin.alunos.edit', $aluno));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.alunos.edit')
@@ -112,9 +112,9 @@ class AlunoControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('alunos.update', $aluno), $updateData);
+            ->put(route('admin.alunos.update', $aluno), $updateData);
 
-        $response->assertRedirect(route('alunos.show', $aluno))
+        $response->assertRedirect(route('admin.alunos.show', $aluno))
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('alunos', [
@@ -129,9 +129,9 @@ class AlunoControllerTest extends TestCase
         $aluno = Aluno::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('alunos.destroy', $aluno));
+            ->delete(route('admin.alunos.destroy', $aluno));
 
-        $response->assertRedirect(route('alunos.index'))
+        $response->assertRedirect(route('admin.alunos.index'))
             ->assertSessionHas('success');
 
         $this->assertDatabaseMissing('alunos', [
@@ -143,10 +143,10 @@ class AlunoControllerTest extends TestCase
     {
         $aluno = Aluno::factory()->create();
 
-        $this->get(route('alunos.index'))->assertRedirect(route('login'));
-        $this->get(route('alunos.create'))->assertRedirect(route('login'));
-        $this->get(route('alunos.show', $aluno))->assertRedirect(route('login'));
-        $this->get(route('alunos.edit', $aluno))->assertRedirect(route('login'));
+        $this->get(route('admin.alunos.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.alunos.create'))->assertRedirect(route('login'));
+        $this->get(route('admin.alunos.show', $aluno))->assertRedirect(route('login'));
+        $this->get(route('admin.alunos.edit', $aluno))->assertRedirect(route('login'));
     }
 
     public function test_can_update_aluno_turma()
@@ -166,9 +166,9 @@ class AlunoControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('alunos.update', $aluno), $updateData);
+            ->put(route('admin.alunos.update', $aluno), $updateData);
 
-        $response->assertRedirect(route('alunos.show', $aluno))
+        $response->assertRedirect(route('admin.alunos.show', $aluno))
             ->assertSessionHas('success');
 
         $aluno->refresh();
@@ -192,7 +192,7 @@ class AlunoControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('alunos.update', $aluno), $updateData);
+            ->put(route('admin.alunos.update', $aluno), $updateData);
 
         $response->assertRedirect()
             ->assertSessionHasErrors(['turma_id']);

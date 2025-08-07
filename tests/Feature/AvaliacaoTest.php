@@ -53,7 +53,7 @@ class AvaliacaoTest extends TestCase
     public function test_pode_acessar_boletim_do_aluno(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('alunos.boletim', $this->aluno));
+            ->get(route('admin.alunos.boletim', $this->aluno));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.alunos.notas.boletim')
@@ -131,9 +131,9 @@ class AvaliacaoTest extends TestCase
         ];
         
         $response = $this->actingAs($this->user)
-            ->put(route('alunos.avaliacoes.update', [$this->aluno, $avaliacao]), $dadosAtualizacao);
+            ->put(route('admin.alunos.avaliacoes.update', [$this->aluno, $avaliacao]), $dadosAtualizacao);
         
-        $response->assertRedirect(route('alunos.boletim', $this->aluno))
+        $response->assertRedirect(route('admin.alunos.boletim', $this->aluno))
             ->assertSessionHas('success', 'Notas atualizadas com sucesso!');
         
         $avaliacao->refresh();
@@ -159,7 +159,7 @@ class AvaliacaoTest extends TestCase
         ];
         
         $response = $this->actingAs($this->user)
-            ->put(route('alunos.avaliacoes.update', [$this->aluno, $avaliacao]), $dadosInvalidos);
+            ->put(route('admin.alunos.avaliacoes.update', [$this->aluno, $avaliacao]), $dadosInvalidos);
         
         $response->assertSessionHasErrors(['av1', 'av2', 'av3']);
     }

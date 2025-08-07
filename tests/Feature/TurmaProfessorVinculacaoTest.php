@@ -40,7 +40,7 @@ class TurmaProfessorVinculacaoTest extends TestCase
         $disciplina = Disciplina::factory()->create();
         $professor->disciplinas()->attach($disciplina->id);
         
-        $response = $this->get(route('turmas.show', $turma));
+        $response = $this->get(route('admin.turmas.show', $turma));
         
         $response->assertStatus(200);
         $response->assertSee('Professores Vinculados');
@@ -65,12 +65,12 @@ class TurmaProfessorVinculacaoTest extends TestCase
         // Associar disciplina ao professor
         $professor->disciplinas()->attach($disciplina->id);
         
-        $response = $this->post(route('turmas.vincular-professor', $turma), [
+        $response = $this->post(route('admin.turmas.vincular-professor', $turma), [
             'professor_id' => $professor->id,
             'disciplina_id' => $disciplina->id,
         ]);
         
-        $response->assertRedirect(route('turmas.show', $turma));
+        $response->assertRedirect(route('admin.turmas.show', $turma));
         $response->assertSessionHas('success', 'Professor vinculado com sucesso!');
         
         // Verificar se a vinculação foi criada
@@ -103,12 +103,12 @@ class TurmaProfessorVinculacaoTest extends TestCase
             'updated_at' => now(),
         ]);
         
-        $response = $this->delete(route('turmas.desvincular-professor', $turma), [
+        $response = $this->delete(route('admin.turmas.desvincular-professor', $turma), [
             'professor_id' => $professor->id,
             'disciplina_id' => $disciplina->id,
         ]);
         
-        $response->assertRedirect(route('turmas.show', $turma));
+        $response->assertRedirect(route('admin.turmas.show', $turma));
         $response->assertSessionHas('success', 'Professor desvinculado com sucesso!');
         
         // Verificar se a vinculação foi removida

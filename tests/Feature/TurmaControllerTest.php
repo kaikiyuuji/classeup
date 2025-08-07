@@ -25,7 +25,7 @@ class TurmaControllerTest extends TestCase
         $turmas = Turma::factory(3)->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('turmas.index'));
+            ->get(route('admin.turmas.index'));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.turmas.index')
@@ -35,7 +35,7 @@ class TurmaControllerTest extends TestCase
     public function test_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('turmas.create'));
+            ->get(route('admin.turmas.create'));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.turmas.create');
@@ -53,9 +53,9 @@ class TurmaControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('turmas.store'), $turmaData);
+            ->post(route('admin.turmas.store'), $turmaData);
 
-        $response->assertRedirect(route('turmas.index'))
+        $response->assertRedirect(route('admin.turmas.index'))
             ->assertSessionHas('success', 'Turma criada com sucesso!');
 
         $this->assertDatabaseHas('turmas', $turmaData);
@@ -64,7 +64,7 @@ class TurmaControllerTest extends TestCase
     public function test_store_validates_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('turmas.store'), []);
+            ->post(route('admin.turmas.store'), []);
 
         $response->assertSessionHasErrors([
             'nome',
@@ -80,7 +80,7 @@ class TurmaControllerTest extends TestCase
         $turma = Turma::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('turmas.show', $turma));
+            ->get(route('admin.turmas.show', $turma));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.turmas.show')
@@ -92,7 +92,7 @@ class TurmaControllerTest extends TestCase
         $turma = Turma::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('turmas.edit', $turma));
+            ->get(route('admin.turmas.edit', $turma));
 
         $response->assertStatus(200)
             ->assertViewIs('admin.turmas.edit')
@@ -112,9 +112,9 @@ class TurmaControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('turmas.update', $turma), $updateData);
+            ->put(route('admin.turmas.update', $turma), $updateData);
 
-        $response->assertRedirect(route('turmas.show', $turma))
+        $response->assertRedirect(route('admin.turmas.show', $turma))
             ->assertSessionHas('success', 'Turma atualizada com sucesso!');
 
         $this->assertDatabaseHas('turmas', [
@@ -140,9 +140,9 @@ class TurmaControllerTest extends TestCase
         $turma = Turma::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('turmas.destroy', $turma));
+            ->delete(route('admin.turmas.destroy', $turma));
 
-        $response->assertRedirect(route('turmas.index'))
+        $response->assertRedirect(route('admin.turmas.index'))
             ->assertSessionHas('success', 'Turma excluída com sucesso!');
 
         $this->assertDatabaseMissing('turmas', ['id' => $turma->id]);
@@ -160,7 +160,7 @@ class TurmaControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('turmas.store'), $turmaData);
+            ->post(route('admin.turmas.store'), $turmaData);
 
         $response->assertSessionHasErrors(['serie']);
     }
@@ -177,7 +177,7 @@ class TurmaControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('turmas.store'), $turmaData);
+            ->post(route('admin.turmas.store'), $turmaData);
 
         $response->assertSessionHasErrors(['turno']);
     }
@@ -194,7 +194,7 @@ class TurmaControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('turmas.store'), $turmaData);
+            ->post(route('admin.turmas.store'), $turmaData);
 
         $response->assertSessionHasErrors(['capacidade_maxima']);
     }
@@ -203,12 +203,12 @@ class TurmaControllerTest extends TestCase
     {
         $turma = Turma::factory()->create();
 
-        $this->get(route('turmas.index'))->assertRedirect(route('login'));
-        $this->get(route('turmas.create'))->assertRedirect(route('login'));
-        $this->get(route('turmas.show', $turma))->assertRedirect(route('login'));
-        $this->get(route('turmas.edit', $turma))->assertRedirect(route('login'));
-        $this->post(route('turmas.store'))->assertRedirect(route('login'));
-        $this->put(route('turmas.update', $turma))->assertRedirect(route('login'));
-        $this->delete(route('turmas.destroy', $turma))->assertRedirect(route('login'));
+        $this->get(route('admin.turmas.index'))->assertRedirect(route('login'));
+        $this->get(route('admin.turmas.create'))->assertRedirect(route('login'));
+        $this->get(route('admin.turmas.show', $turma))->assertRedirect(route('login'));
+        $this->get(route('admin.turmas.edit', $turma))->assertRedirect(route('login'));
+        $this->post(route('admin.turmas.store'))->assertRedirect(route('login'));
+        $this->put(route('admin.turmas.update', $turma))->assertRedirect(route('login'));
+        $this->delete(route('admin.turmas.destroy', $turma))->assertRedirect(route('login'));
     }
 }

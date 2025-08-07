@@ -62,7 +62,7 @@ class AlunoController extends Controller
         Aluno::create($validatedData);
 
         return redirect()
-            ->route('alunos.index')
+            ->route('admin.alunos.index')
             ->with('success', 'Aluno criado com sucesso!');
     }
 
@@ -107,7 +107,7 @@ class AlunoController extends Controller
         $aluno->update($validatedData);
 
         return redirect()
-            ->route('alunos.show', $aluno)
+            ->route('admin.alunos.show', $aluno)
             ->with('success', 'Aluno atualizado com sucesso!');
     }
 
@@ -119,7 +119,7 @@ class AlunoController extends Controller
         $aluno->delete();
 
         return redirect()
-            ->route('alunos.index')
+            ->route('admin.alunos.index')
             ->with('success', 'Aluno excluído com sucesso!');
     }
 
@@ -163,7 +163,7 @@ class AlunoController extends Controller
         $avaliacaoService->atualizarNotas($avaliacao, $request->validated());
         
         return redirect()
-            ->route('alunos.boletim', $aluno)
+            ->route('admin.alunos.boletim', $aluno)
             ->with('success', 'Notas atualizadas com sucesso!');
     }
 }

@@ -47,7 +47,7 @@ class ProfessorController extends Controller
         Professor::create($validatedData);
 
         return redirect()
-            ->route('professores.index')
+            ->route('admin.professores.index')
             ->with('success', 'Professor criado com sucesso!');
     }
 
@@ -91,7 +91,7 @@ class ProfessorController extends Controller
         $professor->update($validatedData);
 
         return redirect()
-            ->route('professores.show', $professor)
+            ->route('admin.professores.show', $professor)
             ->with('success', 'Professor atualizado com sucesso!');
     }
 
@@ -103,7 +103,7 @@ class ProfessorController extends Controller
         $professor->delete();
 
         return redirect()
-            ->route('professores.index')
+            ->route('admin.professores.index')
             ->with('success', 'Professor excluído com sucesso!');
     }
 
@@ -123,7 +123,7 @@ class ProfessorController extends Controller
         // Verificar se já está vinculado
         if ($professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
             return redirect()
-                ->route('professores.show', $professor)
+                ->route('admin.professores.show', $professor)
                 ->with('error', 'Professor já está vinculado a esta disciplina!');
         }
         
@@ -132,7 +132,7 @@ class ProfessorController extends Controller
         $disciplina = Disciplina::find($disciplinaId);
         
         return redirect()
-            ->route('professores.show', $professor)
+            ->route('admin.professores.show', $professor)
             ->with('success', "Professor vinculado à disciplina {$disciplina->nome} com sucesso!");
     }
     
@@ -150,7 +150,7 @@ class ProfessorController extends Controller
         // Verificar se está vinculado
         if (!$professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
             return redirect()
-                ->route('professores.show', $professor)
+                ->route('admin.professores.show', $professor)
                 ->with('error', 'Professor não está vinculado a esta disciplina!');
         }
         
@@ -159,7 +159,7 @@ class ProfessorController extends Controller
         $disciplina = Disciplina::find($disciplinaId);
         
         return redirect()
-            ->route('professores.show', $professor)
+            ->route('admin.professores.show', $professor)
             ->with('success', "Professor desvinculado da disciplina {$disciplina->nome} com sucesso!");
     }
 
