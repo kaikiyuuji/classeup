@@ -72,7 +72,7 @@
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-900">{{ $professor->email }}</div>
                                                 @if($professor->telefone)
-                                                    <div class="text-sm text-gray-500">{{ $professor->telefone }}</div>
+                                                    <div class="text-sm text-gray-500" data-format="phone">{{ $professor->telefone }}</div>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4">

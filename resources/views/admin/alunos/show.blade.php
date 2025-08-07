@@ -141,7 +141,7 @@
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <dt class="text-sm font-medium text-gray-600">CPF</dt>
-                                    <dd class="text-sm text-gray-900 font-mono">{{ $aluno->cpf }}</dd>
+                                    <dd class="text-sm text-gray-900 font-mono" data-format="cpf">{{ $aluno->cpf }}</dd>
                                 </div>
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
@@ -183,7 +183,7 @@
                                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                         <dt class="text-sm font-medium text-gray-600">Telefone</dt>
                                         <dd class="text-sm">
-                                            <a href="tel:{{ $aluno->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                            <a href="tel:{{ $aluno->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors" data-format="phone">
                                                 {{ $aluno->telefone }}
                                             </a>
                                         </dd>

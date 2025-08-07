@@ -68,6 +68,8 @@ class AlunoStoreRequest extends FormRequest
     {
         $this->merge([
             'ativo' => $this->has('ativo'),
+            'cpf' => $this->input('cpf') ? preg_replace('/\D/', '', $this->input('cpf')) : null,
+            'telefone' => $this->input('telefone') ? preg_replace('/\D/', '', $this->input('telefone')) : null,
         ]);
     }
 }

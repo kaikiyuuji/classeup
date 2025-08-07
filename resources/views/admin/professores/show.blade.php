@@ -85,7 +85,7 @@
                                 @if($professor->telefone)
                                     <div class="flex items-center">
                                         <x-icons.phone class="w-4 h-4 mr-2" />
-                                        <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                        <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors" data-format="phone">
                         {{ $professor->telefone }}
                                         </a>
                                     </div>
@@ -114,7 +114,7 @@
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
                                     <dt class="text-sm font-medium text-gray-600">CPF</dt>
-                                    <dd class="text-sm text-gray-900 font-mono">{{ $professor->cpf }}</dd>
+                                    <dd class="text-sm text-gray-900 font-mono" data-format="cpf">{{ $professor->cpf }}</dd>
                                 </div>
 
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200">
@@ -198,7 +198,7 @@
                                         <div class="flex justify-between items-center py-2">
                                             <dt class="text-sm font-medium text-gray-600">Telefone</dt>
                                             <dd class="text-sm">
-                                                <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                                <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors" data-format="phone">
                                                     {{ $professor->telefone }}
                                                 </a>
                                             </dd>

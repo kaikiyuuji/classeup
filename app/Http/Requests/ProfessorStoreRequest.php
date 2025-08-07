@@ -73,6 +73,8 @@ class ProfessorStoreRequest extends FormRequest
     {
         $this->merge([
             'ativo' => $this->has('ativo'),
+            'cpf' => $this->cpf ? preg_replace('/\D/', '', $this->cpf) : $this->cpf,
+            'telefone' => $this->telefone ? preg_replace('/\D/', '', $this->telefone) : $this->telefone,
         ]);
     }
 }

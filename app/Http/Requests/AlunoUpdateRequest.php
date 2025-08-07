@@ -55,6 +55,17 @@ class AlunoUpdateRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'cpf' => $this->input('cpf') ? preg_replace('/\D/', '', $this->input('cpf')) : null,
+            'telefone' => $this->input('telefone') ? preg_replace('/\D/', '', $this->input('telefone')) : null,
+        ]);
+    }
+
+    /**
      * Get custom messages for validator errors.
      *
      * @return array<string, string>
@@ -82,13 +93,4 @@ class AlunoUpdateRequest extends FormRequest
         ];
     }
 
-    /**
-     * Prepare the data for validation.
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'ativo' => $this->has('ativo'),
-        ]);
-    }
 }

@@ -55,6 +55,7 @@
                                     <input type="text" name="cpf" id="cpf" value="{{ old('cpf') }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                                            placeholder="000.000.000-00"
+                                           maxlength="14"
                                            required>
                                     @error('cpf')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -116,7 +117,8 @@
                                     <label for="telefone" class="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
                                     <input type="text" name="telefone" id="telefone" value="{{ old('telefone') }}" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                           placeholder="(11) 99999-9999">
+                                           placeholder="(11) 99999-9999"
+                                           maxlength="15">
                                     @error('telefone')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

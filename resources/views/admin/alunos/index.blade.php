@@ -68,7 +68,7 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">{{ $aluno->nome }}</div>
-                                                        <div class="text-sm text-gray-500">{{ $aluno->cpf }}</div>
+                                                        <div class="text-sm text-gray-500" data-format="cpf">{{ $aluno->cpf }}</div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -78,7 +78,7 @@
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-900">{{ $aluno->email }}</div>
                                                 @if($aluno->telefone)
-                                                    <div class="text-sm text-gray-500">{{ $aluno->telefone }}</div>
+                                                    <div class="text-sm text-gray-500" data-format="phone">{{ $aluno->telefone }}</div>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4">
