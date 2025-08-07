@@ -30,6 +30,9 @@
                     <x-nav-link :href="route('admin.faltas.index')" :active="request()->routeIs('admin.faltas.*')">
                         {{ __('Faltas') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.usuarios.professores')" :active="request()->routeIs('admin.usuarios.*')">
+                        {{ __('Usuários') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -99,6 +102,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.faltas.index')" :active="request()->routeIs('admin.faltas.*')">
                 {{ __('Faltas') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.usuarios.professores')" :active="request()->routeIs('admin.usuarios.*')">
+                {{ __('Usuários') }}
             </x-responsive-nav-link>
         </div>
 
