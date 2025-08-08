@@ -24,7 +24,7 @@ class CheckAdmin
         
         if (!$user->isAdmin()) {
             return redirect()->route('dashboard')
-                ->with('error', 'Acesso negado. Apenas administradores podem acessar esta área.');
+                ->with('error', 'Você não tem permissão para acessar esta área');
         }
 
         return $next($request);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\AvaliacaoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Avaliacao extends Model
 {
     use HasFactory;
+    
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return AvaliacaoFactory::new();
+    }
     
     protected $table = 'avaliacoes';
 

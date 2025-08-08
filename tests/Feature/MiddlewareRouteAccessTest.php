@@ -20,14 +20,20 @@ class MiddlewareRouteAccessTest extends TestCase
             'email' => 'admin@test.com'
         ]);
         
+        // Criar professor com registro associado
+        $professor = \App\Models\Professor::factory()->create();
         $this->professorUser = User::factory()->create([
             'tipo_usuario' => 'professor',
-            'email' => 'professor@test.com'
+            'email' => 'professor@test.com',
+            'professor_id' => $professor->id
         ]);
         
+        // Criar aluno com registro associado
+        $aluno = \App\Models\Aluno::factory()->create();
         $this->alunoUser = User::factory()->create([
             'tipo_usuario' => 'aluno',
-            'email' => 'aluno@test.com'
+            'email' => 'aluno@test.com',
+            'aluno_id' => $aluno->id
         ]);
     }
 
@@ -215,17 +221,28 @@ class MiddlewareRouteAccessTest extends TestCase
     {
         // Professor tentando acessar rota admin
         $response = $this->actingAs($this->professorUser)
-            ->followingRedirects()
             ->get('/admin/alunos');
+        
+        // Verificar se foi redirecionado
+        $response->assertRedirect(route('dashboard'));
+        
+        // Verificar se a mensagem foi definida na sessão
+        $response->assertSessionHas('error', 'Você não tem permissão para acessar esta área');
+        
+        // Testar diretamente o dashboard do professor com mensagem na sessão
+        $response = $this->actingAs($this->professorUser)
+            ->withSession(['error' => 'Você não tem permissão para acessar esta área'])
+            ->get('/professor/dashboard');
         
         $response->assertSee('Você não tem permissão para acessar esta área');
 
         // Aluno tentando acessar rota de professor
         $response = $this->actingAs($this->alunoUser)
-            ->followingRedirects()
             ->get('/professor/dashboard');
         
-        $response->assertSee('Você não tem permissão para acessar esta área');
+        // Verificar redirecionamento e mensagem na sessão
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error', 'Você não tem permissão para acessar esta área');
     }
 
     /**
