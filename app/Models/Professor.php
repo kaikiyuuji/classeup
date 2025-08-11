@@ -115,4 +115,12 @@ class Professor extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    /**
+     * Relacionamento one-to-many com Chamada
+     */
+    public function chamadas()
+    {
+        return $this->hasMany(Chamada::class);
+    }
 }

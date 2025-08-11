@@ -73,7 +73,7 @@
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <h4 class="text-sm font-medium text-gray-900">{{ $turma->nome }}</h4>
-                                            <p class="text-sm text-gray-500">{{ $turma->nivel_educacional }}</p>
+                                            <p class="text-sm text-gray-500">{{ $turma->serie }}</p>
                                             <p class="text-xs text-gray-400 mt-1">{{ $turma->alunos->count() }} alunos</p>
                                         </div>
                                         <div class="flex space-x-2">

@@ -47,7 +47,7 @@
                                             Ano Letivo
                                         </th>
                                         <x-admin.sortable-header 
-                                            field="nivel_educacional" 
+                                            field="serie" 
                                             :current-sort="$sortField ?? ''" 
                                             :current-direction="$sortDirection ?? 'asc'" 
                                             label="Nível Educacional" 
@@ -139,12 +139,12 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @if($turma->ativo)
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                        <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
+                                                        <x-heroicon-o-pause class="w-1.5 h-1.5 mr-1.5" />
                                                         Ativa
                                                     </span>
                                                 @else
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                        <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
+                                                        <x-heroicon-o-pause class="w-1.5 h-1.5 mr-1.5" />
                                                         Inativa
                                                     </span>
                                                 @endif

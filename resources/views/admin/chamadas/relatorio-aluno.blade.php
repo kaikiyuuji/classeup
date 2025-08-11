@@ -118,7 +118,7 @@
                     
                     <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                         <div class="flex items-center">
-                            <x-heroicon-o-x-circle class="w-8 h-8 text-red-500 mr-3" />
+                            <x-heroicon-o-x-mark class="w-8 h-8 text-red-500 mr-3" />
                             <div>
                                 <p class="text-sm text-gray-600">Faltas</p>
                                 <p class="text-2xl font-bold text-red-600">{{ $chamadas->where('status', 'falta')->count() }}</p>

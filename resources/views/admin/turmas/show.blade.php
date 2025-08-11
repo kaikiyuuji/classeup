@@ -197,7 +197,7 @@
                                     @if($alunosDisponiveis->count() > 0)
                                         <button onclick="openModal('modalVincularAlunos')" 
                                                 class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                            <x-heroicon-o-user-plus class="w-4 h-4 mr-2" />
+                                            <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                                             Vincular Alunos
                                         </button>
                                     @else
@@ -324,7 +324,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <x-heroicon-o-user-plus class="w-5 h-5 text-blue-600" />
+                                <x-heroicon-o-plus class="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-gray-900">Vincular Alunos à Turma</h3>

@@ -57,7 +57,7 @@ class TurmaController extends Controller
         $sortDirection = $request->get('direction', 'asc');
         
         // Validar campos de ordenação permitidos
-        $allowedSortFields = ['nome', 'nivel_educacional', 'turno', 'ativo'];
+        $allowedSortFields = ['nome', 'serie', 'turno', 'ativo'];
         if (!in_array($sortField, $allowedSortFields)) {
             $sortField = 'nome';
         }

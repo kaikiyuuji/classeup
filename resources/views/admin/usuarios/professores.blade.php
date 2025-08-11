@@ -71,7 +71,7 @@
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <x-heroicon-o-pause-circle class="h-8 w-8 text-yellow-600" />
+                                <x-heroicon-o-pause class="h-8 w-8 text-yellow-600" />
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
@@ -91,7 +91,7 @@
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <x-heroicon-o-user-minus class="h-8 w-8 text-gray-600" />
+                                <x-heroicon-o-user class="h-8 w-8 text-gray-600" />
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
@@ -226,7 +226,7 @@
                                                 @endif
                                             @else
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                    <x-heroicon-o-x-circle class="w-3 h-3 mr-1" />
+                                                    <x-heroicon-o-x-mark class="w-3 h-3 mr-1" />
                                                     Sem usuário
                                                 </span>
                                             @endif
@@ -246,7 +246,7 @@
                                                       onsubmit="return confirm('Deseja criar um usuário para este professor?')">
                                                     @csrf
                                                     <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                                        <x-heroicon-o-user-plus class="w-4 h-4 mr-1" />
+                                                        <x-heroicon-o-plus class="w-4 h-4 mr-1" />
                                                         Criar Usuário
                                                     </button>
                                                 </form>
@@ -260,7 +260,7 @@
                                                             @csrf
                                                             @method('PATCH')
                                                             <button type="submit" class="inline-flex items-center p-2 border border-transparent rounded-md text-yellow-600 hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" title="Desativar usuário">
-                                                                <x-heroicon-o-x-circle class="w-4 h-4" />
+                                                                <x-heroicon-o-x-mark class="w-4 h-4" />
                                                             </button>
                                                         </form>
                                                     @else

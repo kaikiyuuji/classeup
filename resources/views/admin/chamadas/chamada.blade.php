@@ -159,7 +159,7 @@
                                             <div>
                                                 <p class="font-semibold text-gray-900 text-lg">{{ $aluno->nome }}</p>
                                                 <p class="text-sm text-gray-600 flex items-center">
-                                                    <x-heroicon-o-identification class="w-4 h-4 mr-1" />
+                                                    <x-heroicon-o-user class="w-4 h-4 mr-1" />
                                                     {{ $aluno->numero_matricula }}
                                                 </p>
                                             </div>
@@ -205,7 +205,7 @@
                             </button>
                             <button type="submit" 
                                     class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center">
-                                <x-heroicon-o-arrow-down-tray class="w-5 h-5 mr-2" />
+                                <x-heroicon-o-check class="w-5 h-5 mr-2" />
                                 Salvar Chamada
                             </button>
                         </div>

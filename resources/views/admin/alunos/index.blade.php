@@ -106,7 +106,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                     {{ $aluno->isMatriculaAtiva() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                    <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
+                                                    <x-heroicon-o-pause class="w-1.5 h-1.5 mr-1.5" />
                                                     {{ ucfirst($aluno->status_matricula) }}
                                                 </span>
                                             </td>

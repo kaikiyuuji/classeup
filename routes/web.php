@@ -28,15 +28,15 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 // Rotas específicas para cada tipo de dashboard
-Route::get('/dashboard/admin', [DashboardController::class, 'admin'])
+Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
     ->middleware(['auth', 'check.admin'])
     ->name('dashboard.admin');
     
-Route::get('/dashboard/professor', [DashboardController::class, 'professor'])
+Route::get('/professor/dashboard', [DashboardController::class, 'professor'])
     ->middleware(['auth', 'check.professor'])
     ->name('dashboard.professor');
     
-Route::get('/dashboard/aluno', [DashboardController::class, 'aluno'])
+Route::get('/aluno/dashboard', [DashboardController::class, 'aluno'])
     ->middleware(['auth', 'check.aluno'])
     ->name('dashboard.aluno');
 
