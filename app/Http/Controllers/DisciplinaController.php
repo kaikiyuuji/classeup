@@ -6,19 +6,57 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DisciplinaStoreRequest;
 use App\Http\Requests\DisciplinaUpdateRequest;
 use App\Models\Disciplina;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class DisciplinaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $disciplinas = Disciplina::orderBy('nome')->paginate(10);
+        $query = Disciplina::query();
+
+        // Filtro de busca por nome, código ou descrição
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                  ->orWhere('codigo', 'like', "%{$search}%")
+                  ->orWhere('descricao', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por status
+        if ($request->filled('status')) {
+            $status = $request->get('status');
+            if ($status === 'ativo') {
+                $query->where('ativo', true);
+            } elseif ($status === 'inativo') {
+                $query->where('ativo', false);
+            }
+        }
+
+        // Lógica de ordenação
+        $sortField = $request->get('sort', 'nome');
+        $sortDirection = $request->get('direction', 'asc');
         
-        return view('admin.disciplinas.index', compact('disciplinas'));
+        // Validar campos de ordenação permitidos
+        $allowedSortFields = ['nome', 'descricao', 'carga_horaria', 'ativo'];
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'nome';
+        }
+        
+        // Validar direção de ordenação
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $disciplinas = $query->orderBy($sortField, $sortDirection)->paginate(10)->withQueryString();
+        
+        return view('admin.disciplinas.index', compact('disciplinas', 'sortField', 'sortDirection'));
     }
 
     /**

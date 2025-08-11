@@ -17,25 +17,134 @@ class UserController extends Controller
     /**
      * Exibe lista de professores com status de usuário
      */
-    public function professores(): View
+    public function professores(Request $request): View
     {
-        $professores = Professor::with('user')
-            ->orderBy('nome')
-            ->get();
+        $query = Professor::with('user');
+
+        // Filtro de busca por nome, email ou especialidade
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('especialidade', 'like', "%{$search}%")
+                  ->orWhere('formacao', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por status de usuário
+        if ($request->filled('status_usuario')) {
+            $statusUsuario = $request->get('status_usuario');
+            if ($statusUsuario === 'com_usuario') {
+                $query->whereHas('user');
+            } elseif ($statusUsuario === 'sem_usuario') {
+                $query->whereDoesntHave('user');
+            } elseif ($statusUsuario === 'ativo') {
+                $query->whereHas('user', function ($q) {
+                    $q->whereNotNull('email_verified_at');
+                });
+            } elseif ($statusUsuario === 'inativo') {
+                $query->whereHas('user', function ($q) {
+                    $q->whereNull('email_verified_at');
+                });
+            }
+        }
+
+        // Lógica de ordenação
+        $sortField = $request->get('sort', 'nome');
+        $sortDirection = $request->get('direction', 'asc');
+        
+        // Validar campos de ordenação permitidos
+        $allowedSortFields = ['nome', 'email', 'especialidade', 'formacao', 'ativo'];
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'nome';
+        }
+        
+        // Validar direção de ordenação
+        $allowedSortDirections = ['asc', 'desc'];
+        if (!in_array($sortDirection, $allowedSortDirections)) {
+            $sortDirection = 'asc';
+        }
+
+        $professores = $query->orderBy($sortField, $sortDirection)
+            ->paginate(15)
+            ->withQueryString();
             
-        return view('admin.usuarios.professores', compact('professores'));
+        return view('admin.usuarios.professores', compact('professores', 'sortField', 'sortDirection'));
     }
     
     /**
      * Exibe lista de alunos com status de usuário
      */
-    public function alunos(): View
+    public function alunos(Request $request): View
     {
-        $alunos = Aluno::with('user')
-            ->orderBy('nome')
-            ->get();
+        $query = Aluno::with(['user', 'turma']);
+
+        // Filtro de busca por nome, email ou matrícula
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('numero_matricula', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por status de usuário
+        if ($request->filled('status_usuario')) {
+            $statusUsuario = $request->get('status_usuario');
+            if ($statusUsuario === 'com_usuario') {
+                $query->whereHas('user');
+            } elseif ($statusUsuario === 'sem_usuario') {
+                $query->whereDoesntHave('user');
+            } elseif ($statusUsuario === 'ativo') {
+                $query->whereHas('user', function ($q) {
+                    $q->whereNotNull('email_verified_at');
+                });
+            } elseif ($statusUsuario === 'inativo') {
+                $query->whereHas('user', function ($q) {
+                    $q->whereNull('email_verified_at');
+                });
+            }
+        }
+
+        // Filtro por turma
+        if ($request->filled('turma_id')) {
+            $query->where('turma_id', $request->get('turma_id'));
+        }
+
+        // Lógica de ordenação
+        $sortField = $request->get('sort', 'nome');
+        $sortDirection = $request->get('direction', 'asc');
+        
+        // Validar campos de ordenação permitidos
+        $allowedSortFields = ['nome', 'numero_matricula', 'email', 'turma'];
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'nome';
+        }
+        
+        // Validar direção de ordenação
+        $allowedSortDirections = ['asc', 'desc'];
+        if (!in_array($sortDirection, $allowedSortDirections)) {
+            $sortDirection = 'asc';
+        }
+
+        // Ordenação especial para turma (relacionamento)
+        if ($sortField === 'turma') {
+            $query->leftJoin('turmas', 'alunos.turma_id', '=', 'turmas.id')
+                  ->select('alunos.*')
+                  ->orderBy('turmas.nome', $sortDirection);
+        } else {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        $alunos = $query->paginate(15)
+            ->withQueryString();
             
-        return view('admin.usuarios.alunos', compact('alunos'));
+        // Buscar turmas para o filtro
+        $turmas = \App\Models\Turma::orderBy('nome')->get();
+            
+        return view('admin.usuarios.alunos', compact('alunos', 'turmas', 'sortField', 'sortDirection'));
     }
     
     /**

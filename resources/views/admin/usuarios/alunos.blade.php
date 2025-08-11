@@ -108,6 +108,76 @@
                 </div>
             </div>
 
+            <!-- Filtros -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Filtros</h3>
+                    <form method="GET" action="{{ route('admin.usuarios.alunos') }}" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Busca por nome, email ou matrícula -->
+                            <div>
+                                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Buscar por nome, email ou matrícula
+                                </label>
+                                <input type="text" 
+                                       id="search" 
+                                       name="search" 
+                                       value="{{ request('search') }}"
+                                       placeholder="Digite para buscar..."
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+
+                            <!-- Filtro por status do usuário -->
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Status do Usuário
+                                </label>
+                                <select id="status" 
+                                        name="status" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="">Todos os status</option>
+                                    <option value="com_usuario" {{ request('status') === 'com_usuario' ? 'selected' : '' }}>Com usuário</option>
+                                    <option value="sem_usuario" {{ request('status') === 'sem_usuario' ? 'selected' : '' }}>Sem usuário</option>
+                                    <option value="ativo" {{ request('status') === 'ativo' ? 'selected' : '' }}>Ativo</option>
+                                    <option value="inativo" {{ request('status') === 'inativo' ? 'selected' : '' }}>Inativo</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por turma -->
+                            <div>
+                                <label for="turma" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Turma
+                                </label>
+                                <select id="turma" 
+                                        name="turma" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="">Todas as turmas</option>
+                                    @foreach(\App\Models\Turma::orderBy('nome')->get() as $turma)
+                                        <option value="{{ $turma->id }}" {{ request('turma') == $turma->id ? 'selected' : '' }}>
+                                            {{ $turma->nome }} - {{  ucfirst($turma->serie) }} - {{ ucfirst($turma->turno) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Botões de ação -->
+                        <div class="flex items-center justify-end space-x-3 pt-4">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <x-icons.search class="w-4 h-4 mr-2" />
+                                Filtrar
+                            </button>
+                            <a href="{{ route('admin.usuarios.alunos') }}" 
+                               class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <x-icons.x class="w-4 h-4 mr-2" />
+                                Limpar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Main Content -->
             <div class="bg-white overflow-hidden shadow-sm rounded-lg">        
                 
@@ -117,22 +187,28 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Aluno
-                                        </th>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Matrícula
-                                        </th>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Turma
-                                        </th>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <x-admin.sortable-header 
+                                            field="nome" 
+                                            :current-sort="request('sort')" 
+                                            :current-direction="request('direction')" 
+                                            label="Aluno" />
+                                        <x-admin.sortable-header 
+                                            field="numero_matricula" 
+                                            :current-sort="request('sort')" 
+                                            :current-direction="request('direction')" 
+                                            label="Matrícula" />
+                                        <x-admin.sortable-header 
+                                            field="turma" 
+                                            :current-sort="request('sort')" 
+                                            :current-direction="request('direction')" 
+                                            label="Turma" />
+                                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Status do Usuário
                                         </th>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Email do Sistema
                                         </th>
-                                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Ações
                                         </th>
                                     </tr>
@@ -161,7 +237,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @if($aluno->turma)
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                        {{ $aluno->turma->nome }}
+                                                        {{ $aluno->turma->nome }} - {{  ucfirst($aluno->turma->serie) }} - {{  ucfirst($aluno->turma->turno) }} 
                                                     </span>
                                                 @else
                                                     <span class="text-sm text-gray-500 italic">Sem turma</span>
@@ -235,13 +311,19 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center text-sm text-gray-500">
                                     <x-icons.information-circle class="w-4 h-4 mr-1" />
-                                    Total de alunos: {{ $alunos->count() }}
+                                    Total de alunos: {{ $alunos->total() }}
                                 </div>
                                 <div class="flex items-center text-sm text-gray-500">
                                     <x-icons.key class="w-4 h-4 mr-1" />
                                     Senha padrão: CPF (apenas números)
                                 </div>
                             </div>
+                            
+                            @if($alunos->hasPages())
+                                <div class="mt-4">
+                                    {{ $alunos->links() }}
+                                </div>
+                            @endif
                         </div>
                     @else
                         <div class="p-12 text-center">

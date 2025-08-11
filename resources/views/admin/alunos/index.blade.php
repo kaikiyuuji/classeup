@@ -17,14 +17,18 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-8">
-            @if(session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                    <x-icons.check class="w-5 h-5 mr-2 text-green-600" />
-                    {{ session('success') }}
-                </div>
-            @endif
+            
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <!-- Filtros -->
+                <x-admin.filtros 
+                    :action="route('admin.alunos.index')"
+                    placeholder="Buscar por nome, email ou matrícula..."
+                    :show-search="true"
+                    :show-status="true"
+                    :show-turma="true"
+                    :turmas="$turmas"
+                />
 
                 @if($alunos->count() > 0)
                     <!-- Table View -->
@@ -32,21 +36,30 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Aluno
-                                        </th>
+                                        <x-admin.sortable-header 
+                                            field="nome" 
+                                            :current-sort="$sortField ?? ''" 
+                                            :current-direction="$sortDirection ?? 'asc'" 
+                                            label="Aluno" 
+                                        />
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Matrícula
                                         </th>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Contato
-                                        </th>
+                                        <x-admin.sortable-header 
+                                            field="email" 
+                                            :current-sort="$sortField ?? ''" 
+                                            :current-direction="$sortDirection ?? 'asc'" 
+                                            label="Contato" 
+                                        />
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Turmas
                                         </th>
-                                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                            Status
-                                        </th>
+                                        <x-admin.sortable-header 
+                                            field="status_matricula" 
+                                            :current-sort="$sortField ?? ''" 
+                                            :current-direction="$sortDirection ?? 'asc'" 
+                                            label="Status" 
+                                        />
                                         <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                             Ações
                                         </th>

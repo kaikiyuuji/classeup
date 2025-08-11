@@ -108,6 +108,54 @@
                 </div>
             </div>
 
+            <!-- Filtros -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+                <div class="p-6">
+                    <form method="GET" action="{{ route('admin.usuarios.professores') }}" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Busca -->
+                            <div>
+                                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
+                                <input type="text" 
+                                       name="search" 
+                                       id="search"
+                                       value="{{ request('search') }}"
+                                       placeholder="Nome, email, especialidade..."
+                                       class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+
+                            <!-- Status do Usuário -->
+                            <div>
+                                <label for="status_usuario" class="block text-sm font-medium text-gray-700 mb-2">Status do Usuário</label>
+                                <select name="status_usuario" 
+                                        id="status_usuario"
+                                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">Todos</option>
+                                    <option value="com_usuario" {{ request('status_usuario') === 'com_usuario' ? 'selected' : '' }}>Com Usuário</option>
+                                    <option value="sem_usuario" {{ request('status_usuario') === 'sem_usuario' ? 'selected' : '' }}>Sem Usuário</option>
+                                    <option value="ativo" {{ request('status_usuario') === 'ativo' ? 'selected' : '' }}>Usuário Ativo</option>
+                                    <option value="inativo" {{ request('status_usuario') === 'inativo' ? 'selected' : '' }}>Usuário Inativo</option>
+                                </select>
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="flex items-end space-x-2">
+                                <button type="submit" 
+                                        class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <x-icons.search class="w-4 h-4 mr-2" />
+                                    Filtrar
+                                </button>
+                                <a href="{{ route('admin.usuarios.professores') }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <x-icons.x class="w-4 h-4 mr-2" />
+                                    Limpar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 @if($professores->count() > 0)
 
@@ -115,19 +163,23 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Professor
-                                    </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        Contato
-                                    </th>
+                                    <x-admin.sortable-header 
+                                        field="nome" 
+                                        :current-sort="$sortField ?? 'nome'" 
+                                        :current-direction="$sortDirection ?? 'asc'" 
+                                        label="Professor" />
+                                    <x-admin.sortable-header 
+                                        field="email" 
+                                        :current-sort="$sortField ?? 'nome'" 
+                                        :current-direction="$sortDirection ?? 'asc'" 
+                                        label="Contato" />
                                     <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Status do Usuário
                                     </th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Email do Sistema
                                     </th>
-                                    <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Ações
                                     </th>
                                 </tr>
@@ -236,7 +288,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center text-sm text-gray-500">
                                 <x-icons.information-circle class="w-4 h-4 mr-1" />
-                                Total de professores: {{ $professores->count() }}
+                                Total de professores: {{ $professores->total() }}
                             </div>
                             <div class="flex items-center text-sm text-gray-500">
                                 <x-icons.key class="w-4 h-4 mr-1" />
@@ -252,6 +304,13 @@
                     </div>
                 @endif
             </div>
+            
+            <!-- Paginação -->
+            @if($professores->hasPages())
+                <div class="mt-6">
+                    {{ $professores->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

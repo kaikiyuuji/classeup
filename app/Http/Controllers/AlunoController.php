@@ -19,13 +19,56 @@ class AlunoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $alunos = Aluno::with('turma')
-            ->orderBy('nome')
-            ->paginate(15);
+        $query = Aluno::with('turma');
 
-        return view('admin.alunos.index', compact('alunos'));
+        // Filtro de busca por nome, email ou número de matrícula
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('numero_matricula', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por status de matrícula
+        if ($request->filled('status')) {
+            $status = $request->get('status');
+            if ($status === 'ativo') {
+                $query->where('status_matricula', 'ativa');
+            } elseif ($status === 'inativo') {
+                $query->whereIn('status_matricula', ['inativa', 'cancelada', 'transferida']);
+            }
+        }
+
+        // Filtro por turma
+        if ($request->filled('turma_id')) {
+            $query->where('turma_id', $request->get('turma_id'));
+        }
+
+        // Lógica de ordenação
+        $sortField = $request->get('sort', 'nome');
+        $sortDirection = $request->get('direction', 'asc');
+        
+        // Validar campos de ordenação permitidos
+        $allowedSortFields = ['nome', 'email', 'data_nascimento', 'status_matricula'];
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'nome';
+        }
+        
+        // Validar direção de ordenação
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $alunos = $query->orderBy($sortField, $sortDirection)->paginate(15)->withQueryString();
+        
+        // Buscar turmas para o filtro
+        $turmas = Turma::where('ativo', true)->orderBy('nome')->get();
+
+        return view('admin.alunos.index', compact('alunos', 'turmas', 'sortField', 'sortDirection'));
     }
 
     /**

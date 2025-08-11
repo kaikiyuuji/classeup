@@ -34,13 +34,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Success Message -->
-    @if(session('success'))
-        <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md mb-6">
-            {{ session('success') }}
-        </div>
-    @endif
+    
 
     <!-- Boletim Table -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">

@@ -22,13 +22,54 @@ class TurmaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $turmas = Turma::with('alunos')
-            ->orderBy('nome')
-            ->paginate(15);
+        $query = Turma::with('alunos');
 
-        return view('admin.turmas.index', compact('turmas'));
+        // Filtro de busca por nome
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where('nome', 'like', "%{$search}%");
+        }
+
+        // Filtro por status
+        if ($request->filled('status')) {
+            $status = $request->get('status');
+            if ($status === 'ativo') {
+                $query->where('ativo', true);
+            } elseif ($status === 'inativo') {
+                $query->where('ativo', false);
+            }
+        }
+
+        // Filtro por nível educacional
+        if ($request->filled('nivel_educacional')) {
+            $query->where('serie', $request->get('nivel_educacional'));
+        }
+
+        // Filtro por turno
+        if ($request->filled('turno')) {
+            $query->where('turno', $request->get('turno'));
+        }
+
+        // Lógica de ordenação
+        $sortField = $request->get('sort', 'nome');
+        $sortDirection = $request->get('direction', 'asc');
+        
+        // Validar campos de ordenação permitidos
+        $allowedSortFields = ['nome', 'nivel_educacional', 'turno', 'ativo'];
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'nome';
+        }
+        
+        // Validar direção de ordenação
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $turmas = $query->orderBy($sortField, $sortDirection)->paginate(15)->withQueryString();
+
+        return view('admin.turmas.index', compact('turmas', 'sortField', 'sortDirection'));
     }
 
     /**

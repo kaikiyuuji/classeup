@@ -16,12 +16,72 @@ class ProfessorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $professores = Professor::orderBy('nome')
-            ->paginate(15);
+        $query = Professor::query();
 
-        return view('admin.professores.index', compact('professores'));
+        // Filtro de busca por nome, email ou especialidade
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('especialidade', 'like', "%{$search}%")
+                  ->orWhere('formacao', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por status
+        if ($request->filled('status')) {
+            $status = $request->get('status');
+            if ($status === 'ativo') {
+                $query->where('ativo', true);
+            } elseif ($status === 'inativo') {
+                $query->where('ativo', false);
+            }
+        }
+
+        // Filtro por especialidade
+        if ($request->filled('especialidade')) {
+            $query->where('especialidade', $request->get('especialidade'));
+        }
+
+        // Filtro por disciplina
+        if ($request->filled('disciplina_id')) {
+            $query->whereHas('disciplinas', function ($q) use ($request) {
+                $q->where('disciplinas.id', $request->get('disciplina_id'));
+            });
+        }
+
+        // Lógica de ordenação
+        $sortField = $request->get('sort', 'nome');
+        $sortDirection = $request->get('direction', 'asc');
+        
+        // Validar campos de ordenação permitidos
+        $allowedSortFields = ['nome', 'email', 'especialidade', 'ativo'];
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'nome';
+        }
+        
+        // Validar direção de ordenação
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $professores = $query->orderBy($sortField, $sortDirection)->paginate(15)->withQueryString();
+        
+        // Buscar especialidades únicas para o filtro
+        $especialidades = Professor::whereNotNull('especialidade')
+            ->distinct()
+            ->pluck('especialidade')
+            ->filter()
+            ->sort()
+            ->values();
+            
+        // Buscar disciplinas para o filtro
+        $disciplinas = Disciplina::where('ativo', true)->orderBy('nome')->get();
+
+        return view('admin.professores.index', compact('professores', 'especialidades', 'disciplinas', 'sortField', 'sortDirection'));
     }
 
     /**

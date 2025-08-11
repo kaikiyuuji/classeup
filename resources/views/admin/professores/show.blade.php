@@ -26,20 +26,7 @@
 
     <div class="py-8">
         <div class="max-w-6xl mx-auto px-8">
-            <!-- Mensagens -->
-            @if(session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                    <x-icons.check-circle class="w-5 h-5 mr-2" />
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                    <x-icons.x-circle class="w-5 h-5 mr-2" />
-                    {{ session('error') }}
-                </div>
-            @endif
+                
 
             <!-- Card Principal -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
