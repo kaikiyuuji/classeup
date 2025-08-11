@@ -21,11 +21,10 @@ class DatabaseSeeder extends Seeder
 
         // Executar seeders específicos
         $this->call([
-            AlunoSeeder::class,
-            ProfessorSeeder::class,
+            AdminUserSeeder::class,
+            AlunoProfessorSeeder::class,
             DisciplinaSeeder::class,
-            TurmaSeeder::class,
-            ProfessorDisciplinaTurmaSeeder::class,
+            TurmaSeeder::class
         ]);
     }
 }
