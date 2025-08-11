@@ -180,7 +180,7 @@ class UserController extends Controller
     private function gerarEmailProfessor(Professor $professor): string
     {
         $nomeFormatado = $this->formatarNomeParaEmail($professor->nome);
-        return "{$nomeFormatado}.professor@classeup.edu.br";
+        return "{$nomeFormatado}.professor@classeup.br";
     }
     
     /**
@@ -188,7 +188,7 @@ class UserController extends Controller
      */
     private function gerarEmailAluno(Aluno $aluno): string
     {
-        return "{$aluno->numero_matricula}@aluno.classeup.edu.br";
+        return "{$aluno->numero_matricula}@aluno.classeup.br";
     }
     
     /**

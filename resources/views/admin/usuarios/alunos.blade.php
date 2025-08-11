@@ -23,10 +23,8 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-           
-
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
@@ -112,20 +110,7 @@
 
             <!-- Main Content -->
             <div class="bg-white overflow-hidden shadow-sm rounded-lg">        
-                @if(session('success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                        <x-icons.check-circle class="w-5 h-5 mr-2 text-green-600" />
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
-                        <x-icons.x-circle class="w-5 h-5 mr-2 text-red-600" />
-                        {{ session('error') }}
-                    </div>
-                @endif
-
+                
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                     @if($alunos->count() > 0)
                         <div class="overflow-hidden">
