@@ -9,51 +9,51 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-800">Justificar Falta</h1>
-                <a href="{{ route('admin.faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
+                <a href="{{ route('admin.chamadas.relatorio-aluno', ['matricula' => $chamada->matricula]) }}" 
                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    <x-icons.arrow-left class="w-4 h-4 mr-2" />Voltar
+                    <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />Voltar
                 </a>
             </div>
         </div>
 
         <div class="p-6">
-            <!-- Informações da Falta -->
+            <!-- Informações da Chamada -->
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <h3 class="font-semibold text-red-800 mb-3">
-                    <x-icons.exclamation class="w-5 h-5 mr-2" />
+                    <x-heroicon-o-exclamation-triangle class="w-5 h-5 mr-2" />
                     Detalhes da Falta
                 </h3>
                 
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="text-gray-600">Aluno:</p>
-                        <p class="font-medium text-gray-800">{{ $falta->aluno->nome }}</p>
+                        <p class="font-medium text-gray-800">{{ $chamada->aluno->nome }}</p>
                     </div>
                     
                     <div>
                         <p class="text-gray-600">Matrícula:</p>
-                        <p class="font-medium text-gray-800">{{ $falta->matricula }}</p>
+                        <p class="font-medium text-gray-800">{{ $chamada->matricula }}</p>
                     </div>
                     
                     <div>
-                        <p class="text-gray-600">Data da Falta:</p>
-                        <p class="font-medium text-gray-800">{{ $falta->data_falta->format('d/m/Y') }}</p>
+                        <p class="text-gray-600">Data da Chamada:</p>
+                        <p class="font-medium text-gray-800">{{ $chamada->data_chamada->format('d/m/Y') }}</p>
                     </div>
                     
                     <div>
                         <p class="text-gray-600">Disciplina:</p>
-                        <p class="font-medium text-gray-800">{{ $falta->disciplina->nome }}</p>
+                        <p class="font-medium text-gray-800">{{ $chamada->disciplina->nome }}</p>
                     </div>
                     
                     <div class="col-span-2">
                         <p class="text-gray-600">Professor:</p>
-                        <p class="font-medium text-gray-800">{{ $falta->professor->nome }}</p>
+                        <p class="font-medium text-gray-800">{{ $chamada->professor->nome }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Formulário de Justificativa -->
-            <form action="{{ route('admin.faltas.processar-justificativa', $falta->id) }}" method="POST">
+            <form action="{{ route('admin.chamadas.processar-justificativa', $chamada->id) }}" method="POST">
                 @csrf
                 
                 <div class="mb-6">
@@ -65,7 +65,7 @@
                               rows="5" 
                               placeholder="Digite a justificativa para a falta..."
                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('observacoes') border-red-500 @enderror"
-                              required>{{ old('observacoes', $falta->observacoes) }}</textarea>
+                              required>{{ old('observacoes', $chamada->observacoes) }}</textarea>
                     
                     @error('observacoes')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -92,13 +92,13 @@
 
                 <!-- Botões de Ação -->
                 <div class="flex justify-end gap-3">
-                    <a href="{{ route('admin.faltas.relatorio-aluno', ['matricula' => $falta->matricula]) }}" 
+                    <a href="{{ route('admin.chamadas.relatorio-aluno', ['matricula' => $chamada->matricula]) }}" 
                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
                         Cancelar
                     </a>
                     <button type="submit" 
                             class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors">
-                        <x-icons.check class="w-4 h-4 mr-2" />Justificar Falta
+                        <x-heroicon-o-check class="w-4 h-4 mr-2" />Justificar Falta
                     </button>
                 </div>
             </form>

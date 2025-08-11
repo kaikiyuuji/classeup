@@ -12,12 +12,12 @@
             <div class="flex space-x-3">
                 <a href="{{ route('admin.professores.edit', $professor) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                    <x-icons.edit class="w-4 h-4 mr-2" />
+                    <x-heroicon-o-pencil class="w-4 h-4 mr-2" />
                     Editar
                 </a>
                 <a href="{{ route('admin.professores.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                    <x-icons.back class="w-4 h-4 mr-2" />
+                    <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                     Voltar
                 </a>
             </div>
@@ -64,14 +64,14 @@
                             <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $professor->nome }}</h1>
                             <div class="flex items-start space-x-4 text-gray-600">
                                 <div class="flex items-center">
-                                    <x-icons.mail class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-envelope class="w-4 h-4 mr-2" />
                                     <a href="mailto:{{ $professor->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
                     {{ $professor->email }}
                                     </a>
                                 </div>
                                 @if($professor->telefone)
                                     <div class="flex items-center">
-                                        <x-icons.phone class="w-4 h-4 mr-2" />
+                                        <x-heroicon-o-phone class="w-4 h-4 mr-2" />
                                         <a href="tel:{{ $professor->telefone }}" class="text-blue-600 hover:text-blue-800 transition-colors" data-format="phone">
                         {{ $professor->telefone }}
                                         </a>
@@ -89,7 +89,7 @@
                         <!-- Informações Pessoais -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.user class="w-5 h-5 mr-2 text-purple-600" />
+                                <x-heroicon-o-user class="w-5 h-5 mr-2 text-purple-600" />
                                 Informações Pessoais
                             </h3>
                             
@@ -166,7 +166,7 @@
                     <div class="mt-8">
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.mail class="w-5 h-5 mr-2 text-green-600" />
+                                <x-heroicon-o-envelope class="w-5 h-5 mr-2 text-green-600" />
                                 Informações de Contato
                             </h3>
                             
@@ -209,7 +209,7 @@
                     <div class="mt-8">
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.book class="w-5 h-5 mr-2 text-blue-600" />
+                                <x-heroicon-o-book-open class="w-5 h-5 mr-2 text-blue-600" />
                                 Disciplinas Vinculadas
                             </h3>
                             
@@ -234,7 +234,7 @@
                                                     <button type="submit" 
                                                             onclick="return confirm('Tem certeza que deseja desvincular esta disciplina?')"
                                                             class="text-red-600 hover:text-red-800 transition-colors">
-                                                        <x-icons.x class="w-4 h-4" />
+                                                        <x-heroicon-o-x-mark class="w-4 h-4" />
                                                     </button>
                                                 </form>
                                             </div>
@@ -243,7 +243,7 @@
                                 </div>
                             @else
                                 <div class="mb-6 text-center py-8">
-                                    <x-icons.book class="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                                    <x-heroicon-o-book-open class="w-12 h-12 mx-auto text-gray-400 mb-4" />
                                     <p class="text-gray-500 text-sm">Nenhuma disciplina vinculada</p>
                                 </div>
                             @endif
@@ -266,7 +266,7 @@
                                         </div>
                                         <button type="submit" 
                                                 class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                                            <x-icons.plus class="w-4 h-4 inline mr-1" />
+                                            <x-heroicon-o-plus class="w-4 h-4 inline mr-1" />
                                             Vincular
                                         </button>
                                     </form>
@@ -290,7 +290,7 @@
                                 @method('DELETE')
                                 <button type="submit" 
                                         class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                                    <x-icons.trash class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-trash class="w-4 h-4 mr-2" />
                                     Excluir Professor
                                 </button>
                             </form>
@@ -299,12 +299,12 @@
                             <div class="flex space-x-3">
                                 <a href="{{ route('admin.professores.index') }}" 
                                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                                    <x-icons.back class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                                     Voltar à Lista
                                 </a>
                                 <a href="{{ route('admin.professores.edit', $professor) }}" 
                                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                                    <x-icons.edit class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-pencil class="w-4 h-4 mr-2" />
                                     Editar Professor
                                 </a>
                             </div>

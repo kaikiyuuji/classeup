@@ -14,7 +14,7 @@
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                                <x-icons.user class="w-6 h-6"/>
+                                <x-heroicon-o-user class="w-6 h-6" />
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">Total de Alunos</p>
@@ -28,7 +28,7 @@
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-green-100 text-green-600">
-                                <x-icons.academic-cap class="w-6 h-6"/>
+                                <x-heroicon-o-academic-cap class="w-6 h-6" />
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">Total de Professores</p>
@@ -78,7 +78,7 @@
                     <a href="{{ route('admin.alunos.index') }}" class="bg-blue-50 hover:bg-blue-100 rounded-lg p-4 transition-colors">
                         <div class="flex items-center">
                             <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
-                                <x-icons.user class="w-6 h-6"/>
+                                <x-heroicon-o-user class="w-6 h-6" />
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-gray-900">Gerenciar Alunos</p>
@@ -90,7 +90,7 @@
                     <a href="{{ route('admin.professores.index') }}" class="bg-green-50 hover:bg-green-100 rounded-lg p-4 transition-colors">
                         <div class="flex items-center">
                             <div class="p-2 bg-green-100 rounded-lg text-green-600">
-                                <x-icons.academic-cap class="w-6 h-6"/>
+                                <x-heroicon-o-academic-cap class="w-6 h-6" />
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-gray-900">Gerenciar Professores</p>

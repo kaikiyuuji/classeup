@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.professor' => \App\Http\Middleware\CheckProfessor::class,
             'check.aluno' => \App\Http\Middleware\CheckAluno::class,
             'check.boletim.ownership' => \App\Http\Middleware\CheckBoletimOwnership::class,
-            'check.falta.ownership' => \App\Http\Middleware\CheckFaltaOwnership::class,
+            'check.chamada.ownership' => \App\Http\Middleware\CheckChamadaOwnership::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

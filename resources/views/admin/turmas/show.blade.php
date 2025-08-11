@@ -12,12 +12,12 @@
             <div class="flex space-x-3">
                 <a href="{{ route('admin.turmas.edit', $turma) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                    <x-icons.edit class="w-4 h-4 mr-2" />
+                    <x-heroicon-o-pencil class="w-4 h-4 mr-2" />
                     Editar
                 </a>
                 <a href="{{ route('admin.turmas.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors duration-200">
-                    <x-icons.back class="w-4 h-4 mr-2" />
+                    <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                     Voltar
                 </a>
             </div>
@@ -41,7 +41,7 @@
                                     <span>{{ App\Models\Turma::getNiveisEducacionais()[$turma->serie] ?? $turma->serie }}</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <x-icons.clock class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-clock class="w-4 h-4 mr-2" />
                                     <span>{{ ucfirst($turma->turno) }}</span>
                                 </div>
 
@@ -57,7 +57,7 @@
                         <!-- Informações da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.book class="w-5 h-5 mr-2 text-indigo-600" />
+                                <x-heroicon-o-book-open class="w-5 h-5 mr-2 text-indigo-600" />
                                 Informações da Turma
                             </h3>
                             
@@ -97,7 +97,7 @@
                         <!-- Informações de Capacidade -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.users class="w-5 h-5 mr-2 text-indigo-600" />
+                                <x-heroicon-o-users class="w-5 h-5 mr-2 text-indigo-600" />
                                 Capacidade e Ocupação
                             </h3>
                             
@@ -186,7 +186,7 @@
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                                    <x-icons.users class="w-5 h-5 mr-2 text-blue-600" />
+                                    <x-heroicon-o-users class="w-5 h-5 mr-2 text-blue-600" />
                                     Gerenciar Vinculações
                                 </h3>
                             </div>
@@ -197,7 +197,7 @@
                                     @if($alunosDisponiveis->count() > 0)
                                         <button onclick="openModal('modalVincularAlunos')" 
                                                 class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                            <x-icons.user-plus class="w-4 h-4 mr-2" />
+                                            <x-heroicon-o-user-plus class="w-4 h-4 mr-2" />
                                             Vincular Alunos
                                         </button>
                                     @else
@@ -206,7 +206,7 @@
                                         </div>
                                         <a href="{{ route('admin.alunos.create') }}" 
                                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                            <x-icons.plus class="w-4 h-4 mr-2" />
+                                            <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                                             Cadastrar Primeiro Aluno
                                         </a>
                                     @endif
@@ -217,7 +217,7 @@
                                     @if($professoresDisponiveis->count() > 0)
                                         <button onclick="openModal('modalVincularProfessor')" 
                                                 class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                            <x-icons.academic-cap class="w-4 h-4 mr-2" />
+                                            <x-heroicon-o-academic-cap class="w-4 h-4 mr-2" />
                                             Vincular Professor
                                         </button>
                                     @else
@@ -226,7 +226,7 @@
                                         </div>
                                         <a href="{{ route('admin.professores.create') }}" 
                                            class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                            <x-icons.plus class="w-4 h-4 mr-2" />
+                                            <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                                             Cadastrar Primeiro Professor
                                         </a>
                                     @endif
@@ -239,7 +239,7 @@
                     @if($turma->professores->count() > 0)
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.academic-cap class="w-5 h-5 mr-2 text-indigo-600" />
+                                <x-heroicon-o-academic-cap class="w-5 h-5 mr-2 text-indigo-600" />
                                 Professores Vinculados ({{ $turma->professores->count() }})
                             </h3>
                             
@@ -250,7 +250,7 @@
                                             <div class="flex items-center space-x-4">
                                                 <div class="flex-shrink-0">
                                                     <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                        <x-icons.user class="w-5 h-5 text-blue-600" />
+                                                        <x-heroicon-o-user class="w-5 h-5 text-blue-600" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
@@ -293,7 +293,7 @@
                     @else
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <div class="text-center py-8">
-                                <x-icons.academic-cap class="mx-auto h-12 w-12 text-gray-400" />
+                                <x-heroicon-o-academic-cap class="mx-auto h-12 w-12 text-gray-400" />
                                 <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor vinculado</h3>
                                 <p class="mt-1 text-sm text-gray-500">Esta turma ainda não possui professores vinculados.</p>
                             </div>
@@ -306,7 +306,7 @@
                         <div class="flex flex-wrap gap-3">
                             <a href="{{ route('admin.turmas.edit', $turma) }}" 
                                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                <x-icons.edit class="w-4 h-4 mr-2" />
+                                <x-heroicon-o-pencil class="w-4 h-4 mr-2" />
                                 Editar Turma
                             </a>
                         </div>
@@ -324,7 +324,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <x-icons.user-plus class="w-5 h-5 text-blue-600" />
+                                <x-heroicon-o-user-plus class="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-gray-900">Vincular Alunos à Turma</h3>
@@ -332,7 +332,7 @@
                             </div>
                         </div>
                         <button onclick="closeModal('modalVincularAlunos')" class="text-gray-400 hover:text-gray-600 hover:bg-white rounded-lg p-2 transition-colors duration-200">
-                            <x-icons.x class="w-6 h-6" />
+                            <x-heroicon-o-x-mark class="w-6 h-6" />
                         </button>
                     </div>
                 </div>
@@ -421,7 +421,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <x-icons.academic-cap class="w-5 h-5 text-purple-600" />
+                                <x-heroicon-o-academic-cap class="w-5 h-5 text-purple-600" />
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-gray-900">Vincular Professor à Turma</h3>
@@ -429,7 +429,7 @@
                             </div>
                         </div>
                         <button onclick="closeModal('modalVincularProfessor')" class="text-gray-400 hover:text-gray-600 hover:bg-white rounded-lg p-2 transition-colors duration-200">
-                            <x-icons.x class="w-6 h-6" />
+                            <x-heroicon-o-x-mark class="w-6 h-6" />
                         </button>
                     </div>
                 </div>
@@ -454,7 +454,7 @@
                                 <!-- Seleção de Professor -->
                                 <div>
                                     <label for="professor_id_modal" class="block text-sm font-semibold text-gray-700 mb-3">
-                                        <x-icons.user class="w-4 h-4 inline mr-2 text-purple-600" />
+                                        <x-heroicon-o-user class="w-4 h-4 inline mr-2 text-purple-600" />
                                         Selecione o Professor:
                                     </label>
                                     <select name="professor_id" id="professor_id_modal" 
@@ -474,7 +474,7 @@
                                 <!-- Seleção de Disciplina -->
                                 <div>
                                     <label for="disciplina_id_modal" class="block text-sm font-semibold text-gray-700 mb-3">
-                                        <x-icons.book class="w-4 h-4 inline mr-2 text-purple-600" />
+                                        <x-heroicon-o-book-open class="w-4 h-4 inline mr-2 text-purple-600" />
                                         Selecione a Disciplina:
                                     </label>
                                     <select name="disciplina_id" id="disciplina_id_modal" 
@@ -488,7 +488,7 @@
                         
                         <div class="flex items-center justify-between pt-6 border-t border-gray-200">
                             <div class="flex items-center text-sm text-gray-600 bg-blue-50 px-4 py-2 rounded-lg">
-                                <x-icons.info class="w-4 h-4 mr-2 text-blue-500" />
+                                <x-heroicon-o-information-circle class="w-4 h-4 mr-2 text-blue-500" />
                                 <span>Apenas disciplinas que o professor leciona serão exibidas</span>
                             </div>
                             
@@ -500,7 +500,7 @@
                                 <button type="submit" 
                                         class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm"
                                         id="btnVincularProfessorModal" disabled>
-                                    <x-icons.plus class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                                     Vincular Professor
                                 </button>
                             </div>

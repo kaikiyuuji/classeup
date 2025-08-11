@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use App\Models\Falta;
+use App\Models\Chamada;
 
 class DashboardController extends Controller
 {
@@ -82,11 +82,12 @@ class DashboardController extends Controller
         // Dados específicos para o dashboard do aluno
         $turma = $aluno->turma;
         $avaliacoes = $aluno->avaliacoes()->with('disciplina')->latest()->take(5)->get();
-        $faltas = Falta::porAluno($aluno->numero_matricula)
+        $chamadas = Chamada::porAluno($aluno->numero_matricula)
             ->with(['disciplina', 'professor'])
-            ->latest('data_falta')
-            ->limit(5)
+            ->latest('data_chamada')
+            ->limit(10)
             ->get();
+        $faltas = $chamadas->where('status', 'falta')->take(5);
         
         return view('aluno.dashboard', compact(
             'aluno',

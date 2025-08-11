@@ -71,4 +71,13 @@ class Disciplina extends Model
     {
         return $this->hasMany(Avaliacao::class);
     }
+
+    /**
+     * Relacionamento one-to-many com Chamada
+     * Uma disciplina tem muitas chamadas
+     */
+    public function chamadas(): HasMany
+    {
+        return $this->hasMany(Chamada::class);
+    }
 }

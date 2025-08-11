@@ -9,7 +9,7 @@
             </div>
             <a href="{{ route('admin.alunos.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                <x-icons.arrow-left class="w-4 h-4 mr-2" />
+                <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                 Voltar
             </a>
         </div>
@@ -134,7 +134,7 @@
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
                                         <div class="space-y-1 text-center">
-                                            <x-icons.photo class="mx-auto h-12 w-12 text-gray-400" />
+                                            <x-heroicon-o-photo class="mx-auto h-12 w-12 text-gray-400" />
                                             <div class="flex text-sm text-gray-600">
                                                 <label for="foto_perfil" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Enviar uma foto</span>
@@ -237,12 +237,12 @@
                         <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
                             <a href="{{ route('admin.alunos.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
-                                <x-icons.x class="w-5 h-5 mr-2" />
+                                <x-heroicon-o-x-mark class="w-5 h-5 mr-2" />
                                 Cancelar
                             </a>
                             <button type="submit" 
                                     class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <x-icons.plus class="w-4 h-4 mr-2" />
+                                <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                                 Cadastrar Aluno
                             </button>
                         </div>

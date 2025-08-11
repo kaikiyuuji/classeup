@@ -9,7 +9,7 @@
             </div>
             <a href="{{ route('admin.turmas.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                <x-icons.arrow-left class="w-4 h-4 mr-2" />
+                <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                 Voltar
             </a>
         </div>
@@ -25,7 +25,7 @@
                         <!-- Informações da Turma -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.document class="w-5 h-5 mr-2 text-blue-600" />
+                                <x-heroicon-o-document class="w-5 h-5 mr-2 text-blue-600" />
                                 Informações da Turma
                             </h3>
                             
@@ -39,7 +39,7 @@
                                            required>
                                     @error('nome')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -60,7 +60,7 @@
                                     </select>
                                     @error('ano_letivo')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -81,7 +81,7 @@
                                     </select>
                                     @error('serie')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -100,7 +100,7 @@
                                     </select>
                                     @error('turno')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -116,7 +116,7 @@
                                            required>
                                     @error('capacidade_maxima')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -127,7 +127,7 @@
                         <!-- Status -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.check-circle class="w-5 h-5 mr-2 text-green-600" />
+                                <x-heroicon-o-check-circle class="w-5 h-5 mr-2 text-green-600" />
                                 Status
                             </h3>
                             
@@ -152,7 +152,7 @@
                             </a>
                             <button type="submit" 
                                     class="inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
-                                <x-icons.check class="w-4 h-4 mr-2" />
+                                <x-heroicon-o-check class="w-4 h-4 mr-2" />
                                 Cadastrar Turma
                             </button>
                         </div>

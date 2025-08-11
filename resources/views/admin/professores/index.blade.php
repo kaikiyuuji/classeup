@@ -9,7 +9,7 @@
             </div>
             <a href="{{ route('admin.professores.create') }}" 
                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                <x-icons.plus class="w-4 h-4 mr-2" />
+                <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                 Novo Professor
             </a>
         </div>
@@ -100,7 +100,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                     {{ $professor->ativo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                    <x-icons.circle class="w-1.5 h-1.5 mr-1.5" />
+                                                    <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
                                                     {{ $professor->ativo ? 'Ativo' : 'Inativo' }}
                                                 </span>
                                             </td>
@@ -108,12 +108,12 @@
                                                 <div class="flex items-center justify-end space-x-2">
                                                     <a href="{{ route('admin.professores.show', $professor) }}" 
                                                    class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                        <x-icons.eye class="w-3 h-3 mr-1" />
+                                                        <x-heroicon-o-eye class="w-3 h-3 mr-1" />
                                                         Ver
                                                     </a>
                                                     <a href="{{ route('admin.professores.edit', $professor) }}" 
                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                        <x-icons.edit class="w-3 h-3 mr-1" />
+                                                        <x-heroicon-o-pencil class="w-3 h-3 mr-1" />
                                                         Editar
                                                     </a>
                                                     <form action="{{ route('admin.professores.destroy', $professor) }}" 
@@ -124,7 +124,7 @@
                                                         @method('DELETE')
                                                         <button type="submit" 
                                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                            <x-icons.trash class="w-3 h-3 mr-1" />
+                                                            <x-heroicon-o-trash class="w-3 h-3 mr-1" />
                                                             Excluir
                                                         </button>
                                                     </form>
@@ -143,13 +143,13 @@
                     </div>
                 @else
                     <div class="text-center py-12">
-                        <x-icons.academic-cap class="mx-auto h-12 w-12 text-gray-400" />
+                        <x-heroicon-o-academic-cap class="mx-auto h-12 w-12 text-gray-400" />
                         <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum professor cadastrado</h3>
                         <p class="mt-1 text-sm text-gray-500">Comece criando seu primeiro professor.</p>
                         <div class="mt-6">
                             <a href="{{ route('admin.professores.create') }}" 
                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <x-icons.plus class="w-4 h-4 mr-2" />
+                                <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                                 Cadastrar Primeiro Professor
                             </a>
                         </div>

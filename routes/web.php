@@ -3,7 +3,7 @@
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisciplinaController;
-use App\Http\Controllers\FaltaController;
+use App\Http\Controllers\ChamadaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurmaController;
@@ -56,6 +56,8 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
     Route::get('alunos/{aluno}/boletim', [AlunoController::class, 'boletim'])->name('alunos.boletim');
     Route::post('alunos/{aluno}/notas', [AlunoController::class, 'atualizarNotas'])->name('alunos.atualizar-notas');
     Route::put('alunos/{aluno}/avaliacoes/{avaliacao}', [AlunoController::class, 'atualizarAvaliacao'])->name('alunos.avaliacoes.update');
+    Route::get('alunos/{aluno}/presencas', [AlunoController::class, 'presencasAluno'])->name('alunos.presencas');
+    Route::get('alunos/{aluno}/disciplinas', [AlunoController::class, 'disciplinasAluno'])->name('alunos.disciplinas');
     
     // CRUD de Professores
     Route::resource('professores', ProfessorController::class)->parameters([
@@ -89,22 +91,26 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
         Route::patch('/desativar/{user}', [UserController::class, 'desativarUsuario'])->name('desativar');
     });
     
-    // Gerenciamento de Faltas Administrativo
-    Route::prefix('faltas')->name('faltas.')->group(function () {
-        Route::get('/', [FaltaController::class, 'index'])->name('index');
-        Route::get('/chamada/{turma}/{disciplina}', [FaltaController::class, 'chamada'])->name('chamada');
-        Route::post('/chamada', [FaltaController::class, 'store'])->name('store');
-        Route::get('/relatorio', [FaltaController::class, 'relatorioProfessor'])->name('relatorio');
-        Route::get('/relatorio-aluno/{matricula?}', [FaltaController::class, 'relatorioAluno'])->name('relatorio-aluno');
-        Route::get('/justificar/{falta}', [FaltaController::class, 'justificar'])->name('justificar');
-        Route::post('/justificar/{falta}', [FaltaController::class, 'processarJustificativa'])->name('processar-justificativa');
-        Route::delete('/justificar/{falta}', [FaltaController::class, 'removerJustificativa'])->name('remover-justificativa');
+    // Gerenciamento de Chamadas Administrativo
+    Route::prefix('chamadas')->name('chamadas.')->group(function () {
+        Route::get('/', [ChamadaController::class, 'index'])->name('index');
+        Route::get('/chamada/{turma}/{disciplina}', [ChamadaController::class, 'chamada'])->name('chamada');
+        Route::post('/chamada', [ChamadaController::class, 'store'])->name('store');
+        Route::get('/gerenciar/{turma}/{disciplina}', [ChamadaController::class, 'gerenciar'])->name('gerenciar');
+        Route::put('/editar/{chamada}', [ChamadaController::class, 'editarChamada'])->name('editar');
+        Route::delete('/excluir/{data}/{turma}/{disciplina}', [ChamadaController::class, 'excluirChamadaDia'])->name('excluir-dia');
+        Route::get('/relatorio', [ChamadaController::class, 'relatorioProfessor'])->name('relatorio');
+        Route::get('/relatorio-aluno/{matricula?}', [ChamadaController::class, 'relatorioAluno'])->name('relatorio-aluno');
+        Route::get('/justificar/{chamada}', [ChamadaController::class, 'justificar'])->name('justificar');
+        Route::post('/justificar/{chamada}', [ChamadaController::class, 'processarJustificativa'])->name('processar-justificativa');
+        Route::delete('/justificar/{chamada}', [ChamadaController::class, 'removerJustificativa'])->name('remover-justificativa');
+        Route::get('/presencas-aluno/{matricula}', [ChamadaController::class, 'presencasAluno'])->name('presencas-aluno');
     });
 
     // Relatórios Administrativos
     Route::prefix('relatorios')->name('relatorios.')->group(function () {
         Route::get('/', [AlunoController::class, 'relatoriosAdmin'])->name('index');
-        Route::get('/frequencia', [FaltaController::class, 'relatorioFrequencia'])->name('frequencia');
+        Route::get('/frequencia', [ChamadaController::class, 'relatorioFrequencia'])->name('frequencia');
         Route::get('/notas', [AlunoController::class, 'relatorioNotas'])->name('notas');
         Route::get('/turmas', [TurmaController::class, 'relatorioTurmas'])->name('turmas');
         Route::get('/professores', [ProfessorController::class, 'relatorioProfessores'])->name('professores');
@@ -129,18 +135,18 @@ Route::middleware(['auth', 'check.professor'])->prefix('professor')->name('profe
     Route::get('/notas/{turma}/{disciplina}', [AlunoController::class, 'editarNotas'])->name('notas.editar');
     Route::put('/alunos/{aluno}/avaliacoes/{avaliacao}', [AlunoController::class, 'atualizarAvaliacao'])->name('avaliacoes.update');
     
-    // Lançamento de Faltas
-    Route::prefix('faltas')->name('faltas.')->group(function () {
-        Route::get('/', [FaltaController::class, 'index'])->name('index');
-        Route::get('/chamada/{turma}/{disciplina}', [FaltaController::class, 'chamada'])->name('chamada');
-        Route::post('/chamada', [FaltaController::class, 'store'])->name('store');
-        Route::get('/relatorio', [FaltaController::class, 'relatorioProfessor'])->name('relatorio');
+    // Lançamento de Chamadas
+    Route::prefix('chamadas')->name('chamadas.')->group(function () {
+        Route::get('/', [ChamadaController::class, 'index'])->name('index');
+        Route::get('/chamada/{turma}/{disciplina}', [ChamadaController::class, 'chamada'])->name('chamada');
+        Route::post('/chamada', [ChamadaController::class, 'store'])->name('store');
+        Route::get('/relatorio', [ChamadaController::class, 'relatorioProfessor'])->name('relatorio');
     });
     
     // Relatórios do Professor
     Route::prefix('relatorios')->name('relatorios.')->group(function () {
         Route::get('/minhas-turmas', [ProfessorController::class, 'relatorioMinhasTurmas'])->name('turmas');
-        Route::get('/frequencia-turma/{turma}', [FaltaController::class, 'relatorioFrequenciaTurma'])->name('frequencia');
+        Route::get('/frequencia-turma/{turma}', [ChamadaController::class, 'relatorioFrequenciaTurma'])->name('frequencia');
     });
 });
 
@@ -158,14 +164,14 @@ Route::middleware(['auth', 'check.aluno'])->prefix('aluno')->name('aluno.')->gro
         ->name('boletim.show')
         ->middleware('check.boletim.ownership');
     
-    // Consulta de Faltas
-    Route::prefix('faltas')->name('faltas.')->group(function () {
-        Route::get('/', [FaltaController::class, 'minhasFaltas'])->name('index');
-        Route::get('/justificar/{falta}', [FaltaController::class, 'justificar'])
+    // Consulta de Chamadas
+    Route::prefix('chamadas')->name('chamadas.')->group(function () {
+        Route::get('/', [ChamadaController::class, 'minhasChamadas'])->name('index');
+        Route::get('/justificar/{chamada}', [ChamadaController::class, 'justificar'])
             ->name('justificar')
-            ->middleware('check.falta.ownership');
-        Route::post('/justificar/{falta}', [FaltaController::class, 'processarJustificativa'])->name('processar-justificativa');
-        Route::delete('/justificar/{falta}', [FaltaController::class, 'removerJustificativa'])->name('remover-justificativa');
+            ->middleware('check.chamada.ownership');
+        Route::post('/justificar/{chamada}', [ChamadaController::class, 'processarJustificativa'])->name('processar-justificativa');
+        Route::delete('/justificar/{chamada}', [ChamadaController::class, 'removerJustificativa'])->name('remover-justificativa');
     });
     
     // Perfil do Aluno

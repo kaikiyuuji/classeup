@@ -263,40 +263,29 @@
                         </div>
                     </div>
 
-                    <!-- Faltas -->
+                    <!-- Controle de Chamadas -->
                     <div class="mt-8">
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
-                                Controle de Faltas
+                                Controle de Chamadas
                             </h3>
                             
-                            @php
-                                $faltasRecentes = App\Models\Falta::porAluno($aluno->numero_matricula)
-                                    ->porPeriodo(now()->startOfMonth(), now())
-                                    ->with(['disciplina', 'professor'])
-                                    ->orderBy('data_falta', 'desc')
-                                    ->limit(5)
-                                    ->get();
-                                $totalFaltasMes = $faltasRecentes->count();
-                                $faltasNaoJustificadas = $faltasRecentes->where('justificada', false)->count();
-                            @endphp
-                            
                             <div class="grid grid-cols-3 gap-4 mb-6">
-                                <div class="bg-white rounded-lg p-4 border border-gray-200">
+                                <div class="bg-white rounded-lg p-4 border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors" onclick="abrirModalPresencas()">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0">
-                                            <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                 </svg>
                                             </div>
                                         </div>
                                         <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">{{ $totalFaltasMes }}</p>
-                                            <p class="text-xs text-gray-500">Faltas este mês</p>
+                                            <p class="text-sm font-medium text-gray-900">{{ $totalPresencas }}</p>
+                                            <p class="text-xs text-gray-500">Total de Presenças</p>
                                         </div>
                                     </div>
                                 </div>
@@ -311,8 +300,8 @@
                                             </div>
                                         </div>
                                         <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">{{ $faltasNaoJustificadas }}</p>
-                                            <p class="text-xs text-gray-500">Não justificadas</p>
+                                            <p class="text-sm font-medium text-gray-900">{{ $faltasParaJustificar->count() }}</p>
+                                            <p class="text-xs text-gray-500">Faltas para Justificar</p>
                                         </div>
                                     </div>
                                 </div>
@@ -320,53 +309,46 @@
                                 <div class="bg-white rounded-lg p-4 border border-gray-200">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0">
-                                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                                 </svg>
                                             </div>
                                         </div>
                                         <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">{{ $totalFaltasMes - $faltasNaoJustificadas }}</p>
-                                            <p class="text-xs text-gray-500">Justificadas</p>
+                                            <a href="{{ route('admin.chamadas.relatorio-aluno', ['matricula' => $aluno->numero_matricula]) }}" class="text-sm font-medium text-blue-600 hover:text-blue-800">
+                                                Ver Relatório
+                                            </a>
+                                            <p class="text-xs text-gray-500">Relatório Completo</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            @if($faltasRecentes->isNotEmpty())
+                            @if($faltasParaJustificar->isNotEmpty())
                                 <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
                                     <div class="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                                        <h4 class="text-sm font-semibold text-gray-800">Faltas Recentes (Este Mês)</h4>
+                                        <h4 class="text-sm font-semibold text-gray-800">Faltas para Justificar</h4>
                                     </div>
                                     <div class="divide-y divide-gray-200">
-                                        @foreach($faltasRecentes as $falta)
+                                        @foreach($faltasParaJustificar as $falta)
                                             <div class="px-4 py-3">
                                                 <div class="flex justify-between items-start">
                                                     <div class="flex-1">
                                                         <div class="flex items-center text-sm">
-                                                            <span class="font-medium text-gray-900">{{ $falta->data_falta->format('d/m/Y') }}</span>
+                                                            <span class="font-medium text-gray-900">{{ $falta->data_chamada->format('d/m/Y') }}</span>
                                                             <span class="mx-2 text-gray-400">•</span>
                                                             <span class="text-gray-600">{{ $falta->disciplina->nome }}</span>
                                                         </div>
                                                         <p class="text-xs text-gray-500 mt-1">Prof. {{ $falta->professor->nome }}</p>
                                                     </div>
                                                     <div class="ml-4">
-                                                        @if($falta->justificada)
-                                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                                </svg>
-                                                                Justificada
-                                                            </span>
-                                                        @else
-                                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                                </svg>
-                                                                Não Justificada
-                                                            </span>
-                                                        @endif
+                                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                            Não Justificada
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -378,19 +360,10 @@
                                     <svg class="w-12 h-12 mx-auto text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    <p class="text-gray-500 text-sm">Nenhuma falta registrada este mês.</p>
+                                    <p class="text-gray-500 text-sm">Nenhuma falta pendente de justificativa.</p>
                                 </div>
                             @endif
-                            
-                            <div class="flex justify-end mt-4">
-                                <a href="{{ route('admin.faltas.relatorio-aluno', ['matricula' => $aluno->numero_matricula]) }}" 
-                                   class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                    Ver Relatório Completo
-                                </a>
-                            </div>
+
                         </div>
                     </div>
 
@@ -435,4 +408,241 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Presenças -->
+    <div id="modalPresencas" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <!-- Cabeçalho do Modal -->
+                <div class="flex justify-between items-center pb-4 border-b">
+                    <h3 class="text-lg font-semibold text-gray-900">Presenças de {{ $aluno->nome }}</h3>
+                    <button onclick="fecharModalPresencas()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Filtros -->
+                <div class="py-4 border-b">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
+                            <input type="date" id="filtroDataInicio" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
+                            <input type="date" id="filtroDataFim" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Disciplina</label>
+                            <select id="filtroDisciplina" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Todas as disciplinas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button onclick="filtrarPresencas()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            Filtrar
+                        </button>
+                        <button onclick="limparFiltros()" class="ml-2 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                            Limpar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista de Presenças -->
+                <div class="py-4">
+                    <div id="listaPresencas" class="space-y-2">
+                        <!-- Presenças serão carregadas aqui via AJAX -->
+                    </div>
+                    
+                    <!-- Loading -->
+                    <div id="loadingPresencas" class="text-center py-4 hidden">
+                        <div class="inline-flex items-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Carregando presenças...
+                        </div>
+                    </div>
+                    
+                    <!-- Paginação -->
+                    <div id="paginacaoPresencas" class="mt-4 flex justify-center">
+                        <!-- Paginação será inserida aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let paginaAtual = 1;
+        let disciplinas = [];
+        
+        function abrirModalPresencas() {
+            document.getElementById('modalPresencas').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            carregarDisciplinas();
+            carregarPresencas();
+        }
+        
+        function fecharModalPresencas() {
+            document.getElementById('modalPresencas').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function carregarDisciplinas() {
+            console.log('Carregando disciplinas...');
+            fetch(`{{ route('admin.alunos.disciplinas', $aluno) }}`)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dados recebidos:', data);
+                    const select = document.getElementById('filtroDisciplina');
+                    select.innerHTML = '<option value="">Todas as disciplinas</option>';
+                    
+                    if (data.disciplinas && data.disciplinas.length > 0) {
+                        data.disciplinas.forEach(disciplina => {
+                            const option = document.createElement('option');
+                            option.value = disciplina.id;
+                            option.textContent = disciplina.nome;
+                            select.appendChild(option);
+                        });
+                        console.log(`${data.disciplinas.length} disciplinas carregadas`);
+                    } else {
+                        console.log('Nenhuma disciplina encontrada');
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = 'Nenhuma disciplina encontrada';
+                        select.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar disciplinas:', error);
+                    const select = document.getElementById('filtroDisciplina');
+                    select.innerHTML = '<option value="">Erro ao carregar disciplinas</option>';
+                });
+        }
+        
+        function carregarPresencas(pagina = 1) {
+            const loadingElement = document.getElementById('loadingPresencas');
+            const listaElement = document.getElementById('listaPresencas');
+            
+            loadingElement.classList.remove('hidden');
+            
+            const dataInicio = document.getElementById('filtroDataInicio').value;
+            const dataFim = document.getElementById('filtroDataFim').value;
+            const disciplinaId = document.getElementById('filtroDisciplina').value;
+            
+            const params = new URLSearchParams({
+                page: pagina,
+                ...(dataInicio && { data_inicio: dataInicio }),
+                ...(dataFim && { data_fim: dataFim }),
+                ...(disciplinaId && { disciplina_id: disciplinaId })
+            });
+            
+            fetch(`{{ route('admin.alunos.presencas', $aluno) }}?${params}`)
+                .then(response => response.json())
+                .then(data => {
+                    loadingElement.classList.add('hidden');
+                    renderizarPresencas(data.presencas);
+                    renderizarPaginacao(data.pagination);
+                })
+                .catch(error => {
+                    loadingElement.classList.add('hidden');
+                    console.error('Erro ao carregar presenças:', error);
+                    listaElement.innerHTML = '<p class="text-red-600 text-center">Erro ao carregar presenças.</p>';
+                });
+        }
+        
+        function renderizarPresencas(presencas) {
+            const listaElement = document.getElementById('listaPresencas');
+            
+            if (presencas.length === 0) {
+                listaElement.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhuma presença encontrada.</p>';
+                return;
+            }
+            
+            const html = presencas.map(presenca => {
+                const data = new Date(presenca.data_chamada).toLocaleDateString('pt-BR');
+                return `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <div class="font-medium text-gray-900">${data}</div>
+                            <div class="text-sm text-gray-600">${presenca.disciplina.nome}</div>
+                            <div class="text-xs text-gray-500">Prof. ${presenca.professor.nome}</div>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Presente
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            listaElement.innerHTML = html;
+        }
+        
+        function renderizarPaginacao(pagination) {
+            const paginacaoElement = document.getElementById('paginacaoPresencas');
+            
+            if (pagination.last_page <= 1) {
+                paginacaoElement.innerHTML = '';
+                return;
+            }
+            
+            let html = '<div class="flex space-x-2">';
+            
+            // Botão anterior
+            if (pagination.current_page > 1) {
+                html += `<button onclick="carregarPresencas(${pagination.current_page - 1})" class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Anterior</button>`;
+            }
+            
+            // Números das páginas
+            for (let i = 1; i <= pagination.last_page; i++) {
+                const isActive = i === pagination.current_page;
+                const classes = isActive ? 'px-3 py-1 bg-blue-600 text-white rounded' : 'px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300';
+                html += `<button onclick="carregarPresencas(${i})" class="${classes}">${i}</button>`;
+            }
+            
+            // Botão próximo
+            if (pagination.current_page < pagination.last_page) {
+                html += `<button onclick="carregarPresencas(${pagination.current_page + 1})" class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Próximo</button>`;
+            }
+            
+            html += '</div>';
+            paginacaoElement.innerHTML = html;
+        }
+        
+        function filtrarPresencas() {
+            paginaAtual = 1;
+            carregarPresencas();
+        }
+        
+        function limparFiltros() {
+            document.getElementById('filtroDataInicio').value = '';
+            document.getElementById('filtroDataFim').value = '';
+            document.getElementById('filtroDisciplina').value = '';
+            paginaAtual = 1;
+            carregarPresencas();
+        }
+        
+        // Fechar modal ao clicar fora
+        document.getElementById('modalPresencas').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModalPresencas();
+            }
+        });
+    </script>
 </x-app-layout>

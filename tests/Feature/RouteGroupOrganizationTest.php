@@ -73,7 +73,7 @@ class RouteGroupOrganizationTest extends TestCase
             '/professor/dashboard',
             '/professor/turmas',
             '/professor/notas',
-            '/professor/faltas'
+            '/professor/chamadas'
         ];
 
         foreach ($professorRoutes as $route) {
@@ -100,7 +100,7 @@ class RouteGroupOrganizationTest extends TestCase
         $alunoRoutes = [
             '/aluno/dashboard',
             '/aluno/boletim',
-            '/aluno/faltas'
+            '/aluno/chamadas'
         ];
 
         foreach ($alunoRoutes as $route) {

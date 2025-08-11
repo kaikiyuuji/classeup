@@ -27,8 +27,8 @@
                     <x-nav-link :href="route('admin.turmas.index')" :active="request()->routeIs('admin.turmas.*')">
                         {{ __('Turmas') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.faltas.index')" :active="request()->routeIs('admin.faltas.*')">
-                        {{ __('Faltas') }}
+                    <x-nav-link :href="route('admin.chamadas.index')" :active="request()->routeIs('admin.chamadas.*')">
+                        {{ __('Chamadas') }}
                     </x-nav-link>
                     <x-nav-link :href="route('admin.usuarios.professores')" :active="request()->routeIs('admin.usuarios.*')">
                         {{ __('Usuários') }}
@@ -100,8 +100,8 @@
             <x-responsive-nav-link :href="route('admin.turmas.index')" :active="request()->routeIs('admin.turmas.*')">
                 {{ __('Turmas') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.faltas.index')" :active="request()->routeIs('admin.faltas.*')">
-                {{ __('Faltas') }}
+            <x-responsive-nav-link :href="route('admin.chamadas.index')" :active="request()->routeIs('admin.chamadas.*')">
+                {{ __('Chamadas') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.usuarios.professores')" :active="request()->routeIs('admin.usuarios.*')">
                 {{ __('Usuários') }}

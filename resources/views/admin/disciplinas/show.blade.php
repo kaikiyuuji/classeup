@@ -10,12 +10,12 @@
             <div class="flex gap-3">
                 <a href="{{ route('admin.disciplinas.edit', $disciplina) }}" 
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <x-icons.edit class="w-4 h-4 mr-2" />
+                    <x-heroicon-o-pencil class="w-4 h-4 mr-2" />
                     Editar
                 </a>
                 <a href="{{ route('admin.disciplinas.index') }}" 
                    class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    <x-icons.arrow-left class="w-4 h-4 mr-2" />
+                    <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                     Voltar
                 </a>
             </div>
@@ -69,12 +69,12 @@
                                 <div class="px-4 py-3 bg-white border border-gray-300 rounded-lg">
                                     @if($disciplina->ativo)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            <x-icons.circle class="w-1.5 h-1.5 mr-1.5" />
+                                            <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
                                             Ativa
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            <x-icons.circle class="w-1.5 h-1.5 mr-1.5" />
+                                            <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
                                             Inativa
                                         </span>
                                     @endif

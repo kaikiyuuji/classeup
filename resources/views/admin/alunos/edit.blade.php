@@ -202,7 +202,7 @@
                                     
                                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-purple-400 transition-colors duration-200">
                                         <div class="space-y-1 text-center">
-                                            <x-icons.photo class="mx-auto h-12 w-12 text-gray-400" />
+                                            <x-heroicon-o-photo class="mx-auto h-12 w-12 text-gray-400" />
                                             <div class="flex text-sm text-gray-600">
                                                 <label for="foto_perfil" class="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500">
                                                     <span>{{ $aluno->foto_perfil ? 'Alterar foto' : 'Enviar uma foto' }}</span>
@@ -330,12 +330,12 @@
                         <div class="flex items-center justify-end gap-4 pt-8 border-t border-gray-200">
                             <a href="{{ route('admin.alunos.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
-                                <x-icons.x class="w-5 h-5 mr-2" />
+                                <x-heroicon-o-x-mark class="w-5 h-5 mr-2" />
                                 Cancelar
                             </a>
                             <button type="submit" 
                                     class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm transition-colors duration-200">
-                                <x-icons.check class="w-5 h-5 mr-2" />
+                                <x-heroicon-o-check class="w-5 h-5 mr-2" />
                                 Atualizar Aluno
                             </button>
                         </div>

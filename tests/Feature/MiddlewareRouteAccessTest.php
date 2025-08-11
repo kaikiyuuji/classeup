@@ -282,9 +282,9 @@ class MiddlewareRouteAccessTest extends TestCase
     }
 
     /**
-     * Testa verificação de propriedade nas faltas
+     * Testa verificação de propriedade nas chamadas
      */
-    public function test_falta_ownership_verification(): void
+    public function test_chamada_ownership_verification(): void
     {
         // Criar dois alunos
         $aluno1 = \App\Models\Aluno::factory()->create();
@@ -301,23 +301,29 @@ class MiddlewareRouteAccessTest extends TestCase
             'aluno_id' => $aluno2->id
         ]);
 
-        // Criar faltas para cada aluno
-         $falta1 = \App\Models\Falta::factory()->create(['matricula' => $aluno1->numero_matricula]);
-         $falta2 = \App\Models\Falta::factory()->create(['matricula' => $aluno2->numero_matricula]);
+        // Criar chamadas com status de falta para cada aluno
+         $chamada1 = \App\Models\Chamada::factory()->create([
+             'matricula' => $aluno1->numero_matricula,
+             'status' => 'falta'
+         ]);
+         $chamada2 = \App\Models\Chamada::factory()->create([
+             'matricula' => $aluno2->numero_matricula,
+             'status' => 'falta'
+         ]);
 
-        // Aluno 1 tentando justificar falta do Aluno 2
-        $response = $this->actingAs($userAluno1)->get("/aluno/faltas/justificar/{$falta2->id}");
+        // Aluno 1 tentando justificar chamada do Aluno 2
+        $response = $this->actingAs($userAluno1)->get("/aluno/chamadas/justificar/{$chamada2->id}");
         $this->assertEquals(403, $response->getStatusCode(),
-            "Aluno não deveria poder justificar falta de outro aluno");
+            "Aluno não deveria poder justificar chamada de outro aluno");
 
-        // Aluno 1 justificando sua própria falta
-        $response = $this->actingAs($userAluno1)->get("/aluno/faltas/justificar/{$falta1->id}");
+        // Aluno 1 justificando sua própria chamada
+        $response = $this->actingAs($userAluno1)->get("/aluno/chamadas/justificar/{$chamada1->id}");
         $this->assertNotEquals(403, $response->getStatusCode(),
-            "Aluno deveria poder justificar sua própria falta");
+            "Aluno deveria poder justificar sua própria chamada");
 
-        // Admin justificando qualquer falta
-        $response = $this->actingAs($this->adminUser)->get("/aluno/faltas/justificar/{$falta1->id}");
+        // Admin justificando qualquer chamada
+        $response = $this->actingAs($this->adminUser)->get("/aluno/chamadas/justificar/{$chamada1->id}");
         $this->assertNotEquals(403, $response->getStatusCode(),
-            "Admin deveria poder justificar qualquer falta");
+            "Admin deveria poder justificar qualquer chamada");
     }
 }

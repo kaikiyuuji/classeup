@@ -109,7 +109,7 @@ class DashboardControllerTest extends TestCase
         
         $response->assertStatus(200);
         $response->assertViewIs('aluno.dashboard');
-        $response->assertViewHas(['aluno', 'turma', 'avaliacoes', 'faltas']);
+        $response->assertViewHas(['aluno', 'turma', 'avaliacoes', 'chamadas']);
     }
 
     public function test_admin_dashboard_requires_admin_middleware(): void

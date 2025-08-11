@@ -9,7 +9,7 @@
             </div>
             <a href="{{ route('admin.alunos.create') }}" 
                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                <x-icons.plus class="w-4 h-4 mr-2" />
+                <x-heroicon-o-plus class="w-4 h-4 mr-2" />
                 Novo Aluno
             </a>
         </div>
@@ -106,7 +106,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                     {{ $aluno->isMatriculaAtiva() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                    <x-icons.circle class="w-1.5 h-1.5 mr-1.5" />
+                                                    <x-heroicon-o-stop class="w-1.5 h-1.5 mr-1.5" />
                                                     {{ ucfirst($aluno->status_matricula) }}
                                                 </span>
                                             </td>
@@ -114,12 +114,12 @@
                                                 <div class="flex items-center justify-end space-x-2">
                                                     <a href="{{ route('admin.alunos.show', $aluno) }}" 
                                                        class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                        <x-icons.eye class="w-3 h-3 mr-1" />
+                                                        <x-heroicon-o-eye class="w-3 h-3 mr-1" />
                                                         Ver
                                                     </a>
                                                     <a href="{{ route('admin.alunos.edit', $aluno) }}" 
                                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                        <x-icons.pencil class="w-3 h-3 mr-1" />
+                                                        <x-heroicon-o-pencil class="w-3 h-3 mr-1" />
                                                         Editar
                                                     </a>
                                                     <form action="{{ route('admin.alunos.destroy', $aluno) }}" 
@@ -130,7 +130,7 @@
                                                         @method('DELETE')
                                                         <button type="submit" 
                                                                 class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                            <x-icons.trash class="w-3 h-3 mr-1" />
+                                                            <x-heroicon-o-trash class="w-3 h-3 mr-1" />
                                                             Excluir
                                                         </button>
                                                     </form>

@@ -8,8 +8,11 @@ use App\Http\Requests\AlunoUpdateRequest;
 use App\Http\Requests\AvaliacaoUpdateRequest;
 use App\Models\Aluno;
 use App\Models\Avaliacao;
+use App\Models\Chamada;
+use App\Models\Disciplina;
 use App\Models\Turma;
 use App\Services\AvaliacaoService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -115,8 +118,20 @@ class AlunoController extends Controller
     public function show(Aluno $aluno): View
     {
         $aluno->load('turma');
+        
+        // Obter estatísticas de chamadas
+        $totalPresencas = Chamada::porAluno($aluno->numero_matricula)
+            ->where('status', 'presente')
+            ->count();
             
-        return view('admin.alunos.show', compact('aluno'));
+        $faltasParaJustificar = Chamada::porAluno($aluno->numero_matricula)
+            ->where('status', 'falta')
+            ->where('justificada', false)
+            ->with(['disciplina', 'professor'])
+            ->orderBy('data_chamada', 'desc')
+            ->get();
+            
+        return view('admin.alunos.show', compact('aluno', 'totalPresencas', 'faltasParaJustificar'));
     }
 
     /**
@@ -208,5 +223,51 @@ class AlunoController extends Controller
         return redirect()
             ->route('admin.alunos.boletim', $aluno)
             ->with('success', 'Notas atualizadas com sucesso!');
+    }
+    
+    /**
+     * Retorna as presenças de um aluno via AJAX
+     */
+    public function presencasAluno(Request $request, Aluno $aluno)
+    {
+        $dataInicio = $request->get('data_inicio');
+        $dataFim = $request->get('data_fim');
+        $disciplinaId = $request->get('disciplina_id');
+        
+        $query = Chamada::with(['disciplina', 'professor'])
+            ->porAluno($aluno->numero_matricula)
+            ->presencas();
+        
+        if ($dataInicio && $dataFim) {
+            $query->porPeriodo(Carbon::parse($dataInicio), Carbon::parse($dataFim));
+        }
+        
+        if ($disciplinaId) {
+            $query->porDisciplina($disciplinaId);
+        }
+        
+        $presencas = $query->orderBy('data_chamada', 'desc')->paginate(10);
+        
+        return response()->json([
+            'presencas' => $presencas->items(),
+            'pagination' => [
+                'current_page' => $presencas->currentPage(),
+                'last_page' => $presencas->lastPage(),
+                'per_page' => $presencas->perPage(),
+                'total' => $presencas->total()
+            ]
+        ]);
+    }
+
+    /**
+     * Retorna as disciplinas que o aluno teve chamadas
+     */
+    public function disciplinasAluno(Aluno $aluno)
+    {
+        $disciplinas = Disciplina::whereHas('chamadas', function ($query) use ($aluno) {
+            $query->where('matricula', $aluno->numero_matricula);
+        })->select('id', 'nome')->get();
+
+        return response()->json(['disciplinas' => $disciplinas]);
     }
 }

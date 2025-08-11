@@ -3,14 +3,14 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-bold text-2xl text-gray-900">
-                    <x-icons.clipboard class="w-6 h-6 mr-2 text-blue-600 inline" />
+                    <x-heroicon-o-clipboard class="w-6 h-6 mr-2 text-blue-600 inline" />
                     Fazer Chamada
                 </h2>
                 <p class="text-gray-600 mt-1">{{ $turma->nome }} - {{ $disciplina->nome }}</p>
             </div>
-            <a href="{{ route('admin.faltas.index') }}" 
+            <a href="{{ route('admin.chamadas.index') }}" 
                class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
-                <x-icons.arrow-left class="w-4 h-4 mr-2" />
+                <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                 Voltar
             </a>
         </div>
@@ -24,7 +24,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
-                            <x-icons.users class="w-6 h-6 text-white" />
+                            <x-heroicon-o-users class="w-6 h-6 text-white" />
                         </div>
                         <div>
                             <h1 class="text-2xl font-bold text-white">{{ $turma->nome }}</h1>
@@ -40,8 +40,6 @@
 
         <div class="p-6">
             <!-- Mensagens de Alerta -->
-            
-
             @if(session('warning'))
                 <div class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 px-6 py-4 rounded-r-lg shadow-sm">
                     <div class="flex items-center mb-3">
@@ -69,7 +67,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.faltas.store') }}" method="POST" id="chamadaForm">
+            <form action="{{ route('admin.chamadas.store') }}" method="POST" id="chamadaForm">
                 @csrf
                 <input type="hidden" name="turma_id" value="{{ $turma->id }}">
                 <input type="hidden" name="disciplina_id" value="{{ $disciplina->id }}">
@@ -80,13 +78,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Seleção de Data -->
                         <div>
-                            <label for="data_falta" class="block text-sm font-semibold text-gray-700 mb-3">
-                                <x-icons.calendar class="w-4 h-4 mr-1 inline" />
+                            <label for="data_chamada" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <x-heroicon-o-calendar class="w-4 h-4 mr-1 inline" />
                                 Data da Aula
                             </label>
                             <input type="date" 
-                                   id="data_falta" 
-                                   name="data_falta" 
+                                   id="data_chamada" 
+                                   name="data_chamada" 
                                    value="{{ $data }}" 
                                    max="{{ now()->format('Y-m-d') }}"
                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium"
@@ -96,20 +94,20 @@
                         <!-- Ações Rápidas -->
                         <div class="md:col-span-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                <x-icons.lightning-bolt class="w-4 h-4 mr-1 inline" />
+                                <x-heroicon-o-bolt class="w-4 h-4 mr-1 inline" />
                                 Ações Rápidas
                             </label>
                             <div class="flex gap-3">
                                 <button type="button" 
-                                        onclick="marcarTodos(false)" 
+                                        onclick="marcarTodos(true)" 
                                         class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center justify-center">
-                                    <x-icons.check class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-check class="w-4 h-4 mr-2" />
                                     Todos Presentes
                                 </button>
                                 <button type="button" 
-                                        onclick="marcarTodos(true)" 
+                                        onclick="marcarTodos(false)" 
                                         class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center justify-center">
-                                    <x-icons.x class="w-4 h-4 mr-2" />
+                                    <x-heroicon-o-x-mark class="w-4 h-4 mr-2" />
                                     Todos Faltosos
                                 </button>
                             </div>
@@ -121,7 +119,7 @@
                 <div class="mb-6">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                            <x-icons.users class="w-5 h-5 mr-2 text-blue-600" />
+                            <x-heroicon-o-users class="w-5 h-5 mr-2 text-blue-600" />
                             Lista de Alunos
                             <span class="ml-2 bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
                                 {{ $alunos->count() }} alunos
@@ -132,7 +130,7 @@
                     @if($alunos->isEmpty())
                         <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg p-6 text-center">
                             <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <x-icons.exclamation-triangle class="w-8 h-8 text-yellow-600" />
+                                <x-heroicon-o-exclamation-triangle class="w-8 h-8 text-yellow-600" />
                             </div>
                             <p class="text-yellow-800 font-medium text-lg">
                                 Nenhum aluno encontrado nesta turma.
@@ -154,14 +152,14 @@
                                                          class="w-12 h-12 rounded-full object-cover border-2 border-gray-200">
                                                 @else
                                                     <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
-                                                        <x-icons.user class="w-6 h-6 text-white" />
+                                                        <x-heroicon-o-user class="w-6 h-6 text-white" />
                                                     </div>
                                                 @endif
                                             </div>
                                             <div>
                                                 <p class="font-semibold text-gray-900 text-lg">{{ $aluno->nome }}</p>
                                                 <p class="text-sm text-gray-600 flex items-center">
-                                                    <x-icons.identification class="w-4 h-4 mr-1" />
+                                                    <x-heroicon-o-identification class="w-4 h-4 mr-1" />
                                                     {{ $aluno->numero_matricula }}
                                                 </p>
                                             </div>
@@ -170,16 +168,16 @@
                                         <div class="flex items-center">
                                             <label class="flex items-center cursor-pointer group">
                                                 <input type="checkbox" 
-                                                       name="faltas[]" 
+                                                       name="presencas[]" 
                                                        value="{{ $aluno->numero_matricula }}"
-                                                       class="sr-only falta-checkbox"
-                                                       {{ in_array($aluno->numero_matricula, $faltasExistentes) ? 'checked' : '' }}>
+                                                       class="sr-only presenca-checkbox"
+                                                       {{ in_array($aluno->numero_matricula, $presencasExistentes) ? 'checked' : '' }}>
                                                 <div class="relative">
-                                                    <div class="w-14 h-7 bg-green-400 rounded-full shadow-inner transition-colors duration-200 ease-in-out checkbox-bg group-hover:shadow-lg"></div>
+                                                    <div class="w-14 h-7 bg-red-400 rounded-full shadow-inner transition-colors duration-200 ease-in-out checkbox-bg group-hover:shadow-lg"></div>
                                                     <div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow transition-transform duration-200 ease-in-out checkbox-dot"></div>
                                                 </div>
                                                 <div class="ml-4 text-right">
-                                                    <span class="block text-sm font-bold status-text text-green-600">Presente</span>
+                                                    <span class="block text-sm font-bold status-text text-red-600">Falta</span>
                                                     <span class="block text-xs text-gray-500">Clique para alterar</span>
                                                 </div>
                                             </label>
@@ -202,12 +200,12 @@
                             <button type="button" 
                                     onclick="window.history.back()" 
                                     class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center">
-                                <x-icons.x class="w-4 h-4 mr-2" />
+                                <x-heroicon-o-x-mark class="w-4 h-4 mr-2" />
                                 Cancelar
                             </button>
                             <button type="submit" 
                                     class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors font-medium shadow-sm flex items-center">
-                                <x-icons.save class="w-5 h-5 mr-2" />
+                                <x-heroicon-o-arrow-down-tray class="w-5 h-5 mr-2" />
                                 Salvar Chamada
                             </button>
                         </div>
@@ -219,10 +217,10 @@
 </div>
 
 <script>
-function marcarTodos(faltoso) {
-    const checkboxes = document.querySelectorAll('.falta-checkbox');
+function marcarTodos(presente) {
+    const checkboxes = document.querySelectorAll('.presenca-checkbox');
     checkboxes.forEach(checkbox => {
-        checkbox.checked = faltoso;
+        checkbox.checked = presente;
         atualizarEstiloCheckbox(checkbox);
     });
 }
@@ -233,24 +231,24 @@ function atualizarEstiloCheckbox(checkbox) {
     const statusText = checkbox.parentElement.parentElement.querySelector('.status-text');
     
     if (checkbox.checked) {
-        bg.classList.remove('bg-green-400');
-        bg.classList.add('bg-red-500');
-        dot.classList.add('translate-x-7');
-        statusText.textContent = 'Faltoso';
-        statusText.classList.remove('text-green-600');
-        statusText.classList.add('text-red-600');
-    } else {
-        bg.classList.remove('bg-red-500');
+        bg.classList.remove('bg-red-400');
         bg.classList.add('bg-green-400');
-        dot.classList.remove('translate-x-7');
+        dot.classList.add('translate-x-7');
         statusText.textContent = 'Presente';
         statusText.classList.remove('text-red-600');
         statusText.classList.add('text-green-600');
+    } else {
+        bg.classList.remove('bg-green-400');
+        bg.classList.add('bg-red-400');
+        dot.classList.remove('translate-x-7');
+        statusText.textContent = 'Falta';
+        statusText.classList.remove('text-green-600');
+        statusText.classList.add('text-red-600');
     }
 }
 
 function atualizarChamada() {
-    const data = document.getElementById('data_falta').value;
+    const data = document.getElementById('data_chamada').value;
     const url = new URL(window.location);
     url.searchParams.set('data', data);
     window.location.href = url.toString();
@@ -258,7 +256,7 @@ function atualizarChamada() {
 
 // Inicializar estilos dos checkboxes
 document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('.falta-checkbox');
+    const checkboxes = document.querySelectorAll('.presenca-checkbox');
     checkboxes.forEach(checkbox => {
         atualizarEstiloCheckbox(checkbox);
         checkbox.addEventListener('change', function() {

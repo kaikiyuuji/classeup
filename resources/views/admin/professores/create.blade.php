@@ -9,7 +9,7 @@
             </div>
             <a href="{{ route('admin.professores.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                <x-icons.arrow-left class="w-4 h-4 mr-2" />
+                <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
                 Voltar
             </a>
         </div>
@@ -25,7 +25,7 @@
                         <!-- Informações Pessoais -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.user class="w-5 h-5 mr-2 text-purple-600" />
+                                <x-heroicon-o-user class="w-5 h-5 mr-2 text-purple-600" />
                                 Informações Pessoais
                             </h3>
                             
@@ -39,7 +39,7 @@
                                            required>
                                     @error('nome')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -55,7 +55,7 @@
                                            required>
                                     @error('cpf')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -69,7 +69,7 @@
                                            required>
                                     @error('data_nascimento')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -84,7 +84,7 @@
                                            required>
                                     @error('especialidade')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -95,7 +95,7 @@
                         <!-- Informações de Contato -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.mail class="w-5 h-5 mr-2 text-green-600" />
+                                <x-heroicon-o-envelope class="w-5 h-5 mr-2 text-green-600" />
                                 Informações de Contato
                             </h3>
                             
@@ -109,7 +109,7 @@
                                            required>
                                     @error('email')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -124,7 +124,7 @@
                                            maxlength="15">
                                     @error('telefone')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -138,7 +138,7 @@
                                               placeholder="Digite o endereço completo do professor">{{ old('endereco') }}</textarea>
                                     @error('endereco')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -149,7 +149,7 @@
                                     <label for="foto_perfil" class="block text-sm font-semibold text-gray-700 mb-2">Foto de Perfil</label>
                                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors duration-200">
                                         <div class="space-y-1 text-center">
-                                            <x-icons.photo class="mx-auto h-12 w-12 text-gray-400" />
+                                            <x-heroicon-o-photo class="mx-auto h-12 w-12 text-gray-400" />
                                             <div class="flex text-sm text-gray-600">
                                                 <label for="foto_perfil" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                     <span>Enviar uma foto</span>
@@ -166,7 +166,7 @@
                                             <div class="flex items-center justify-between mb-3">
                                                 <p class="text-sm font-medium text-blue-700">📷 Preview da imagem selecionada</p>
                                                 <button type="button" onclick="removeImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 hover:bg-red-200 rounded-md transition-colors duration-200">
-                                                    <x-icons.x class="w-3 h-3 mr-1" />
+                                                    <x-heroicon-o-x-mark class="w-3 h-3 mr-1" />
                                                     Remover
                                                 </button>
                                             </div>
@@ -195,7 +195,7 @@
                                     </div>
                                     @error('foto_perfil')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -206,7 +206,7 @@
                         <!-- Informações Acadêmicas -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.book-open class="w-5 h-5 mr-2 text-blue-600" />
+                                <x-heroicon-o-book-open class="w-5 h-5 mr-2 text-blue-600" />
                                 Informações Acadêmicas
                             </h3>
                             
@@ -220,7 +220,7 @@
                                               required>{{ old('formacao') }}</textarea>
                                     @error('formacao')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
-                                            <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                            <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                             {{ $message }}
                                         </p>
                                     @enderror
@@ -231,7 +231,7 @@
                         <!-- Status -->
                         <div class="bg-gray-50 rounded-lg p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-                                <x-icons.check-circle class="w-5 h-5 mr-2 text-purple-600" />
+                                <x-heroicon-o-check-circle class="w-5 h-5 mr-2 text-purple-600" />
                                 Status do Professor
                             </h3>
                             
@@ -248,7 +248,7 @@
                             </div>
                             @error('ativo')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <x-icons.exclamation-circle class="w-4 h-4 mr-1" />
+                                    <x-heroicon-o-exclamation-circle class="w-4 h-4 mr-1" />
                                     {{ $message }}
                                 </p>
                             @enderror
@@ -258,12 +258,12 @@
                         <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
                             <a href="{{ route('admin.professores.index') }}" 
                                class="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
-                                <x-icons.x class="w-5 h-5 mr-2" />
+                                <x-heroicon-o-x-mark class="w-5 h-5 mr-2" />
                                 Cancelar
                             </a>
                             <button type="submit" 
                                     class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <x-icons.check class="w-4 h-4 mr-2" />
+                                <x-heroicon-o-check class="w-4 h-4 mr-2" />
                                 Cadastrar Professor
                             </button>
                         </div>
