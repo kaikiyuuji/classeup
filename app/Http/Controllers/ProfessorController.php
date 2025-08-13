@@ -7,9 +7,14 @@ use App\Http\Requests\ProfessorStoreRequest;
 use App\Http\Requests\ProfessorUpdateRequest;
 use App\Models\Disciplina;
 use App\Models\Professor;
+use App\Models\Turma;
+use App\Models\Aluno;
+use App\Models\Chamada;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ProfessorController extends Controller
 {
@@ -221,6 +226,169 @@ class ProfessorController extends Controller
         return redirect()
             ->route('admin.professores.show', $professor)
             ->with('success', "Professor desvinculado da disciplina {$disciplina->nome} com sucesso!");
+    }
+
+    /**
+     * Processar lançamento de chamada (redirecionamento)
+     */
+    public function lancarChamada(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'turma_id' => 'required|exists:turmas,id',
+            'disciplina_id' => 'required|exists:disciplinas,id',
+            'data_chamada' => 'required|date|before_or_equal:today'
+        ]);
+        
+        $professor = auth()->user()->professor;
+        
+        // Validar se o professor está vinculado à turma e disciplina
+        $vinculo = DB::table('professor_disciplina_turma')
+            ->where('professor_id', $professor->id)
+            ->where('turma_id', $request->turma_id)
+            ->where('disciplina_id', $request->disciplina_id)
+            ->exists();
+            
+        if (!$vinculo) {
+            return redirect()->back()
+                ->with('error', 'Você não tem permissão para fazer chamada nesta turma/disciplina.');
+        }
+        
+        return redirect()->route('professor.chamada.fazer', [
+            'turma' => $request->turma_id,
+            'disciplina' => $request->disciplina_id
+        ])->with('data', $request->data_chamada);
+    }
+    
+    /**
+     * Exibir interface de chamada
+     */
+    public function chamada(Request $request, $turmaId, $disciplinaId): View
+    {
+        $professor = auth()->user()->professor;
+        $data = $request->get('data', session('data', now()->format('Y-m-d')));
+        
+        // Validar se o professor está vinculado à turma e disciplina
+        $vinculo = DB::table('professor_disciplina_turma')
+            ->where('professor_id', $professor->id)
+            ->where('turma_id', $turmaId)
+            ->where('disciplina_id', $disciplinaId)
+            ->exists();
+            
+        if (!$vinculo) {
+            abort(403, 'Você não tem permissão para acessar esta turma/disciplina.');
+        }
+        
+        $turma = Turma::findOrFail($turmaId);
+        $disciplina = Disciplina::findOrFail($disciplinaId);
+        
+        // Obter alunos da turma
+        $alunos = Aluno::where('turma_id', $turmaId)
+            ->where('status_matricula', 'ativa')
+            ->orderBy('nome')
+            ->get();
+            
+        // Verificar se já existe chamada para esta data
+        $matriculasAlunos = $alunos->pluck('numero_matricula')->toArray();
+        $presencasExistentes = Chamada::where('disciplina_id', $disciplinaId)
+            ->where('professor_id', $professor->id)
+            ->whereDate('data_chamada', $data)
+            ->whereIn('matricula', $matriculasAlunos)
+            ->where('status', 'presente')
+            ->pluck('matricula')
+            ->toArray();
+            
+        // Verificar se já existe alguma chamada (presente ou falta) para esta data
+        $chamadaJaLancada = Chamada::where('disciplina_id', $disciplinaId)
+            ->where('professor_id', $professor->id)
+            ->whereDate('data_chamada', $data)
+            ->whereIn('matricula', $matriculasAlunos)
+            ->exists();
+            
+        return view('professor.chamada.fazer', compact(
+            'turma', 'disciplina', 'professor', 'alunos', 'presencasExistentes', 'data', 'chamadaJaLancada'
+        ));
+    }
+    
+    /**
+     * Salvar chamada
+     */
+    public function salvarChamada(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'turma_id' => 'required|exists:turmas,id',
+            'disciplina_id' => 'required|exists:disciplinas,id',
+            'data_chamada' => 'required|date|before_or_equal:today',
+            'presencas' => 'array',
+            'presencas.*' => 'string'
+        ]);
+        
+        $professor = auth()->user()->professor;
+        
+        // Validar se o professor está vinculado à turma e disciplina
+        $vinculo = DB::table('professor_disciplina_turma')
+            ->where('professor_id', $professor->id)
+            ->where('turma_id', $request->turma_id)
+            ->where('disciplina_id', $request->disciplina_id)
+            ->exists();
+            
+        if (!$vinculo) {
+            return redirect()->back()
+                ->with('error', 'Você não tem permissão para fazer chamada nesta turma/disciplina.');
+        }
+        
+        // Verificar se já existe chamada para esta data
+        $matriculasAlunos = Aluno::where('turma_id', $request->turma_id)
+            ->where('status_matricula', 'ativa')
+            ->pluck('numero_matricula')
+            ->toArray();
+            
+        $chamadaExistente = Chamada::where('disciplina_id', $request->disciplina_id)
+            ->where('professor_id', $professor->id)
+            ->whereDate('data_chamada', $request->data_chamada)
+            ->whereIn('matricula', $matriculasAlunos)
+            ->exists();
+            
+        if ($chamadaExistente && !$request->has('confirmar_reenvio')) {
+            return redirect()->back()
+                ->with('warning', 'Já existe uma chamada registrada para esta data. Deseja substituir?')
+                ->with('mostrar_confirmacao', true)
+                ->withInput();
+        }
+        
+        // Remover chamadas existentes se confirmado o reenvio
+        if ($chamadaExistente && $request->has('confirmar_reenvio')) {
+            Chamada::where('disciplina_id', $request->disciplina_id)
+                ->where('professor_id', $professor->id)
+                ->whereDate('data_chamada', $request->data_chamada)
+                ->whereIn('matricula', $matriculasAlunos)
+                ->delete();
+        }
+        
+        // Registrar novas chamadas
+        $presencas = $request->get('presencas', []);
+        $alunos = Aluno::where('turma_id', $request->turma_id)
+            ->where('status_matricula', 'ativa')
+            ->get();
+            
+        foreach ($alunos as $aluno) {
+            $status = in_array($aluno->numero_matricula, $presencas) ? 'presente' : 'falta';
+            
+            Chamada::create([
+                'matricula' => $aluno->numero_matricula,
+                'disciplina_id' => $request->disciplina_id,
+                'professor_id' => $professor->id,
+                'data_chamada' => $request->data_chamada,
+                'status' => $status
+            ]);
+        }
+        
+        $turma = Turma::find($request->turma_id);
+        $disciplina = Disciplina::find($request->disciplina_id);
+        
+        return redirect()->route('professor.chamadas.gerenciar', [
+            'turma' => $request->turma_id,
+            'disciplina' => $request->disciplina_id
+        ])->with('success', "Chamada da turma {$turma->nome} - {$disciplina->nome} salva com sucesso!");
     }
 
     /**

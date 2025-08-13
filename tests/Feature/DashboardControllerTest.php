@@ -71,7 +71,7 @@ class DashboardControllerTest extends TestCase
         Turma::factory()->count(2)->create();
         Disciplina::factory()->count(4)->create();
         
-        $response = $this->actingAs($this->adminUser)->get('/dashboard/admin');
+        $response = $this->actingAs($this->adminUser)->get('/admin/dashboard');
         
         $response->assertStatus(200);
         $response->assertViewIs('admin.dashboard');
@@ -96,40 +96,40 @@ class DashboardControllerTest extends TestCase
             'updated_at' => now(),
         ]);
         
-        $response = $this->actingAs($this->professorUser)->get('/dashboard/professor');
+        $response = $this->actingAs($this->professorUser)->get('/professor/dashboard');
         
         $response->assertStatus(200);
         $response->assertViewIs('professor.dashboard');
-        $response->assertViewHas(['professor', 'turmas', 'disciplinas', 'totalAlunos']);
+        $response->assertViewHas(['professor', 'turmasComDisciplinas', 'totalAlunos']);
     }
 
     public function test_aluno_dashboard_shows_aluno_data(): void
     {
-        $response = $this->actingAs($this->alunoUser)->get('/dashboard/aluno');
+        $response = $this->actingAs($this->alunoUser)->get('/aluno/dashboard');
         
         $response->assertStatus(200);
         $response->assertViewIs('aluno.dashboard');
-        $response->assertViewHas(['aluno', 'turma', 'avaliacoes', 'chamadas']);
+        $response->assertViewHas(['aluno', 'turma', 'avaliacoes', 'faltas']);
     }
 
     public function test_admin_dashboard_requires_admin_middleware(): void
     {
-        $response = $this->actingAs($this->professorUser)->get('/dashboard/admin');
+        $response = $this->actingAs($this->professorUser)->get('/admin/dashboard');
         $response->assertRedirect('/dashboard');
-        
-        $response = $this->actingAs($this->alunoUser)->get('/dashboard/admin');
+
+        $response = $this->actingAs($this->alunoUser)->get('/admin/dashboard');
         $response->assertRedirect('/dashboard');
     }
 
     public function test_professor_dashboard_requires_professor_middleware(): void
     {
-        $response = $this->actingAs($this->alunoUser)->get('/dashboard/professor');
+        $response = $this->actingAs($this->alunoUser)->get('/professor/dashboard');
         $response->assertRedirect('/dashboard');
     }
 
     public function test_aluno_dashboard_requires_aluno_middleware(): void
     {
-        $response = $this->actingAs($this->professorUser)->get('/dashboard/aluno');
+        $response = $this->actingAs($this->professorUser)->get('/aluno/dashboard');
         $response->assertRedirect('/dashboard');
     }
 
@@ -140,7 +140,7 @@ class DashboardControllerTest extends TestCase
             'professor_id' => null
         ]);
         
-        $response = $this->actingAs($userWithoutProfessor)->get('/dashboard/professor');
+        $response = $this->actingAs($userWithoutProfessor)->get('/professor/dashboard');
         $response->assertStatus(403);
     }
 
@@ -151,7 +151,7 @@ class DashboardControllerTest extends TestCase
             'aluno_id' => null
         ]);
         
-        $response = $this->actingAs($userWithoutAluno)->get('/dashboard/aluno');
+        $response = $this->actingAs($userWithoutAluno)->get('/aluno/dashboard');
         $response->assertStatus(403);
     }
 

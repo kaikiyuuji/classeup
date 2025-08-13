@@ -15,13 +15,62 @@ use Carbon\Carbon;
 class ChamadaController extends Controller
 {
     /**
-     * Exibe a lista de turmas para chamada
+     * Exibe a lista de turmas para chamada (Admin)
      */
     public function index()
     {
         $turmasComVinculo = $this->obterTurmasComVinculo();
         
         return view('admin.chamadas.index', compact('turmasComVinculo'));
+    }
+
+    /**
+     * Exibe a lista de turmas para chamada (Professor)
+     */
+    public function indexProfessor()
+    {
+        $professor = auth()->user()->professor;
+        
+        if (!$professor) {
+            abort(403, 'Professor não encontrado');
+        }
+        
+        // Buscar turmas vinculadas ao professor com suas disciplinas específicas
+        $turmasComVinculo = DB::table('professor_disciplina_turma')
+            ->join('turmas', 'professor_disciplina_turma.turma_id', '=', 'turmas.id')
+            ->join('disciplinas', 'professor_disciplina_turma.disciplina_id', '=', 'disciplinas.id')
+            ->where('professor_disciplina_turma.professor_id', $professor->id)
+            ->select(
+                'turmas.id as turma_id',
+                'turmas.nome as turma_nome',
+                'turmas.serie',
+                'turmas.turno',
+                'disciplinas.id as disciplina_id',
+                'disciplinas.nome as disciplina_nome',
+                'disciplinas.codigo as disciplina_codigo',
+                'professor_disciplina_turma.professor_id'
+            )
+            ->get()
+            ->groupBy('turma_id')
+            ->map(function ($items) {
+                $firstItem = $items->first();
+                return (object) [
+                    'turma_id' => $firstItem->turma_id,
+                    'turma_nome' => $firstItem->turma_nome,
+                    'serie' => $firstItem->serie,
+                    'turno' => $firstItem->turno,
+                    'professor_id' => $firstItem->professor_id,
+                    'disciplinas' => $items->map(function ($item) {
+                        return (object) [
+                            'disciplina_id' => $item->disciplina_id,
+                            'disciplina_nome' => $item->disciplina_nome,
+                            'disciplina_codigo' => $item->disciplina_codigo
+                        ];
+                    })
+                ];
+            });
+        
+        return view('professor.chamadas.index', compact('turmasComVinculo'));
     }
 
     /**
@@ -231,6 +280,120 @@ class ChamadaController extends Controller
             'success' => true,
             'message' => "Chamada do dia {$data} excluída com sucesso! ({$chamadasExcluidas} registros removidos)"
         ]);
+    }
+
+    /**
+     * Exibe relatórios de chamadas para professores
+     */
+    public function relatorioProfessor(Request $request)
+    {
+        $professor = auth()->user()->professor;
+        
+        if (!$professor) {
+            abort(403, 'Professor não encontrado');
+        }
+        
+        $dataInicio = $request->get('data_inicio', now()->startOfMonth()->format('Y-m-d'));
+        $dataFim = $request->get('data_fim', now()->format('Y-m-d'));
+        $turmaId = $request->get('turma_id');
+        $disciplinaId = $request->get('disciplina_id');
+        $buscaAluno = $request->get('busca_aluno');
+        
+        // Buscar turmas vinculadas ao professor
+        $turmasComVinculo = DB::table('professor_disciplina_turma')
+            ->join('turmas', 'professor_disciplina_turma.turma_id', '=', 'turmas.id')
+            ->join('disciplinas', 'professor_disciplina_turma.disciplina_id', '=', 'disciplinas.id')
+            ->where('professor_disciplina_turma.professor_id', $professor->id)
+            ->select(
+                'turmas.id as turma_id',
+                'turmas.nome as turma_nome',
+                'turmas.serie',
+                'turmas.turno',
+                'disciplinas.id as disciplina_id',
+                'disciplinas.nome as disciplina_nome',
+                'disciplinas.codigo as disciplina_codigo'
+            )
+            ->get();
+        
+        // Buscar estatísticas de chamadas
+        $query = Chamada::where('professor_id', $professor->id)
+            ->whereDate('data_chamada', '>=', $dataInicio)
+            ->whereDate('data_chamada', '<=', $dataFim);
+        
+        if ($turmaId) {
+            $matriculasAlunos = Aluno::where('turma_id', $turmaId)
+                ->where('status_matricula', 'ativa')
+                ->pluck('numero_matricula');
+            $query->whereIn('matricula', $matriculasAlunos);
+        }
+        
+        if ($disciplinaId) {
+            $query->where('disciplina_id', $disciplinaId);
+        }
+        
+        if ($buscaAluno) {
+            // Buscar por matrícula ou nome do aluno
+            $query->where(function($q) use ($buscaAluno) {
+                $q->where('matricula', 'like', '%' . $buscaAluno . '%')
+                  ->orWhereHas('aluno', function($subQuery) use ($buscaAluno) {
+                      $subQuery->where('nome', 'like', '%' . $buscaAluno . '%');
+                  });
+            });
+        }
+        
+        $chamadas = $query->with(['aluno', 'disciplina'])->get();
+        
+        // Calcular estatísticas
+        // Total de chamadas = número de chamadas únicas por disciplina/data
+        $chamadasUnicas = $chamadas->groupBy(function($chamada) {
+            return $chamada->disciplina_id . '-' . $chamada->data_chamada;
+        });
+        $totalChamadas = $chamadasUnicas->count();
+        
+        $totalPresencas = $chamadas->where('status', 'presente')->count();
+        $totalFaltas = $chamadas->where('status', 'falta')->count();
+        $totalRegistros = $chamadas->count();
+        $percentualPresenca = $totalRegistros > 0 ? round(($totalPresencas / $totalRegistros) * 100, 2) : 0;
+        
+        return view('professor.chamadas.relatorio', compact(
+            'turmasComVinculo', 'chamadas', 'dataInicio', 'dataFim', 'turmaId', 'disciplinaId', 'buscaAluno',
+            'totalChamadas', 'totalPresencas', 'totalFaltas', 'totalRegistros', 'percentualPresenca'
+        ));
+    }
+
+    /**
+     * Exibe interface para gerenciar chamadas de uma turma/disciplina (Professor)
+     */
+    public function gerenciarProfessor(Request $request, $turma, $disciplina)
+    {
+        $professor = auth()->user()->professor;
+        
+        if (!$professor) {
+            abort(403, 'Professor não encontrado');
+        }
+        
+        $dataInicio = $request->get('data_inicio', now()->startOfMonth()->format('Y-m-d'));
+        $dataFim = $request->get('data_fim', now()->format('Y-m-d'));
+        
+        $turma = Turma::findOrFail($turma);
+        $disciplina = Disciplina::findOrFail($disciplina);
+        
+        // Verificar se o professor está vinculado à turma e disciplina
+        $vinculo = DB::table('professor_disciplina_turma')
+            ->where('professor_id', $professor->id)
+            ->where('turma_id', $turma->id)
+            ->where('disciplina_id', $disciplina->id)
+            ->exists();
+            
+        if (!$vinculo) {
+            abort(403, 'Você não tem permissão para gerenciar chamadas desta turma/disciplina.');
+        }
+        
+        $chamadasPorDia = $this->obterChamadasPorDia($turma->id, $disciplina->id, $professor->id, $dataInicio, $dataFim);
+        
+        return view('professor.chamadas.gerenciar', compact(
+            'turma', 'disciplina', 'professor', 'chamadasPorDia', 'dataInicio', 'dataFim'
+        ));
     }
 
     /**

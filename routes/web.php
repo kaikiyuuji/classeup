@@ -122,25 +122,31 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
 // ========================================
 
 Route::middleware(['auth', 'check.professor'])->prefix('professor')->name('professor.')->group(function () {
-    // Dashboard do Professor
-    Route::get('/dashboard', [ProfessorController::class, 'dashboard'])->name('dashboard');
+    
+    // API para Dashboard do Professor
+    Route::get('/api/turmas', [DashboardController::class, 'turmasProfessor'])->name('api.turmas');
+    Route::get('/api/turmas/{turma_id}/alunos', [DashboardController::class, 'alunosTurma'])->name('api.turmas.alunos');
     
     // Visualização de Turmas e Alunos
     Route::get('/turmas', [ProfessorController::class, 'minhasTurmas'])->name('turmas.index');
     Route::get('/turmas/{turma}', [TurmaController::class, 'show'])->name('turmas.show');
     Route::get('/alunos/{aluno}', [AlunoController::class, 'show'])->name('alunos.show');
     
+    // Lançamento de Chamadas
+    Route::post('/chamada/lancar', [ProfessorController::class, 'lancarChamada'])->name('chamada.lancar');
+    Route::get('/chamada/{turma}/{disciplina}', [ProfessorController::class, 'chamada'])->name('chamada.fazer');
+    Route::post('/chamada/salvar', [ProfessorController::class, 'salvarChamada'])->name('chamada.salvar');
+    
     // Lançamento de Notas
     Route::get('/notas', [AlunoController::class, 'lancamentoNotas'])->name('notas.index');
     Route::get('/notas/{turma}/{disciplina}', [AlunoController::class, 'editarNotas'])->name('notas.editar');
     Route::put('/alunos/{aluno}/avaliacoes/{avaliacao}', [AlunoController::class, 'atualizarAvaliacao'])->name('avaliacoes.update');
     
-    // Lançamento de Chamadas
+    // Gerenciamento de Chamadas
     Route::prefix('chamadas')->name('chamadas.')->group(function () {
-        Route::get('/', [ChamadaController::class, 'index'])->name('index');
-        Route::get('/chamada/{turma}/{disciplina}', [ChamadaController::class, 'chamada'])->name('chamada');
-        Route::post('/chamada', [ChamadaController::class, 'store'])->name('store');
+        Route::get('/', [ChamadaController::class, 'indexProfessor'])->name('index');
         Route::get('/relatorio', [ChamadaController::class, 'relatorioProfessor'])->name('relatorio');
+        Route::get('/gerenciar/{turma}/{disciplina}', [ChamadaController::class, 'gerenciarProfessor'])->name('gerenciar');
     });
     
     // Relatórios do Professor
@@ -155,8 +161,6 @@ Route::middleware(['auth', 'check.professor'])->prefix('professor')->name('profe
 // ========================================
 
 Route::middleware(['auth', 'check.aluno'])->prefix('aluno')->name('aluno.')->group(function () {
-    // Dashboard do Aluno
-    Route::get('/dashboard', [AlunoController::class, 'dashboardAluno'])->name('dashboard');
     
     // Boletim Individual (com verificação adicional de propriedade)
     Route::get('/boletim', [AlunoController::class, 'meuBoletim'])->name('boletim');

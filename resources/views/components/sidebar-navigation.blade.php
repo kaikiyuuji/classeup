@@ -73,7 +73,7 @@
             @elseif($userType === 'professor')
                 <!-- Menu do Professor -->
                 <div class="space-y-1">
-                    <x-sidebar-link :href="route('professor.dashboard')" :active="request()->routeIs('professor.dashboard')" icon="home">
+                    <x-sidebar-link :href="route('dashboard.professor')" :active="request()->routeIs('dashboard.professor')" icon="home">
                         Meu Dashboard
                     </x-sidebar-link>
                     
@@ -95,7 +95,7 @@
             @else
                 <!-- Menu do Aluno -->
                 <div class="space-y-1">
-                    <x-sidebar-link :href="route('aluno.dashboard')" :active="request()->routeIs('aluno.dashboard')" icon="home">
+                    <x-sidebar-link :href="route('dashboard.aluno')" :active="request()->routeIs('dashboard.aluno')" icon="home">
                         Meu Painel
                     </x-sidebar-link>
                     

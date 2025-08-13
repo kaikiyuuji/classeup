@@ -36,9 +36,8 @@
             
             @hasSection('content')
                 <div class="px-4 sm:px-6 lg:px-8">
-                    <x-session-messages />
+                    @yield('content')
                 </div>
-                @yield('content')
             @else
                 {{ $slot }}
             @endif
