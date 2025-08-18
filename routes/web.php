@@ -56,8 +56,6 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
     Route::get('alunos/{aluno}/boletim', [AlunoController::class, 'boletim'])->name('alunos.boletim');
     Route::post('alunos/{aluno}/notas', [AlunoController::class, 'atualizarNotas'])->name('alunos.atualizar-notas');
     Route::put('alunos/{aluno}/avaliacoes/{avaliacao}', [AlunoController::class, 'atualizarAvaliacao'])->name('alunos.avaliacoes.update');
-    Route::get('alunos/{aluno}/presencas', [AlunoController::class, 'presencasAluno'])->name('alunos.presencas');
-    Route::get('alunos/{aluno}/disciplinas', [AlunoController::class, 'disciplinasAluno'])->name('alunos.disciplinas');
     
     // CRUD de Professores
     Route::resource('professores', ProfessorController::class)->parameters([

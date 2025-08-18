@@ -8,70 +8,53 @@ use App\Http\Requests\AlunoUpdateRequest;
 use App\Http\Requests\AvaliacaoUpdateRequest;
 use App\Models\Aluno;
 use App\Models\Avaliacao;
-use App\Models\Chamada;
-use App\Models\Disciplina;
 use App\Models\Turma;
+use App\Services\AlunoService;
 use App\Services\AvaliacaoService;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AlunoController extends Controller
 {
+    private AlunoService $alunoService;
+
+    public function __construct(AlunoService $alunoService)
+    {
+        $this->alunoService = $alunoService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): View
     {
-        $query = Aluno::with('turma');
-
-        // Filtro de busca por nome, email ou número de matrícula
-        if ($request->filled('search')) {
-            $search = $request->get('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('nome', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('numero_matricula', 'like', "%{$search}%");
-            });
-        }
-
-        // Filtro por status de matrícula
-        if ($request->filled('status')) {
-            $status = $request->get('status');
-            if ($status === 'ativo') {
-                $query->where('status_matricula', 'ativa');
-            } elseif ($status === 'inativo') {
-                $query->whereIn('status_matricula', ['inativa', 'cancelada', 'transferida']);
-            }
-        }
-
-        // Filtro por turma
-        if ($request->filled('turma_id')) {
-            $query->where('turma_id', $request->get('turma_id'));
-        }
-
-        // Lógica de ordenação
-        $sortField = $request->get('sort', 'nome');
-        $sortDirection = $request->get('direction', 'asc');
+        $alunos = $this->alunoService->obterAlunosPaginados($request);
+        $turmas = $this->obterTurmasAtivas();
+        $parametrosOrdenacao = $this->extrairParametrosOrdenacao($request);
         
-        // Validar campos de ordenação permitidos
-        $allowedSortFields = ['nome', 'email', 'data_nascimento', 'status_matricula'];
-        if (!in_array($sortField, $allowedSortFields)) {
-            $sortField = 'nome';
-        }
-        
-        // Validar direção de ordenação
-        if (!in_array($sortDirection, ['asc', 'desc'])) {
-            $sortDirection = 'asc';
-        }
-
-        $alunos = $query->orderBy($sortField, $sortDirection)->paginate(15)->withQueryString();
-        
-        // Buscar turmas para o filtro
-        $turmas = Turma::where('ativo', true)->orderBy('nome')->get();
-
-        return view('admin.alunos.index', compact('alunos', 'turmas', 'sortField', 'sortDirection'));
+        return view('admin.alunos.index', array_merge(
+            compact('alunos', 'turmas'),
+            $parametrosOrdenacao
+        ));
+    }
+    
+    /**
+     * Obtém turmas ativas para filtros
+     */
+    private function obterTurmasAtivas()
+    {
+        return Turma::where('ativo', true)->orderBy('nome')->get();
+    }
+    
+    /**
+     * Extrai parâmetros de ordenação da requisição
+     */
+    private function extrairParametrosOrdenacao(Request $request): array
+    {
+        return [
+            'sortField' => $request->get('sort', 'nome'),
+            'sortDirection' => $request->get('direction', 'asc')
+        ];
     }
 
     /**
@@ -93,23 +76,32 @@ class AlunoController extends Controller
      */
     public function store(AlunoStoreRequest $request): RedirectResponse
     {
-        $validatedData = $request->validated();
+        $dadosValidados = $request->validated();
+        $dadosProcessados = $this->processarDadosAluno($dadosValidados, $request);
         
-        // Handle photo upload
+        Aluno::create($dadosProcessados);
+
+        return $this->redirecionarComSucesso('admin.alunos.index', 'Aluno criado com sucesso!');
+    }
+    
+    /**
+     * Processa dados do aluno incluindo upload de foto
+     */
+    private function processarDadosAluno(array $dados, Request $request): array
+    {
         if ($request->hasFile('foto_perfil')) {
-            $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
+            $dados['foto_perfil'] = $this->processarUploadFoto($request->file('foto_perfil'));
         }
         
-        // Gerar dados de matrícula automaticamente
-        $validatedData['numero_matricula'] = Aluno::gerarNumeroMatricula();
-        $validatedData['data_matricula'] = now()->format('Y-m-d');
-        $validatedData['status_matricula'] = 'ativa';
-        
-        Aluno::create($validatedData);
-
-        return redirect()
-            ->route('admin.alunos.index')
-            ->with('success', 'Aluno criado com sucesso!');
+        return $dados;
+    }
+    
+    /**
+     * Redireciona com mensagem de sucesso
+     */
+    private function redirecionarComSucesso(string $rota, string $mensagem): RedirectResponse
+    {
+        return redirect()->route($rota)->with('success', $mensagem);
     }
 
     /**
@@ -117,21 +109,9 @@ class AlunoController extends Controller
      */
     public function show(Aluno $aluno): View
     {
-        $aluno->load('turma');
+        $dadosExibicao = $this->alunoService->prepararDadosParaExibicao($aluno);
         
-        // Obter estatísticas de chamadas
-        $totalPresencas = Chamada::porAluno($aluno->numero_matricula)
-            ->where('status', 'presente')
-            ->count();
-            
-        $faltasParaJustificar = Chamada::porAluno($aluno->numero_matricula)
-            ->where('status', 'falta')
-            ->where('justificada', false)
-            ->with(['disciplina', 'professor'])
-            ->orderBy('data_chamada', 'desc')
-            ->get();
-            
-        return view('admin.alunos.show', compact('aluno', 'totalPresencas', 'faltasParaJustificar'));
+        return view('admin.alunos.show', $dadosExibicao);
     }
 
     /**
@@ -151,22 +131,43 @@ class AlunoController extends Controller
      */
     public function update(AlunoUpdateRequest $request, Aluno $aluno): RedirectResponse
     {
-        $validatedData = $request->validated();
+        $dadosValidados = $request->validated();
+        $dadosProcessados = $this->processarAtualizacaoAluno($dadosValidados, $request, $aluno);
         
-        // Handle photo upload
+        $aluno->update($dadosProcessados);
+
+        return $this->redirecionarParaExibicao($aluno, 'Aluno atualizado com sucesso!');
+    }
+    
+    /**
+     * Processa dados para atualização incluindo gerenciamento de foto
+     */
+    private function processarAtualizacaoAluno(array $dados, Request $request, Aluno $aluno): array
+    {
         if ($request->hasFile('foto_perfil')) {
-            // Delete old photo if exists
-            if ($aluno->foto_perfil && \Storage::disk('public')->exists($aluno->foto_perfil)) {
-                \Storage::disk('public')->delete($aluno->foto_perfil);
-            }
-            $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
+            $this->removerFotoAnterior($aluno);
+            $dados['foto_perfil'] = $this->processarUploadFoto($request->file('foto_perfil'));
         }
         
-        $aluno->update($validatedData);
-
-        return redirect()
-            ->route('admin.alunos.show', $aluno)
-            ->with('success', 'Aluno atualizado com sucesso!');
+        return $dados;
+    }
+    
+    /**
+     * Remove foto anterior se existir
+     */
+    private function removerFotoAnterior(Aluno $aluno): void
+    {
+        if ($aluno->foto_perfil && \Storage::disk('public')->exists($aluno->foto_perfil)) {
+            \Storage::disk('public')->delete($aluno->foto_perfil);
+        }
+    }
+    
+    /**
+     * Redireciona para página de exibição do aluno
+     */
+    private function redirecionarParaExibicao(Aluno $aluno, string $mensagem): RedirectResponse
+    {
+        return redirect()->route('admin.alunos.show', $aluno)->with('success', $mensagem);
     }
 
     /**
@@ -174,11 +175,23 @@ class AlunoController extends Controller
      */
     public function destroy(Aluno $aluno): RedirectResponse
     {
-        $aluno->delete();
-
+        $resultadoExclusao = $this->alunoService->excluirComSeguranca($aluno);
+        
+        return $this->processarResultadoExclusao($resultadoExclusao, $aluno);
+    }
+    
+    /**
+     * Processa resultado da exclusão e redireciona adequadamente
+     */
+    private function processarResultadoExclusao(array $resultado, Aluno $aluno): RedirectResponse
+    {
+        if ($resultado['sucesso']) {
+            return $this->redirecionarComSucesso('admin.alunos.index', $resultado['mensagem']);
+        }
+        
         return redirect()
-            ->route('admin.alunos.index')
-            ->with('success', 'Aluno excluído com sucesso!');
+            ->route('admin.alunos.show', $aluno)
+            ->with('error', $resultado['mensagem']);
     }
 
 
@@ -186,17 +199,21 @@ class AlunoController extends Controller
 
 
     /**
-     * Handle photo upload and return the stored path.
+     * Processa upload de foto e retorna o caminho armazenado
      */
-    private function handlePhotoUpload($file): string
+    private function processarUploadFoto($arquivo): string
     {
-        // Generate unique filename
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $nomeArquivo = $this->gerarNomeUnicoArquivo($arquivo);
         
-        // Store in public disk under alunos folder
-        $path = $file->storeAs('alunos', $filename, 'public');
-        
-        return $path;
+        return $arquivo->storeAs('alunos', $nomeArquivo, 'public');
+    }
+    
+    /**
+     * Gera nome único para arquivo
+     */
+    private function gerarNomeUnicoArquivo($arquivo): string
+    {
+        return time() . '_' . uniqid() . '.' . $arquivo->getClientOriginalExtension();
     }
 
     /**
@@ -225,49 +242,5 @@ class AlunoController extends Controller
             ->with('success', 'Notas atualizadas com sucesso!');
     }
     
-    /**
-     * Retorna as presenças de um aluno via AJAX
-     */
-    public function presencasAluno(Request $request, Aluno $aluno)
-    {
-        $dataInicio = $request->get('data_inicio');
-        $dataFim = $request->get('data_fim');
-        $disciplinaId = $request->get('disciplina_id');
-        
-        $query = Chamada::with(['disciplina', 'professor'])
-            ->porAluno($aluno->numero_matricula)
-            ->presencas();
-        
-        if ($dataInicio && $dataFim) {
-            $query->porPeriodo(Carbon::parse($dataInicio), Carbon::parse($dataFim));
-        }
-        
-        if ($disciplinaId) {
-            $query->porDisciplina($disciplinaId);
-        }
-        
-        $presencas = $query->orderBy('data_chamada', 'desc')->paginate(10);
-        
-        return response()->json([
-            'presencas' => $presencas->items(),
-            'pagination' => [
-                'current_page' => $presencas->currentPage(),
-                'last_page' => $presencas->lastPage(),
-                'per_page' => $presencas->perPage(),
-                'total' => $presencas->total()
-            ]
-        ]);
-    }
 
-    /**
-     * Retorna as disciplinas que o aluno teve chamadas
-     */
-    public function disciplinasAluno(Aluno $aluno)
-    {
-        $disciplinas = Disciplina::whereHas('chamadas', function ($query) use ($aluno) {
-            $query->where('matricula', $aluno->numero_matricula);
-        })->select('id', 'nome')->get();
-
-        return response()->json(['disciplinas' => $disciplinas]);
-    }
 }

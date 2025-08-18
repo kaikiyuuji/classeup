@@ -24,6 +24,17 @@ class ChamadaController extends Controller
     }
 
     /**
+     * Exibe a lista de turmas para chamada (Professor)
+     */
+    public function index()
+    {
+        $professor = $this->obterProfessorAutenticado();
+        $turmasComVinculo = $this->chamadaService->obterTurmasComVinculoProfessor($professor->id);
+        
+        return view('professor.chamadas.index', compact('turmasComVinculo'));
+    }
+
+    /**
      * Processar lançamento de chamada (redirecionamento)
      */
     public function lancar(ProfessorChamadaRequest $request): RedirectResponse
@@ -47,6 +58,54 @@ class ChamadaController extends Controller
         $contexto = $this->prepararContextoChamada($turmaId, $disciplinaId, $professor, $data);
         
         return view('professor.chamada.fazer', $contexto);
+    }
+
+    /**
+     * Exibe relatórios de chamadas para professores
+     */
+    public function relatorio(Request $request)
+    {
+        $professor = $this->obterProfessorAutenticado();
+        
+        $filtros = $this->extrairFiltrosRelatorio($request);
+        $turmasComVinculo = $this->obterTurmasVinculadasProfessor($professor->id);
+        
+        $estatisticas = $this->chamadaService->obterEstatisticasChamadasProfessor($professor, $filtros);
+        $chamadas = $this->chamadaService->obterChamadasDetalhadasProfessor($professor, $filtros);
+        
+        return view('professor.chamadas.relatorio', array_merge(
+            compact('turmasComVinculo', 'chamadas'),
+            $filtros,
+            $estatisticas
+        ));
+    }
+
+    /**
+     * Exibe interface para gerenciar chamadas de uma turma/disciplina (Professor)
+     */
+    public function gerenciar(Request $request, $turma, $disciplina)
+    {
+        $professor = $this->obterProfessorAutenticado();
+        
+        $dataInicio = $request->get('data_inicio', now()->startOfMonth()->format('Y-m-d'));
+        $dataFim = $request->get('data_fim', now()->format('Y-m-d'));
+        
+        $turma = Turma::findOrFail($turma);
+        $disciplina = Disciplina::findOrFail($disciplina);
+        
+        $this->verificarVinculoProfessor($professor->id, $turma->id, $disciplina->id);
+        
+        $chamadasPorDia = $this->chamadaService->obterChamadasPorDia(
+            $turma->id, 
+            $disciplina->id, 
+            $professor->id, 
+            $dataInicio, 
+            $dataFim
+        );
+        
+        return view('professor.chamadas.gerenciar', compact(
+            'turma', 'disciplina', 'professor', 'chamadasPorDia', 'dataInicio', 'dataFim'
+        ));
     }
     
     /**
@@ -126,6 +185,44 @@ class ChamadaController extends Controller
             'turma', 'disciplina', 'professor', 'alunos', 
             'presencasExistentes', 'data', 'chamadaJaLancada'
         );
+    }
+
+    // Métodos privados adicionais para relatórios e gerenciamento
+    
+    private function extrairFiltrosRelatorio(Request $request): array
+    {
+        return [
+            'data_inicio' => $request->get('data_inicio', now()->startOfMonth()->format('Y-m-d')),
+            'data_fim' => $request->get('data_fim', now()->format('Y-m-d')),
+            'turma_id' => $request->get('turma_id'),
+            'disciplina_id' => $request->get('disciplina_id'),
+            'busca_aluno' => $request->get('busca_aluno')
+        ];
+    }
+
+    private function obterTurmasVinculadasProfessor(int $professorId)
+    {
+        return \Illuminate\Support\Facades\DB::table('professor_disciplina_turma')
+            ->join('turmas', 'professor_disciplina_turma.turma_id', '=', 'turmas.id')
+            ->join('disciplinas', 'professor_disciplina_turma.disciplina_id', '=', 'disciplinas.id')
+            ->where('professor_disciplina_turma.professor_id', $professorId)
+            ->select(
+                'turmas.id as turma_id',
+                'turmas.nome as turma_nome',
+                'turmas.serie',
+                'turmas.turno',
+                'disciplinas.id as disciplina_id',
+                'disciplinas.nome as disciplina_nome',
+                'disciplinas.codigo as disciplina_codigo'
+            )
+            ->get();
+    }
+
+    private function verificarVinculoProfessor(int $professorId, int $turmaId, int $disciplinaId): void
+    {
+        if (!$this->chamadaService->professorTemVinculo($professorId, $turmaId, $disciplinaId)) {
+            abort(403, 'Você não tem permissão para gerenciar chamadas desta turma/disciplina.');
+        }
     }
     
     /**

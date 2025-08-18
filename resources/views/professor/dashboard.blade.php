@@ -76,7 +76,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Presenças</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $totalPresencas }}</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ $estatisticasFrequenciaProfessor['totalPresencas'] }}</p>
                         <p class="text-xs text-gray-500">Registros positivos</p>
                     </div>
                 </div>
@@ -89,8 +89,8 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-600">Faltas</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $totalFaltas }}</p>
-                        <p class="text-xs text-gray-500">{{ $percentualFrequencia }}% frequência</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ $estatisticasFrequenciaProfessor['totalFaltas'] }}</p>
+                        <p class="text-xs text-gray-500">{{ $estatisticasFrequenciaProfessor['percentualFrequencia'] }}% frequência</p>
                     </div>
                 </div>
             </div>
@@ -105,15 +105,15 @@
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-green-600">{{ $totalPresencas }}</div>
+                        <div class="text-3xl font-bold text-green-600">{{ $estatisticasFrequenciaProfessor['totalPresencas'] }}</div>
                         <div class="text-sm text-gray-600">Total de Presenças</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-red-600">{{ $totalFaltas }}</div>
+                        <div class="text-3xl font-bold text-red-600">{{ $estatisticasFrequenciaProfessor['totalFaltas'] }}</div>
                         <div class="text-sm text-gray-600">Total de Faltas</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold text-blue-600">{{ $percentualFrequencia }}%</div>
+                        <div class="text-3xl font-bold text-blue-600">{{ $estatisticasFrequenciaProfessor['percentualFrequencia'] }}%</div>
                         <div class="text-sm text-gray-600">Percentual de Frequência</div>
                     </div>
                     <div class="text-center">

@@ -6,10 +6,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Chamada;
 
 class Aluno extends Model
 {
     use HasFactory;
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Aluno $aluno) {
+            // Gerar número de matrícula automaticamente se não fornecido
+            if (empty($aluno->numero_matricula)) {
+                $aluno->numero_matricula = static::gerarNumeroMatricula();
+            }
+            
+            // Definir data de matrícula automaticamente se não fornecida
+            if (empty($aluno->data_matricula)) {
+                $aluno->data_matricula = now()->format('Y-m-d');
+            }
+            
+            // Definir status de matrícula como ativa se não fornecido
+            if (empty($aluno->status_matricula)) {
+                $aluno->status_matricula = 'ativa';
+            }
+        });
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -141,5 +165,91 @@ class Aluno extends Model
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    /**
+     * Scope para busca por nome, email ou número de matrícula
+     */
+    public function scopeBuscar($query, string $termo)
+    {
+        return $query->where(function ($q) use ($termo) {
+            $q->where('nome', 'like', "%{$termo}%")
+              ->orWhere('email', 'like', "%{$termo}%")
+              ->orWhere('numero_matricula', 'like', "%{$termo}%");
+        });
+    }
+
+    /**
+     * Scope para filtrar por status de matrícula
+     */
+    public function scopePorStatus($query, string $status)
+    {
+        if ($status === 'ativo') {
+            return $query->where('status_matricula', 'ativa');
+        } elseif ($status === 'inativo') {
+            return $query->whereIn('status_matricula', ['inativa', 'cancelada', 'transferida']);
+        }
+        
+        return $query;
+    }
+
+    /**
+     * Scope para filtrar por turma
+     */
+    public function scopePorTurma($query, $turmaId)
+    {
+        return $query->where('turma_id', $turmaId);
+    }
+
+    /**
+     * Scope para ordenação segura
+     */
+    public function scopeOrdenadoPor($query, string $campo = 'nome', string $direcao = 'asc')
+    {
+        $camposPermitidos = ['nome', 'email', 'data_nascimento', 'status_matricula'];
+        $direcoesPermitidas = ['asc', 'desc'];
+        
+        $campo = in_array($campo, $camposPermitidos) ? $campo : 'nome';
+        $direcao = in_array($direcao, $direcoesPermitidas) ? $direcao : 'asc';
+        
+        return $query->orderBy($campo, $direcao);
+    }
+
+    /**
+     * Scope para obter estatísticas de chamadas
+     */
+    public function scopeComEstatisticasChamadas($query)
+    {
+        return $query->withCount([
+            'chamadas as total_presencas' => function ($q) {
+                $q->where('status', 'presente');
+            },
+            'chamadas as total_faltas' => function ($q) {
+                $q->where('status', 'falta');
+            },
+            'chamadas as faltas_nao_justificadas' => function ($q) {
+                $q->where('status', 'falta')->where('justificada', false);
+            }
+        ]);
+    }
+
+    /**
+     * Relacionamento com Chamadas
+     */
+    public function chamadas(): HasMany
+    {
+        return $this->hasMany(Chamada::class, 'matricula', 'numero_matricula');
+    }
+
+    /**
+     * Obter faltas não justificadas
+     */
+    public function faltasNaoJustificadas()
+    {
+        return $this->chamadas()
+            ->where('status', 'falta')
+            ->where('justificada', false)
+            ->with(['disciplina', 'professor'])
+            ->orderBy('data_chamada', 'desc');
     }
 }
