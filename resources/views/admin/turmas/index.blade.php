@@ -164,7 +164,7 @@
                                                     <form action="{{ route('admin.turmas.destroy', $turma) }}" 
                                                           method="POST" 
                                                           class="inline"
-                                                          onsubmit="return confirm('Tem certeza que deseja excluir esta turma?')">
+                                                          onsubmit="return handleDeleteConfirm(event, 'Tem certeza que deseja excluir esta turma?', 'Esta ação não pode ser desfeita.')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" 

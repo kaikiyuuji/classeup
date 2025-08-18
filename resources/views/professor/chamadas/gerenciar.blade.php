@@ -119,7 +119,7 @@
                                             
                                             <form method="POST" action="{{ route('admin.chamadas.excluir-dia', ['data' => $data, 'turma' => $turma->id, 'disciplina' => $disciplina->id]) }}" 
                                                   class="inline-block" 
-                                                  onsubmit="return confirm('Tem certeza que deseja excluir todas as chamadas deste dia?')">
+                                                  onsubmit="return handleDeleteCallsConfirm(event)">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 

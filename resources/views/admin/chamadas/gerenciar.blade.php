@@ -194,12 +194,12 @@
                     if (data.success) {
                         location.reload();
                     } else {
-                        alert('Erro: ' + data.message);
+                        showAlert('Erro: ' + data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Erro:', error);
-                    alert('Erro ao excluir chamada.');
+                    showAlert('Erro ao excluir chamada.', 'error');
                 });
                 
                 fecharModal();
@@ -241,12 +241,12 @@
                         button.classList.add('bg-green-600', 'hover:bg-green-700');
                     }, 2000);
                 } else {
-                    alert('Erro: ' + data.message);
+                    showAlert('Erro: ' + data.message, 'error');
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert('Erro ao salvar chamada.');
+                showAlert('Erro ao salvar chamada.', 'error');
             });
         }
         

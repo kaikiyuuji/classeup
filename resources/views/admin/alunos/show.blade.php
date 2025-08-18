@@ -373,7 +373,7 @@
                             <!-- Botão de Exclusão -->
                             <form action="{{ route('admin.alunos.destroy', $aluno) }}" 
                                   method="POST" 
-                                  onsubmit="return confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.')">
+                                  onsubmit="return handleDeleteConfirm(event, 'Tem certeza que deseja excluir este aluno?', 'Esta ação não pode ser desfeita.')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 

@@ -227,12 +227,12 @@
                                                         <p class="text-xs text-gray-500">{{ $disciplina->codigo }}</p>
                                                     </div>
                                                 </div>
-                                                <form action="{{ route('admin.professores.desvincular-disciplina', $professor) }}" method="POST" class="inline">
+                                                <form action="{{ route('admin.professores.desvincular-disciplina', $professor) }}" method="POST" class="inline"
+                                                      onsubmit="return handleUnlinkConfirm(event, '{{ $disciplina->nome }}', 'deste professor')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="disciplina_id" value="{{ $disciplina->id }}">
                                                     <button type="submit" 
-                                                            onclick="return confirm('Tem certeza que deseja desvincular esta disciplina?')"
                                                             class="text-red-600 hover:text-red-800 transition-colors">
                                                         <x-heroicon-o-x-mark class="w-4 h-4" />
                                                     </button>
@@ -285,7 +285,7 @@
                             <!-- Botão de Exclusão -->
                             <form action="{{ route('admin.professores.destroy', $professor) }}" 
                                   method="POST" 
-                                  onsubmit="return confirm('Tem certeza que deseja excluir este professor? Esta ação não pode ser desfeita.')">
+                                  onsubmit="return handleDeleteConfirm(event, 'Tem certeza que deseja excluir este professor?', 'Esta ação não pode ser desfeita.')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 

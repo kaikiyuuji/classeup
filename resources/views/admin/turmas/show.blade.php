@@ -157,7 +157,7 @@
                                                     Ver
                                                 </a>
                                                 <form action="{{ route('admin.turmas.desvincular-aluno', [$turma, $aluno]) }}" method="POST" class="inline" 
-                                                      onsubmit="return confirm('Tem certeza que deseja desvincular {{ $aluno->nome }} desta turma?')">
+                                                      onsubmit="return handleUnlinkConfirm(event, '{{ $aluno->nome }}', 'desta turma')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" 
@@ -273,7 +273,7 @@
                                                 </a>
                                                 @if($professor->pivot->disciplina_id)
                                                     <form action="{{ route('admin.turmas.desvincular-professor', $turma) }}" method="POST" class="inline" 
-                                                          onsubmit="return confirm('Tem certeza que deseja desvincular {{ $professor->nome }} desta turma?')">
+                                                          onsubmit="return handleUnlinkConfirm(event, '{{ $professor->nome }}', 'desta turma')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <input type="hidden" name="professor_id" value="{{ $professor->id }}">

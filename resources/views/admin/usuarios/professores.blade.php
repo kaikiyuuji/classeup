@@ -243,7 +243,7 @@
                                                 <form action="{{ route('admin.usuarios.vincular-professor', $professor->id) }}" 
                                                       method="POST" 
                                                       class="inline"
-                                                      onsubmit="return confirm('Deseja criar um usuário para este professor?')">
+                                                      onsubmit="return handleCreateConfirm(event, 'Deseja criar um usuário para este professor?')">
                                                     @csrf
                                                     <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                         <x-heroicon-o-plus class="w-4 h-4 mr-1" />
@@ -256,7 +256,7 @@
                                                         <form action="{{ route('admin.usuarios.desativar', $professor->user->id) }}" 
                                                               method="POST" 
                                                               class="inline"
-                                                              onsubmit="return confirm('Deseja desativar este usuário?')">
+                                                              onsubmit="return handleToggleConfirm(event, 'Deseja desativar este usuário?')">
                                                             @csrf
                                                             @method('PATCH')
                                                             <button type="submit" class="inline-flex items-center p-2 border border-transparent rounded-md text-yellow-600 hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" title="Desativar usuário">
@@ -267,7 +267,7 @@
                                                         <form action="{{ route('admin.usuarios.ativar', $professor->user->id) }}" 
                                                               method="POST" 
                                                               class="inline"
-                                                              onsubmit="return confirm('Deseja ativar este usuário?')">
+                                                              onsubmit="return handleToggleConfirm(event, 'Deseja ativar este usuário?')">
                                                             @csrf
                                                             @method('PATCH')
                                                             <button type="submit" class="inline-flex items-center p-2 border border-transparent rounded-md text-green-600 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" title="Ativar usuário">

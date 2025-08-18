@@ -17,7 +17,8 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-8">
-            
+            <!-- Mensagens de Sessão -->
+            <x-session-messages />
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <!-- Filtros -->
@@ -125,7 +126,7 @@
                                                     <form action="{{ route('admin.disciplinas.destroy', $disciplina) }}" 
                                                           method="POST" 
                                                           class="inline"
-                                                          onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina?')">
+                                                          onsubmit="return handleDeleteConfirm(event, 'Tem certeza que deseja excluir esta disciplina?', 'Esta ação não pode ser desfeita.')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" 

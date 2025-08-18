@@ -199,7 +199,7 @@
                                                     <form action="{{ route('admin.chamadas.remover-justificativa', $chamada->id) }}" 
                                                           method="POST" 
                                                           class="inline"
-                                                          onsubmit="return confirm('Tem certeza que deseja remover a justificativa?')">
+                                                          onsubmit="return handleRemoveJustificationConfirm(event)">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" 

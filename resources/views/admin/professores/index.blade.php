@@ -119,7 +119,7 @@
                                                     <form action="{{ route('admin.professores.destroy', $professor) }}" 
                                                           method="POST" 
                                                           class="inline"
-                                                          onsubmit="return confirm('Tem certeza que deseja excluir este professor?')">
+                                                          onsubmit="return handleDeleteConfirm(event, 'Tem certeza que deseja excluir este professor?', 'Esta ação não pode ser desfeita.')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" 

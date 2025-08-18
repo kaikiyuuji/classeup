@@ -19,6 +19,8 @@
 
     <div class="py-8">
         <div class="max-w-4xl mx-auto px-8">
+            <!-- Mensagens de Sessão -->
+            <x-session-messages />
             
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">

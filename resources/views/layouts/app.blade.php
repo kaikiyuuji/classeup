@@ -157,5 +157,10 @@
         
         <!-- Máscaras de formatação -->
         <script src="{{ asset('js/masks.js') }}"></script>
+        
+        <!-- Modal Dialog Component -->
+        <x-modal-dialog />
+        <script src="{{ asset('js/modal-dialog.js') }}"></script>
+        <script src="{{ asset('js/modal-helpers.js') }}"></script>
     </body>
 </html>

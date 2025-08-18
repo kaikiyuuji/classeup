@@ -24,6 +24,8 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-8">
+            <!-- Mensagens de Sessão -->
+            <x-session-messages />
            
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-8">
@@ -123,12 +125,12 @@
 
                     <!-- Ações -->
                     <div class="flex justify-between gap-4 pt-6 border-t border-gray-200 mt-8">
-                        <form action="{{ route('admin.disciplinas.destroy', $disciplina) }}" method="POST" class="inline-block">
+                        <form action="{{ route('admin.disciplinas.destroy', $disciplina) }}" method="POST" class="inline-block"
+                              onsubmit="return handleDeleteConfirm(event, 'Tem certeza que deseja excluir esta disciplina?', 'Esta ação não pode ser desfeita.')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" 
-                                    class="inline-flex justify-center items-center px-6 py-3 border border-red-300 shadow-sm text-base font-medium rounded-lg text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
-                                    onclick="return confirm('Tem certeza que deseja excluir esta disciplina? Esta ação não pode ser desfeita.')">
+                                    class="inline-flex justify-center items-center px-6 py-3 border border-red-300 shadow-sm text-base font-medium rounded-lg text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
