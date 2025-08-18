@@ -63,6 +63,8 @@ Route::middleware(['auth', 'check.admin'])->prefix('admin')->name('admin.')->gro
     Route::resource('professores', ProfessorController::class)->parameters([
         'professores' => 'professor'
     ]);
+    Route::get('professores/{professor}/relacionamentos', [ProfessorController::class, 'verificarRelacionamentos'])
+        ->name('professores.relacionamentos');
     Route::post('professores/{professor}/vincular-disciplina', [ProfessorController::class, 'vincularDisciplina'])->name('professores.vincular-disciplina');
     Route::delete('professores/{professor}/desvincular-disciplina', [ProfessorController::class, 'desvincularDisciplina'])->name('professores.desvincular-disciplina');
     

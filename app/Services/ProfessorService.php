@@ -97,15 +97,109 @@ class ProfessorService
     }
     
     /**
-     * Remover foto anterior do professor
+     * Excluir foto de perfil do professor
      */
-    private function removerFotoAnterior(Professor $professor): void
+    private function excluirFotoPerfil(Professor $professor): void
     {
         if ($professor->foto_perfil && Storage::disk('public')->exists($professor->foto_perfil)) {
             Storage::disk('public')->delete($professor->foto_perfil);
         }
     }
     
+    /**
+     * Verificar se o professor possui relacionamentos que serão afetados pela exclusão
+     */
+    public function verificarRelacionamentosExistentes(Professor $professor): array
+    {
+        $relacionamentos = [
+            'temRelacionamentos' => false,
+            'detalhes' => []
+        ];
+        
+        // Verificar chamadas
+        $totalChamadas = $professor->chamadas()->count();
+        if ($totalChamadas > 0) {
+            $relacionamentos['temRelacionamentos'] = true;
+            $relacionamentos['detalhes']['chamadas'] = [
+                'total' => $totalChamadas,
+                'descricao' => $totalChamadas === 1 ? '1 chamada registrada' : "{$totalChamadas} chamadas registradas"
+            ];
+        }
+        
+        // Verificar vínculos com turmas e disciplinas
+        $totalVinculosTurmas = $professor->disciplinasComTurma()->count();
+        if ($totalVinculosTurmas > 0) {
+            $relacionamentos['temRelacionamentos'] = true;
+            $turmasVinculadas = $professor->disciplinasComTurma()
+                ->with(['turma:id,nome', 'disciplina:id,nome'])
+                ->get()
+                ->groupBy('turma.nome')
+                ->map(function ($vinculos) {
+                    return $vinculos->pluck('disciplina.nome')->unique()->values();
+                });
+                
+            $relacionamentos['detalhes']['turmas'] = [
+                'total' => $totalVinculosTurmas,
+                'descricao' => $totalVinculosTurmas === 1 ? '1 vínculo com turma/disciplina' : "{$totalVinculosTurmas} vínculos com turmas/disciplinas",
+                'detalhamento' => $turmasVinculadas
+            ];
+        }
+        
+        // Verificar vínculos diretos com disciplinas
+        $totalDisciplinas = $professor->disciplinas()->count();
+        if ($totalDisciplinas > 0) {
+            $relacionamentos['temRelacionamentos'] = true;
+            $disciplinasNomes = $professor->disciplinas()->pluck('nome')->toArray();
+            $relacionamentos['detalhes']['disciplinas'] = [
+                'total' => $totalDisciplinas,
+                'descricao' => $totalDisciplinas === 1 ? '1 disciplina vinculada' : "{$totalDisciplinas} disciplinas vinculadas",
+                'nomes' => $disciplinasNomes
+            ];
+        }
+        
+        return $relacionamentos;
+    }
+    
+    /**
+     * Excluir professor e todos os seus relacionamentos
+     */
+    public function excluirProfessorComRelacionamentos(Professor $professor): array
+    {
+        try {
+            DB::beginTransaction();
+            
+            // Remover vínculos com turmas e disciplinas
+            $professor->disciplinasComTurma()->detach();
+            
+            // Remover vínculos diretos com disciplinas
+            $professor->disciplinas()->detach();
+            
+            // Excluir chamadas relacionadas
+            $professor->chamadas()->delete();
+            
+            // Excluir foto de perfil
+            $this->excluirFotoPerfil($professor);
+            
+            // Excluir o professor
+            $professor->delete();
+            
+            DB::commit();
+            
+            return [
+                'sucesso' => true,
+                'mensagem' => 'Professor e todos os dados relacionados foram excluídos com sucesso.'
+            ];
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return [
+                'sucesso' => false,
+                'mensagem' => 'Erro ao excluir professor: ' . $e->getMessage()
+            ];
+        }
+     }
+
     /**
      * Verificar se professor já está vinculado à disciplina
      */

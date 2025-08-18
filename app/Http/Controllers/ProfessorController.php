@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfessorStoreRequest;
 use App\Http\Requests\ProfessorUpdateRequest;
+use App\Http\Requests\ProfessorDeleteRequest;
 use App\Models\Disciplina;
 use App\Models\Professor;
 use App\Services\ProfessorService;
@@ -143,15 +144,29 @@ class ProfessorController extends Controller
     }
 
     /**
+     * Verifica relacionamentos existentes do professor.
+     */
+    public function verificarRelacionamentos(Professor $professor)
+    {
+        $relacionamentos = $this->professorService->verificarRelacionamentosExistentes($professor);
+        
+        return response()->json($relacionamentos);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Professor $professor): RedirectResponse
+    public function destroy(ProfessorDeleteRequest $request, Professor $professor): RedirectResponse
     {
-        $professor->delete();
-
-        return redirect()
-            ->route('admin.professores.index')
-            ->with('success', 'Professor excluído com sucesso!');
+        try {
+            $this->professorService->excluirProfessorComRelacionamentos($professor);
+            
+            return redirect()->route('admin.professores.index')
+                ->with('success', 'Professor e todos os dados relacionados foram excluídos com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao excluir professor: ' . $e->getMessage());
+        }
     }
 
 
