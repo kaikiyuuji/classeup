@@ -134,7 +134,6 @@ class ChamadaService
         // Otimização: usar índices compostos para melhor performance
         Chamada::where('disciplina_id', $dados['disciplina_id'])
             ->where('professor_id', $professor->id)
-            ->where('turma_id', $dados['turma_id'])
             ->whereDate('data_chamada', $dados['data_chamada'])
             ->whereIn('matricula', $matriculas)
             ->delete();
@@ -145,10 +144,12 @@ class ChamadaService
      */
     public function excluirChamadasDoDia(string $data, int $turmaId, int $disciplinaId, int $professorId): int
     {
+        $matriculasAlunos = $this->obterMatriculasAlunosTurma($turmaId);
+        
         return Chamada::where('disciplina_id', $disciplinaId)
             ->where('professor_id', $professorId)
-            ->where('turma_id', $turmaId)
             ->whereDate('data_chamada', $data)
+            ->whereIn('matricula', $matriculasAlunos)
             ->delete();
     }
     
@@ -181,7 +182,6 @@ class ChamadaService
                 'matricula' => $aluno->numero_matricula,
                 'disciplina_id' => $dados['disciplina_id'],
                 'professor_id' => $professor->id,
-                'turma_id' => $dados['turma_id'],
                 'data_chamada' => $dados['data_chamada'],
                 'status' => $this->determinarStatusPresencaOtimizado($aluno->numero_matricula, $presencasSet),
                 'justificada' => false,
@@ -324,19 +324,7 @@ class ChamadaService
             ->exists() ?? false;
     }
 
-    /**
-     * Exclui chamadas de um dia específico
-     */
-    public function excluirChamadasDoDia(string $data, int $turmaId, int $disciplinaId, int $professorId): int
-    {
-        $matriculasAlunos = $this->obterMatriculasAlunosTurma($turmaId);
-        
-        return Chamada::where('disciplina_id', $disciplinaId)
-            ->where('professor_id', $professorId)
-            ->where('data_chamada', $data)
-            ->whereIn('matricula', $matriculasAlunos)
-            ->delete();
-    }
+
 
     /**
      * Obtém presenças de um aluno com filtros

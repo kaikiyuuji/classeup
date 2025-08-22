@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfessorDeleteRequest;
 use App\Http\Requests\ProfessorStoreRequest;
 use App\Http\Requests\ProfessorUpdateRequest;
-use App\Http\Requests\ProfessorDeleteRequest;
 use App\Models\Disciplina;
 use App\Models\Professor;
 use App\Services\ProfessorService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ProfessorController extends Controller
@@ -205,6 +206,55 @@ class ProfessorController extends Controller
         return redirect()
             ->route('admin.professores.show', $professor)
             ->with($tipoMensagem, $resultado['mensagem']);
+    }
+
+    /**
+     * Exibe as turmas vinculadas ao professor autenticado
+     */
+    public function minhasTurmas(): View
+    {
+        $professor = auth()->user()->professor;
+        
+        if (!$professor) {
+            abort(403, 'Professor não encontrado');
+        }
+        
+        // Buscar turmas vinculadas ao professor com suas disciplinas específicas
+        $turmasComVinculo = DB::table('professor_disciplina_turma')
+            ->join('turmas', 'professor_disciplina_turma.turma_id', '=', 'turmas.id')
+            ->join('disciplinas', 'professor_disciplina_turma.disciplina_id', '=', 'disciplinas.id')
+            ->where('professor_disciplina_turma.professor_id', $professor->id)
+            ->select(
+                'turmas.id as turma_id',
+                'turmas.nome as turma_nome',
+                'turmas.serie',
+                'turmas.turno',
+                'turmas.capacidade_maxima',
+                'disciplinas.id as disciplina_id',
+                'disciplinas.nome as disciplina_nome',
+                'disciplinas.codigo as disciplina_codigo'
+            )
+            ->get()
+            ->groupBy('turma_id')
+            ->map(function ($items) {
+                $firstItem = $items->first();
+                return (object) [
+                    'turma_id' => $firstItem->turma_id,
+                    'turma_nome' => $firstItem->turma_nome,
+                    'serie' => $firstItem->serie,
+                    'turno' => $firstItem->turno,
+                    'capacidade_maxima' => $firstItem->capacidade_maxima,
+                    'disciplinas' => $items->map(function ($item) {
+                        return (object) [
+                            'disciplina_id' => $item->disciplina_id,
+                            'disciplina_nome' => $item->disciplina_nome,
+                            'disciplina_codigo' => $item->disciplina_codigo
+                        ];
+                    })
+                ];
+            });
+        
+        return view('professor.turmas.index', compact('turmasComVinculo', 'professor'));
     }
 
     /**

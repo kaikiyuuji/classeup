@@ -119,6 +119,37 @@ class TurmaController extends Controller
     }
 
     /**
+     * Display the specified resource for professors.
+     */
+    public function showForProfessor(Turma $turma): View
+    {
+        $professor = auth()->user()->professor;
+        
+        // Verificar se o professor está vinculado à turma
+        $isVinculado = \DB::table('professor_disciplina_turma')
+            ->where('professor_id', $professor->id)
+            ->where('turma_id', $turma->id)
+            ->exists();
+            
+        if (!$isVinculado) {
+            abort(403, 'Você não tem permissão para visualizar esta turma.');
+        }
+        
+        // Buscar alunos da turma
+        $alunos = $turma->alunos()->orderBy('nome')->get();
+        
+        // Buscar disciplinas que o professor ministra nesta turma
+        $disciplinas = \DB::table('professor_disciplina_turma as pdt')
+            ->join('disciplinas as d', 'd.id', '=', 'pdt.disciplina_id')
+            ->where('pdt.professor_id', $professor->id)
+            ->where('pdt.turma_id', $turma->id)
+            ->select('d.*')
+            ->get();
+        
+        return view('professor.turmas.show', compact('turma', 'alunos', 'disciplinas', 'professor'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Turma $turma): View

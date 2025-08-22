@@ -129,13 +129,12 @@ Route::middleware(['auth', 'check.professor'])->prefix('professor')->name('profe
     
     // Visualização de Turmas e Alunos
     Route::get('/turmas', [ProfessorController::class, 'minhasTurmas'])->name('turmas.index');
-    Route::get('/turmas/{turma}', [TurmaController::class, 'show'])->name('turmas.show');
+    Route::get('/turmas/{turma}', [TurmaController::class, 'showForProfessor'])->name('turmas.show');
     Route::get('/alunos/{aluno}', [AlunoController::class, 'show'])->name('alunos.show');
     
     // Lançamento de Chamadas
-    Route::post('/chamada/lancar', [\App\Http\Controllers\Professor\ChamadaController::class, 'lancarChamada'])->name('chamada.lancar');
-    Route::get('/chamada/{turma}/{disciplina}', [\App\Http\Controllers\Professor\ChamadaController::class, 'chamada'])->name('chamada.fazer');
-    Route::post('/chamada/salvar', [\App\Http\Controllers\Professor\ChamadaController::class, 'salvarChamada'])->name('chamada.salvar');
+    Route::get('/chamada/{turma}/{disciplina}', [\App\Http\Controllers\Professor\ChamadaController::class, 'fazer'])->name('chamada.fazer');
+    Route::post('/chamada', [\App\Http\Controllers\Professor\ChamadaController::class, 'salvar'])->name('chamada.salvar');
     
     // Lançamento de Notas
     Route::get('/notas', [AlunoController::class, 'lancamentoNotas'])->name('notas.index');
