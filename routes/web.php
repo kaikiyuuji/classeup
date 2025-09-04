@@ -127,6 +127,13 @@ Route::middleware(['auth', 'check.professor'])->prefix('professor')->name('profe
     Route::get('/api/turmas', [DashboardController::class, 'turmasProfessor'])->name('api.turmas');
     Route::get('/api/turmas/{turma_id}/alunos', [DashboardController::class, 'alunosTurma'])->name('api.turmas.alunos');
     
+    // API para dados detalhados dos alunos
+    Route::prefix('api/alunos')->name('api.alunos.')->group(function () {
+        Route::get('/{aluno}', [\App\Http\Controllers\Professor\AlunoApiController::class, 'show'])->name('show');
+        Route::get('/{aluno}/frequencia', [\App\Http\Controllers\Professor\AlunoApiController::class, 'frequencia'])->name('frequencia');
+        Route::get('/{aluno}/avaliacoes', [\App\Http\Controllers\Professor\AlunoApiController::class, 'avaliacoes'])->name('avaliacoes');
+    });
+    
     // Visualização de Turmas e Alunos
     Route::get('/turmas', [ProfessorController::class, 'minhasTurmas'])->name('turmas.index');
     Route::get('/turmas/{turma}', [TurmaController::class, 'showForProfessor'])->name('turmas.show');
