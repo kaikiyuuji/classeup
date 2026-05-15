@@ -14,7 +14,9 @@ class AvaliacaoUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $avaliacao = $this->route('avaliacao');
+
+        return $avaliacao !== null && ($this->user()?->can('update', $avaliacao) ?? false);
     }
 
     /**

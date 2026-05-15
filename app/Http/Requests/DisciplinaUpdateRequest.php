@@ -15,7 +15,9 @@ class DisciplinaUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $disciplina = $this->route('disciplina');
+
+        return $disciplina !== null && ($this->user()?->can('update', $disciplina) ?? false);
     }
 
     /**

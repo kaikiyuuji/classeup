@@ -430,3 +430,155 @@ Adaptado para receber casts decimais do Eloquent que retornam string.
 
 - Migration `normalize_status_columns`: trocar `ativo` boolean por `status` string em `professores`, `turmas`, `disciplinas` com cast para `Status::class`. Não feita agora porque mexe em ~30 lugares (FormRequests com `required|boolean`, scopes `Ativo()`/`Inativo()`, factories, views). Será tratada antes da Fase 2.
 - `Aluno::gerarNumeroMatricula()`: mantida no model como wrapper; sai para `MatriculaService` na Fase 3.
+
+---
+
+## Fase 2 — RBAC e Segurança
+
+Objetivo: introduzir controle de acesso por papel, headers HTTP de segurança, rate limiting e validação de upload mais rigorosa.
+
+### 2.1 Modelo de papéis (Role)
+
+#### `app/Enums/Role.php` (novo)
+
+Enum `string` com 3 cases: `Admin`, `Professor`, `Aluno`. Helpers `isAdmin()/isProfessor()/isAluno()` e `label()`.
+
+#### `database/migrations/2026_05_15_130000_add_role_and_profile_links_to_users_table.php` (novo)
+
+Adiciona à tabela `users`:
+- `role` (string, default `'admin'`, indexada)
+- `professor_id` (FK → `professores.id`, nullable, `onDelete: nullOnDelete`)
+- `aluno_id` (FK → `alunos.id`, nullable, `onDelete: nullOnDelete`)
+
+**Backfill**: `UPDATE users SET role = 'admin' WHERE role IS NULL` no `up()` — todos os usuários atuais viram admin (princípio do menor impacto retroativo; admin pode reatribuir manualmente depois).
+
+#### `app/Models/User.php` (modificado)
+
+**Antes**:
+```php
+protected $fillable = ['name', 'email', 'password'];
+protected function casts(): array {
+    return ['email_verified_at' => 'datetime', 'password' => 'hashed'];
+}
+```
+
+**Depois**: `$fillable` inclui `role`, `professor_id`, `aluno_id`. Cast `role => Role::class`. Métodos `isAdmin/isProfessor/isAluno`, `hasRole(Role ...$roles)`, relacionamentos `professor()` e `aluno()` (BelongsTo).
+
+#### `database/factories/UserFactory.php` (modificado)
+
+State default agora popula `role => Role::Admin` e FKs como `null`. Stubs `admin()`, `professor(?Professor)`, `aluno(?Aluno)` agora populam `role` + FK do perfil (criando `Professor`/`Aluno` via factory se não fornecido).
+
+#### `tests/Concerns/CreatesSchoolScenarios.php` (modificado)
+
+Helpers `actingAsAdmin/Professor/Aluno` agora delegam para os states reais do factory. Adicionados `createAdmin/ProfessorUser/AlunoUser` para conveniência.
+
+### 2.2 Policies (autorização granular)
+
+Criadas em `app/Policies/`:
+
+- **`AlunoPolicy`**: admin tudo; professor lista + view; aluno só visualiza próprio perfil.
+- **`ProfessorPolicy`**: admin tudo; professor visualiza só o próprio perfil.
+- **`TurmaPolicy`**: admin tudo; professor visualiza turmas que leciona (via pivot `professor_disciplina_turma`); aluno visualiza apenas sua turma.
+- **`DisciplinaPolicy`**: admin muta; professor leitura; aluno sem acesso.
+- **`AvaliacaoPolicy`**: admin tudo; professor atualiza só avaliações cuja `(aluno→turma, disciplina)` esteja em `professor_disciplina_turma` para si; aluno só visualiza próprias avaliações (não atualiza).
+- **`FaltaPolicy`**: admin tudo; professor só atualiza próprias faltas registradas dentro da janela `podeSerEditada()` (7 dias); aluno só visualiza/justifica próprias faltas.
+
+Auto-discovery do Laravel resolve `Aluno → AlunoPolicy`, sem registro manual.
+
+### 2.3 Middlewares de segurança
+
+#### `app/Http/Middleware/SecurityHeaders.php` (novo)
+
+Headers aplicados em todas as respostas web:
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()`
+- `Content-Security-Policy-Report-Only: …` — CSP em modo **report-only** (não enforce) para não quebrar Alpine.js inline (x-data, x-on:click). Quando estabilizado, trocar a chave para `Content-Security-Policy`.
+- `Strict-Transport-Security: max-age=31536000; includeSubDomains` (apenas em produção + HTTPS).
+
+#### `app/Http/Middleware/EnsureUserHasRole.php` (novo)
+
+Alias: `role`. Uso: `Route::middleware('role:admin,professor')`. Lança `AccessDeniedHttpException` (403) se usuário não autenticado ou role não permitido.
+
+#### `bootstrap/app.php` (modificado)
+
+**Antes**: `withMiddleware(function (Middleware $middleware): void { /* vazio */ })`.
+
+**Depois**:
+- Append `SecurityHeaders::class` ao grupo `web`.
+- Alias `role` → `EnsureUserHasRole`.
+- `RateLimiter::for('writes', …)`: 60 req/min por usuário autenticado (ou 10/min por IP para guest). Aplicado nas rotas de mutação críticas (POST/PUT/DELETE).
+- `RateLimiter::for('global', …)`: 120 req/min — disponível para uso futuro em endpoints sensíveis.
+
+### 2.4 Rotas reorganizadas por role
+
+#### `routes/web.php` (reescrito)
+
+**Antes**: tudo em `Route::middleware('auth')->group(...)` com `Route::resource()` que dava acesso indiscriminado.
+
+**Depois** estruturado em 4 grupos:
+1. **Auth + perfil próprio** (qualquer usuário autenticado): `/profile` (edit/update/destroy).
+2. **`auth + role:admin + throttle:writes`**: mutações de Aluno/Professor/Disciplina/Turma (`create`, `store`, `edit`, `update`, `destroy`, `vincular/desvincular`).
+3. **`auth + role:admin,professor`**: leitura (`index`, `show`) e fluxo de faltas (chamada, justificativa, relatórios).
+4. **`auth`** com Policy via `can:` middleware: boletim (`view,aluno`) e atualizar avaliação (`update,avaliacao` + `throttle:writes`).
+
+Rotas `create` foram movidas para ANTES de `{aluno}/{professor}/...` para evitar que o parâmetro dinâmico capturasse a string `create` (causava 404).
+
+### 2.5 FormRequests com authorize() real
+
+14 FormRequests agora retornam `authorize()` baseado em Policy:
+
+```php
+// AlunoStoreRequest
+public function authorize(): bool {
+    return $this->user()?->can('create', Aluno::class) ?? false;
+}
+
+// AlunoUpdateRequest
+public function authorize(): bool {
+    $aluno = $this->route('aluno');
+    return $aluno !== null && ($this->user()?->can('update', $aluno) ?? false);
+}
+```
+
+Mesmo padrão em `Professor*`, `Disciplina*`, `Turma*`, `Avaliacao*`, `Vincular*`, `Desvincular*`. **Antes**: todos retornavam `return true`.
+
+### 2.6 Upload de foto endurecido
+
+Em `AlunoStoreRequest`, `AlunoUpdateRequest`, `ProfessorStoreRequest`, `ProfessorUpdateRequest`:
+
+**Antes**:
+```php
+'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+```
+
+**Depois**:
+```php
+'foto_perfil' => 'nullable|image|mimes:jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|dimensions:max_width=2000,max_height=2000|max:2048',
+```
+
+Por quê: `mimes` valida apenas a extensão. `mimetypes` valida o MIME real (lido do conteúdo do arquivo) — protege contra `shell.jpg` com conteúdo `<?php ...`. `dimensions` limita pixels para prevenir image bombs.
+
+Mensagens custom em pt-BR adicionadas (`mimetypes`, `dimensions`).
+
+### 2.7 Testes adicionados (TDD)
+
+- **`tests/Feature/Policies/AlunoPolicyTest.php`** (10 testes): matriz admin × professor × aluno × CRUD.
+- **`tests/Feature/Policies/PoliciesMatrixTest.php`** (9 testes): cobre Professor, Disciplina, Turma, Avaliacao e Falta Policies — incluindo cenário de professor que só atualiza avaliações de sua turma+disciplina.
+- **`tests/Feature/Security/SecurityHeadersTest.php`** (5 testes): cada header de segurança.
+- **`tests/Feature/Security/UploadValidationTest.php`** (2 testes): rejeita `.jpg` malicioso com bytes PHP; aceita imagem real.
+
+### 2.8 Estado da Fase 2: VERDE
+
+- ✅ **134 testes passando** (era 108; +26 testes nesta fase).
+- ✅ PHPStan baseline regenerada com 115 erros pré-existentes (subiu de 105 — novas classes geram dynamic property access que Larastan reporta).
+- ✅ Pint passa.
+
+### 2.9 Decisões e trade-offs
+
+- **Spatie/laravel-permission descartado**: 3 roles fixos não justificam dependência extra; Policies + enum nativo bastam.
+- **CSP em report-only**: Alpine.js inline (`x-data`, `x-on:click`) inviabiliza `script-src 'self'` sem `'unsafe-inline'` + `'unsafe-eval'`. Como queremos um header de qualquer modo, fica `Content-Security-Policy-Report-Only` agora; enforcement vem em uma sub-fase após eliminar Alpine inline (ou após Browser Test confirmar quebra zero).
+- **`role:admin,professor`**: aluno fica fora da maior parte do app — só boletim/faltas próprios. Conforme escopo aprovado.
+- **Rate limiter `writes`**: aplicado em mutações HTTP, não em leituras (para não atrapalhar UX em listagens). 60 req/min é folgado para uso normal e contém abuso automatizado.
+- **`mimetypes` ao invés de só `mimes`**: validar o conteúdo real do arquivo (via getimagesize) bloqueia upload de PHP renomeado para `.jpg`.

@@ -15,7 +15,7 @@ class TurmaStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', Turma::class) ?? false;
     }
 
     /**

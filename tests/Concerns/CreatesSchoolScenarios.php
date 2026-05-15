@@ -12,14 +12,24 @@ use App\Models\User;
 
 trait CreatesSchoolScenarios
 {
-    protected function createUser(array $attributes = []): User
+    protected function createAdmin(array $attributes = []): User
     {
-        return User::factory()->create($attributes);
+        return User::factory()->admin()->create($attributes);
+    }
+
+    protected function createProfessorUser(?Professor $professor = null, array $attributes = []): User
+    {
+        return User::factory()->professor($professor)->create($attributes);
+    }
+
+    protected function createAlunoUser(?Aluno $aluno = null, array $attributes = []): User
+    {
+        return User::factory()->aluno($aluno)->create($attributes);
     }
 
     protected function actingAsAdmin(array $attributes = []): User
     {
-        $user = $this->createUser($attributes);
+        $user = $this->createAdmin($attributes);
         $this->actingAs($user);
 
         return $user;
@@ -27,8 +37,7 @@ trait CreatesSchoolScenarios
 
     protected function actingAsProfessor(?Professor $professor = null, array $attributes = []): User
     {
-        $professor ??= Professor::factory()->create();
-        $user = $this->createUser($attributes);
+        $user = $this->createProfessorUser($professor, $attributes);
         $this->actingAs($user);
 
         return $user;
@@ -36,8 +45,7 @@ trait CreatesSchoolScenarios
 
     protected function actingAsAluno(?Aluno $aluno = null, array $attributes = []): User
     {
-        $aluno ??= Aluno::factory()->create();
-        $user = $this->createUser($attributes);
+        $user = $this->createAlunoUser($aluno, $attributes);
         $this->actingAs($user);
 
         return $user;

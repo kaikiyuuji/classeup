@@ -16,7 +16,9 @@ class VincularProfessorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $turma = $this->route('turma');
+
+        return $turma !== null && ($this->user()?->can('update', $turma) ?? false);
     }
 
     /**

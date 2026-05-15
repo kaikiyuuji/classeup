@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Models\Professor;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,7 @@ class ProfessorStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', Professor::class) ?? false;
     }
 
     /**
@@ -33,7 +34,7 @@ class ProfessorStoreRequest extends FormRequest
             'endereco' => 'nullable|string|max:500',
             'especialidade' => 'required|string|max:255',
             'formacao' => 'required|string|max:1000',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|dimensions:max_width=2000,max_height=2000|max:2048',
             'ativo' => 'boolean',
         ];
     }

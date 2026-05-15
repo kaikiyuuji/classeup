@@ -15,7 +15,9 @@ class ProfessorUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $professor = $this->route('professor');
+
+        return $professor !== null && ($this->user()?->can('update', $professor) ?? false);
     }
 
     /**
@@ -45,7 +47,7 @@ class ProfessorUpdateRequest extends FormRequest
             'endereco' => 'nullable|string|max:500',
             'especialidade' => 'required|string|max:255',
             'formacao' => 'required|string|max:1000',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|dimensions:max_width=2000,max_height=2000|max:2048',
             'ativo' => 'boolean',
         ];
     }

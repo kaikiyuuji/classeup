@@ -16,7 +16,9 @@ class AlunoUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $aluno = $this->route('aluno');
+
+        return $aluno !== null && ($this->user()?->can('update', $aluno) ?? false);
     }
 
     /**
@@ -44,7 +46,7 @@ class AlunoUpdateRequest extends FormRequest
             'data_nascimento' => 'required|date|before:today',
             'telefone' => 'nullable|string|max:15',
             'endereco' => 'nullable|string|max:500',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,webp|mimetypes:image/jpeg,image/png,image/webp|dimensions:max_width=2000,max_height=2000|max:2048',
             'status_matricula' => 'required|in:ativa,inativa',
             'turma_id' => [
                 'nullable',
@@ -91,7 +93,9 @@ class AlunoUpdateRequest extends FormRequest
             'telefone.max' => 'O telefone não pode ter mais de 15 caracteres.',
             'endereco.max' => 'O endereço não pode ter mais de 500 caracteres.',
             'foto_perfil.image' => 'A foto de perfil deve ser uma imagem.',
-            'foto_perfil.mimes' => 'A foto de perfil deve ser do tipo: jpeg, png, jpg ou gif.',
+            'foto_perfil.mimes' => 'A foto de perfil deve ser do tipo: jpeg, png ou webp.',
+            'foto_perfil.mimetypes' => 'O conteúdo do arquivo não corresponde a uma imagem válida.',
+            'foto_perfil.dimensions' => 'A foto de perfil deve ter no máximo 2000x2000 pixels.',
             'foto_perfil.max' => 'A foto de perfil não pode ser maior que 2MB.',
             'turma_id.exists' => 'A turma selecionada não existe.',
         ];
