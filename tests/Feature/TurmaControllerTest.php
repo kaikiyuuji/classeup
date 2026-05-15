@@ -146,7 +146,7 @@ class TurmaControllerTest extends TestCase
         $response->assertRedirect(route('turmas.index'))
             ->assertSessionHas('success', 'Turma excluída com sucesso!');
 
-        $this->assertDatabaseMissing('turmas', ['id' => $turma->id]);
+        $this->assertSoftDeleted('turmas', ['id' => $turma->id]);
     }
 
     public function test_store_validates_serie_range(): void

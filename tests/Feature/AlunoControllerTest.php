@@ -135,7 +135,7 @@ class AlunoControllerTest extends TestCase
         $response->assertRedirect(route('alunos.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseMissing('alunos', [
+        $this->assertSoftDeleted('alunos', [
             'id' => $aluno->id,
         ]);
     }

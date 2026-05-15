@@ -9,10 +9,11 @@ use App\Enums\SituacaoAvaliacao;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Avaliacao extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'avaliacoes';
 
@@ -27,6 +28,9 @@ class Avaliacao extends Model
         'recuperacao_final',
         'nota_final',
         'situacao',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $casts = [

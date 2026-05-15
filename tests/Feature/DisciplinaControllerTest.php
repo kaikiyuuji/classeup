@@ -131,7 +131,7 @@ class DisciplinaControllerTest extends TestCase
 
         $response->assertRedirect(route('disciplinas.index'));
         $response->assertSessionHas('success', 'Disciplina excluída com sucesso!');
-        $this->assertDatabaseMissing('disciplinas', ['id' => $disciplina->id]);
+        $this->assertSoftDeleted('disciplinas', ['id' => $disciplina->id]);
     }
 
     public function test_guest_cannot_access_disciplinas_routes(): void

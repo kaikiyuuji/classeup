@@ -682,3 +682,90 @@ Cobre: criação de múltiplas faltas, idempotência (re-submeter apaga antigas)
 - `AlunoService`, `ProfessorService`, `TurmaService`, `DisciplinaService` para encapsular CRUD (atualmente a lógica é simples; faz sentido extrair só quando algo a mais entrar — sem abstração prematura).
 - DTOs `CriarAlunoData`, `AtualizarAlunoData`, `AtualizarNotasData`, `JustificarFaltaData` — idem.
 - `AvaliacaoService` ainda tem método `obterAvaliacoesDoAluno` com side effect "criar avaliações automaticamente". Já foi separado em `garantirAvaliacoesParaAluno()` na Fase 1, mas o legacy continua sendo chamado por `AlunoController::boletim`. Próxima sub-fase troca a chamada para read+write explícito.
+
+---
+
+## Fase 5 — Persistência saudável
+
+Objetivo: índices em colunas frequentes, soft delete em todas as entidades, audit columns automáticas.
+
+### 5.1 Índices
+
+#### `database/migrations/2026_05_15_140000_add_indexes_for_lookups.php` (novo)
+
+Adiciona índices em colunas que são alvos frequentes de `WHERE` mas não tinham índice:
+- `alunos.cpf` — buscas administrativas
+- `alunos.numero_matricula` — `Aluno::where('numero_matricula', ...)` é o cerne de `Falta` e relatórios
+- `professores.cpf`
+- `disciplinas.codigo`
+- `faltas.data_falta` — todos os relatórios filtram por período
+
+Não toca em `users.email` (já é unique → índice automático) nem em PKs.
+
+### 5.2 Soft Deletes
+
+#### `database/migrations/2026_05_15_141000_add_soft_deletes_to_entities.php` (novo)
+
+`$table->softDeletes()` em todas as 6 entidades de domínio: `alunos`, `professores`, `turmas`, `disciplinas`, `avaliacoes`, `faltas`.
+
+**Motivação**: sistema escolar precisa preservar histórico. Aluno que sai da escola não deve ter boletins e faltas apagados — apenas arquivados.
+
+#### Models (modificados)
+
+`Aluno`, `Professor`, `Turma`, `Disciplina`, `Avaliacao`, `Falta` agora:
+- `use SoftDeletes;`
+- `$fillable` inclui `created_by`, `updated_by`, `deleted_by`.
+
+### 5.3 Audit Columns + Observer
+
+#### `database/migrations/2026_05_15_142000_add_audit_columns_to_entities.php` (novo)
+
+Adiciona em cada entidade:
+- `created_by` — FK `users.id` nullable, `onDelete: nullOnDelete`.
+- `updated_by` — idem.
+- `deleted_by` — idem.
+
+#### `app/Observers/AuditObserver.php` (novo)
+
+- `creating`: preenche `created_by` e `updated_by` com `Auth::id()`.
+- `updating`: preenche `updated_by`.
+- `deleting`: preenche `deleted_by` (via `saveQuietly` para não disparar `updating` novamente).
+
+Quando não há usuário autenticado (seeders, console), colunas ficam `NULL` — aceitável.
+
+#### `app/Providers/AppServiceProvider.php` (modificado)
+
+**Antes**: `boot()` vazio.
+
+**Depois**: loop registrando `AuditObserver` em todas as 6 entidades. Uma única linha por entidade — sem precisar adicionar trait nos models, fica centralizado.
+
+### 5.4 Testes (TDD)
+
+#### `tests/Feature/Persistence/SoftDeleteTest.php` (novo, 4 testes)
+
+- Aluno deletado não aparece em `find()` mas aparece em `withTrashed()->find()`.
+- Aluno deletado pode ser restaurado.
+- Soft delete funciona em Aluno, Professor, Turma, Disciplina (data provider implícito).
+- Avaliacao e Falta também são soft-deletáveis.
+
+#### `tests/Feature/Persistence/AuditObserverTest.php` (novo, 3 testes)
+
+- `created_by` e `updated_by` preenchidos automaticamente ao criar com user autenticado.
+- `updated_by` muda no update; `created_by` permanece.
+- Sem user autenticado → ambos `null`.
+
+### 5.5 Testes existentes atualizados
+
+`AlunoControllerTest`, `ProfessorControllerTest`, `TurmaControllerTest`, `DisciplinaControllerTest` — método `test_destroy_deletes_*`:
+
+**Antes**: `$this->assertDatabaseMissing('alunos', ['id' => $aluno->id]);`
+
+**Depois**: `$this->assertSoftDeleted('alunos', ['id' => $aluno->id]);`
+
+`assertDatabaseMissing` verifica ausência completa da linha; soft delete só seta `deleted_at`.
+
+### 5.6 Estado da Fase 5: VERDE
+
+- ✅ **156 testes passando** (era 149; +4 SoftDelete + 3 AuditObserver).
+- ✅ Pint passa.
+- ✅ PHPStan baseline regenerada com 95 erros (era 88; +7 do novo observer e dos `SoftDeletes` adicionados).

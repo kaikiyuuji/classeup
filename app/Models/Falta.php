@@ -8,10 +8,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Falta extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'aluno_id',
@@ -21,6 +22,9 @@ class Falta extends Model
         'data_falta',
         'justificada',
         'observacoes',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     protected $casts = [

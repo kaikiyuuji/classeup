@@ -409,6 +409,18 @@ parameters:
 			path: tests/Feature/Falta/RelacionamentoAlunoTest.php
 
 		-
+			message: '#^Access to an undefined property App\\Models\\Aluno\:\:\$created_by\.$#'
+			identifier: property.notFound
+			count: 4
+			path: tests/Feature/Persistence/AuditObserverTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Aluno\:\:\$updated_by\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/Persistence/AuditObserverTest.php
+
+		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 1

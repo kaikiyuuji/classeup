@@ -143,7 +143,7 @@ class ProfessorControllerTest extends TestCase
         $response->assertRedirect(route('professores.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseMissing('professores', [
+        $this->assertSoftDeleted('professores', [
             'id' => $professor->id,
         ]);
     }
