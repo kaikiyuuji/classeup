@@ -39,6 +39,11 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
+      - name: Install NPM dependencies and build assets
+        run: |
+          npm ci
+          npm run build
+
       - name: Copy environment file
         run: cp .env.example .env
 
@@ -47,6 +52,23 @@ jobs:
 
       - name: Execute tests
         run: php artisan test
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: coverage gate (min 70%)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: xdebug
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - run: |
+          npm ci
+          npm run build
+      - run: cp .env.example .env && php artisan key:generate
+      - run: php artisan test --coverage --min=70
 
   lint:
     runs-on: ubuntu-latest

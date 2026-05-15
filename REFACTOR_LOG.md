@@ -807,6 +807,83 @@ Guia primário para Claude Code e desenvolvedores. Contém:
 | 5 | `f173c41` | Persistência (soft deletes, audit, índices) | 156 |
 | 7 | (este) | Documentação | 156 |
 
-Pendentes (fases 4 e 6, baixo retorno marginal no momento atual):
-- **Fase 4**: cobertura ≥85% — requer mais testes E2E/feature que não trazem mudanças de comportamento. Hoje rodamos 156 testes (468 assertions), cobertura razoável; gate explícito de 85% no CI fica para quando a base de testes estiver mais estável e o time decidir o threshold.
-- **Fase 6**: auditoria com `spatie/laravel-activitylog` — `AuditObserver` da Fase 5 já cobre quem fez/quando para CRUD básico; activitylog completo agrega tracking de mudanças por campo, mas requer pacote externo e DB extra. Postergado.
+---
+
+## Fase 4 — Cobertura via fluxos E2E
+
+Objetivo: rede de segurança contra regressões nos próximos refactors via **testes de fluxo completo** (não % vazia). Cada teste atravessa policies → routes → form requests → services → models → views.
+
+### 4.1 Testes E2E
+
+#### `tests/Feature/E2E/FluxoBoletimTest.php` (novo, 4 testes)
+
+Cenários cobertos:
+- **`admin_cria_avaliacao_e_lanca_notas_aluno_ve_boletim`**: ciclo completo. Admin abre boletim → `AvaliacaoService::garantirAvaliacoesParaAluno` auto-cria a linha → professor (com vínculo na pivot ternária) lança notas → `NotaCalculator` computa média/situação → aluno consulta próprio boletim e vê "Aprovado".
+- **`substitutiva_recupera_aluno_no_boletim`**: regra de negócio crítica em produção (substitutiva troca menor nota se beneficiar). Av3=3 + substitutiva=9 → aluno reprovado vira aprovado com média 7.75.
+- **`aluno_nao_acessa_boletim_de_outro_aluno`**: `AlunoPolicy::view` via middleware `can:view,aluno` na rota.
+- **`professor_de_outra_turma_nao_pode_atualizar_avaliacao`**: a regra-chave da `AvaliacaoPolicy::update` que valida `professor_disciplina_turma` — professor sem vínculo na pivot ternária recebe 403 e nota não muda.
+
+#### `tests/Feature/E2E/FluxoChamadaTest.php` (novo, 4 testes)
+
+- **`admin_registra_chamada_e_falta_e_persistida_com_aluno_id`**: dois alunos ausentes → POST `/faltas/chamada` → 2 linhas em `faltas` com `aluno_id` FK populado (não só a matrícula legacy).
+- **`reenvio_substitui_chamada_quando_confirmado`**: 1ª submissão grava 1 falta; 2ª sem `confirmar_reenvio` retorna warning sem mutar; 2ª com `confirmar_reenvio=1` apaga as anteriores e grava as novas (idempotência via `ChamadaService::registrar`).
+- **`justificativa_e_remocao_via_rotas`**: POST `/faltas/justificar/{falta}` com observação → `justificada=true` + texto persistido; DELETE → reverte.
+- **`aluno_nao_pode_registrar_chamada`**: `FaltaPolicy::create` impede aluno via `FaltaStoreRequest::authorize()`. 0 faltas criadas.
+
+### 4.2 Matriz de acesso (regression net)
+
+#### `tests/Feature/Policies/MatrizAcessoTest.php` (novo, 11 testes via `@dataProvider`)
+
+10 rotas críticas testadas contra os 3 papéis em uma única classe; cada cenário verifica o status esperado:
+
+| Rota | Admin | Professor | Aluno |
+|---|---|---|---|
+| `alunos.index` | 200 | 200 | 403 |
+| `alunos.create` | 200 | 403 | 403 |
+| `professores.create` | 200 | 403 | 403 |
+| `disciplinas.create` | 200 | 403 | 403 |
+| `turmas.create` | 200 | 403 | 403 |
+| `faltas.index` | 200 | 200 | 403 |
+| `faltas.relatorio-aluno` | 200 | 200 | 403 |
+| … | … | … | … |
+
+Reorganizar grupos de rota no `routes/web.php` sem atualizar a matriz quebra a build — é a rede contra regressões silenciosas de autorização.
+
+Mais um teste extra: guest em rota auth → redirect para `/login`.
+
+### 4.3 NotaCalculator edge cases
+
+#### `tests/Unit/Domain/Avaliacao/NotaCalculatorEdgeCasesTest.php` (novo, 5 testes)
+
+Complementa o `NotaCalculatorTest` principal (13 testes) com:
+- Todas as notas 10 (média = 10, aprovado).
+- Substitutiva zero **não** substitui zero (regra "só se beneficiar").
+- Recuperação e substitutiva ambas zero não alteram nada.
+- **Aceita string** vinda do cast `decimal:2` do Eloquent (`'8.00'`) — protege contra refatoração que tipa estrito demais.
+- Substitutiva fornecida com notas zeradas **não é** "em andamento" (regra do `algumaNotaLancada`).
+
+### 4.4 Coverage gate no CI
+
+#### `.github/workflows/tests.yml` (modificado)
+
+**Adicionado**:
+- Step `npm ci && npm run build` antes dos testes (necessário para o Vite manifest, sem o qual feature tests que renderizam views falham com 500).
+- Novo job `coverage` (PHP 8.3 + xdebug) rodando `php artisan test --coverage --min=70`.
+
+**Por que 70% e não 85%**:
+- Gate é piso, não meta. 70% é conservador — passa hoje com folga e mantém pressão para subir gradualmente.
+- 85% sem medir antes é palpite; pode bloquear PRs honestos. Sobe quando o número real for confirmado em CI.
+
+### 4.5 Estado da Fase 4: VERDE
+
+- ✅ **180 testes passando** (era 156; +24 nesta fase: 4 boletim E2E + 4 chamada E2E + 11 matriz acesso + 5 NotaCalculator edge cases).
+- ✅ **541 assertions** (era 468; +73).
+- ✅ Pint passa.
+- ✅ PHPStan: 0 erros novos (baseline 95 inalterada).
+- ✅ CI ganha gate de cobertura ≥70% como novo job.
+
+---
+
+## Fase 6 — Adiada conscientemente
+
+`spatie/laravel-activitylog` agrega tracking de mudanças por campo (valor antigo → novo) e página `/admin/audit-log`. O `AuditObserver` da Fase 5 já cobre quem fez e quando para CRUD. Sem requisito regulatório explícito ou demanda concreta de "quem alterou esta nota de 7 para 9", o esforço é prematuro: pacote externo, tabela polimórfica grande, rotina de limpeza, índices. Faz mais sentido instalar quando aparecer a demanda — aí registra `LogsActivity` em 1-2 models específicos.
