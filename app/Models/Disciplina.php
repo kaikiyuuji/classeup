@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -40,7 +42,7 @@ class Disciplina extends Model
     public function professores(): BelongsToMany
     {
         return $this->belongsToMany(Professor::class, 'professor_disciplina')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     /**
@@ -49,8 +51,8 @@ class Disciplina extends Model
     public function professoresComTurma(): BelongsToMany
     {
         return $this->belongsToMany(Professor::class, 'professor_disciplina_turma')
-                    ->withPivot('turma_id')
-                    ->withTimestamps();
+            ->withPivot('turma_id')
+            ->withTimestamps();
     }
 
     /**
@@ -59,8 +61,8 @@ class Disciplina extends Model
     public function turmas(): BelongsToMany
     {
         return $this->belongsToMany(Turma::class, 'professor_disciplina_turma')
-                    ->withPivot('professor_id')
-                    ->withTimestamps();
+            ->withPivot('professor_id')
+            ->withTimestamps();
     }
 
     /**

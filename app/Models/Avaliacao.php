@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Avaliacao extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'avaliacoes';
 
     /**
@@ -100,7 +102,7 @@ class Avaliacao extends Model
      */
     private function temSubstitutiva(): bool
     {
-        return !is_null($this->substitutiva);
+        return ! is_null($this->substitutiva);
     }
 
     /**
@@ -108,7 +110,7 @@ class Avaliacao extends Model
      */
     private function temRecuperacaoFinal(): bool
     {
-        return !is_null($this->recuperacao_final);
+        return ! is_null($this->recuperacao_final);
     }
 
     /**
@@ -118,6 +120,7 @@ class Avaliacao extends Model
     {
         $indiceMenorNota = $this->encontrarIndiceMenorNota($notas);
         $notas[$indiceMenorNota] = $this->substitutiva;
+
         return $notas;
     }
 
@@ -128,6 +131,7 @@ class Avaliacao extends Model
     {
         $indiceMenorNota = $this->encontrarIndiceMenorNota($notas);
         $notas[$indiceMenorNota] = $this->recuperacao_final;
+
         return $notas;
     }
 
@@ -155,7 +159,7 @@ class Avaliacao extends Model
         if ($this->nota_final >= 6.0) {
             return 'aprovado';
         }
-        
+
         return 'reprovado';
     }
 

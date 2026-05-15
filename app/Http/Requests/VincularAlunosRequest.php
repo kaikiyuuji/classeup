@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Turma;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class VincularAlunosRequest extends FormRequest
 {
@@ -18,13 +22,13 @@ class VincularAlunosRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'alunos' => 'required|array|min:1',
-            'alunos.*' => 'exists:alunos,id'
+            'alunos.*' => 'exists:alunos,id',
         ];
     }
 
@@ -39,14 +43,14 @@ class VincularAlunosRequest extends FormRequest
             'alunos.required' => 'Selecione pelo menos um aluno.',
             'alunos.array' => 'Formato inválido para alunos.',
             'alunos.min' => 'Selecione pelo menos um aluno.',
-            'alunos.*.exists' => 'Um ou mais alunos selecionados não existem.'
+            'alunos.*.exists' => 'Um ou mais alunos selecionados não existem.',
         ];
     }
 
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param  Validator $validator
      * @return void
      */
     public function withValidator($validator)
@@ -61,7 +65,7 @@ class VincularAlunosRequest extends FormRequest
      */
     private function validateCapacidadeTurma($validator): void
     {
-        if (!$this->alunos) {
+        if (! $this->alunos) {
             return;
         }
 
@@ -69,11 +73,11 @@ class VincularAlunosRequest extends FormRequest
         $alunosAtivos = $turma->alunos()->count();
         $novosAlunos = count($this->alunos);
         $totalAposVinculacao = $alunosAtivos + $novosAlunos;
-        
+
         if ($totalAposVinculacao > $turma->capacidade_maxima) {
             $vagasDisponiveis = $turma->capacidade_maxima - $alunosAtivos;
             $validator->errors()->add(
-                'capacidade', 
+                'capacidade',
                 "A turma não tem capacidade suficiente. Vagas disponíveis: {$vagasDisponiveis}. Alunos selecionados: {$novosAlunos}."
             );
         }

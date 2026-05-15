@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Aluno;
@@ -14,12 +16,12 @@ class AvaliacaoService
      */
     public function obterAvaliacoesDoAluno(Aluno $aluno): Collection
     {
-        if (!$this->alunoTemTurma($aluno)) {
-            return new Collection();
+        if (! $this->alunoTemTurma($aluno)) {
+            return new Collection;
         }
 
         $disciplinasDaTurma = $this->obterDisciplinasDaTurma($aluno);
-        
+
         return $this->criarAvaliacoesSeNecessario($aluno, $disciplinasDaTurma);
     }
 
@@ -31,7 +33,7 @@ class AvaliacaoService
         $avaliacao->fill($notas);
         $avaliacao->calcularNotaFinal();
         $avaliacao->save();
-        
+
         return $avaliacao;
     }
 
@@ -40,7 +42,7 @@ class AvaliacaoService
      */
     private function alunoTemTurma(Aluno $aluno): bool
     {
-        return !is_null($aluno->turma_id);
+        return ! is_null($aluno->turma_id);
     }
 
     /**
@@ -57,11 +59,11 @@ class AvaliacaoService
     private function criarAvaliacoesSeNecessario(Aluno $aluno, Collection $disciplinas): Collection
     {
         foreach ($disciplinas as $disciplina) {
-            if (!$this->avaliacaoExiste($aluno, $disciplina)) {
+            if (! $this->avaliacaoExiste($aluno, $disciplina)) {
                 $this->criarAvaliacaoParaDisciplina($aluno, $disciplina);
             }
         }
-        
+
         return $aluno->avaliacoes()->with('disciplina')->get();
     }
 

@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\DesvincularAlunoRequest;
+use App\Http\Requests\DesvincularProfessorRequest;
 use App\Http\Requests\TurmaStoreRequest;
 use App\Http\Requests\TurmaUpdateRequest;
-use App\Models\Turma;
+use App\Http\Requests\VincularAlunosRequest;
+use App\Http\Requests\VincularProfessorRequest;
 use App\Models\Aluno;
 use App\Models\Professor;
+use App\Models\Turma;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Requests\VincularAlunosRequest;
-use App\Http\Requests\DesvincularAlunoRequest;
-use App\Http\Requests\VincularProfessorRequest;
-use App\Http\Requests\DesvincularProfessorRequest;
-
 
 class TurmaController extends Controller
 {
@@ -45,7 +44,7 @@ class TurmaController extends Controller
     public function store(TurmaStoreRequest $request): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         Turma::create($validatedData);
 
         return redirect()
@@ -59,12 +58,12 @@ class TurmaController extends Controller
     public function show(Turma $turma): View
     {
         $turma->load(['alunos', 'professores', 'disciplinas']);
-        
+
         // Buscar alunos disponíveis (sem turma)
         $alunosDisponiveis = Aluno::whereNull('turma_id')
             ->orderBy('nome')
             ->get();
-            
+
         // Buscar professores ativos com suas disciplinas que não estão vinculados à turma
         $professoresJaVinculados = $turma->professores()->pluck('professor_id')->toArray();
         $professoresDisponiveis = Professor::with('disciplinas')
@@ -73,7 +72,7 @@ class TurmaController extends Controller
             ->whereHas('disciplinas') // Apenas professores que têm disciplinas vinculadas
             ->orderBy('nome')
             ->get();
-        
+
         return view('admin.turmas.show', compact('turma', 'alunosDisponiveis', 'professoresDisponiveis'));
     }
 
@@ -91,10 +90,10 @@ class TurmaController extends Controller
     public function update(TurmaUpdateRequest $request, Turma $turma): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         // Garantir que o campo 'ativo' seja sempre processado
         $validatedData['ativo'] = $request->has('ativo') ? (bool) $request->input('ativo') : false;
-        
+
         $turma->update($validatedData);
 
         return redirect()
@@ -123,10 +122,11 @@ class TurmaController extends Controller
         $alunosJaVinculados = $turma->alunos()->pluck('id')->toArray();
         $alunosParaVincular = array_diff($request->validated()['alunos'], $alunosJaVinculados);
 
-        if (!empty($alunosParaVincular)) {
+        if (! empty($alunosParaVincular)) {
             // Atualiza o turma_id dos alunos selecionados
             Aluno::whereIn('id', $alunosParaVincular)->update(['turma_id' => $turma->id]);
             $quantidadeVinculada = count($alunosParaVincular);
+
             return redirect()->route('turmas.show', $turma)
                 ->with('success', "{$quantidadeVinculada} aluno(s) vinculado(s) com sucesso!");
         }
@@ -142,7 +142,7 @@ class TurmaController extends Controller
     {
         // Remove a vinculação definindo turma_id como null
         $aluno->update(['turma_id' => null]);
-        
+
         return redirect()
             ->route('turmas.show', $turma)
             ->with('success', "Aluno {$aluno->nome} desvinculado com sucesso!");
@@ -155,12 +155,12 @@ class TurmaController extends Controller
     {
         $professorId = $request->validated()['professor_id'];
         $disciplinaId = $request->validated()['disciplina_id'];
-        
+
         // Criar o vínculo usando Eloquent
         $turma->professores()->attach($professorId, [
-            'disciplina_id' => $disciplinaId
+            'disciplina_id' => $disciplinaId,
         ]);
-        
+
         return redirect()
             ->route('turmas.show', $turma)
             ->with('success', 'Professor vinculado com sucesso!');
@@ -173,12 +173,12 @@ class TurmaController extends Controller
     {
         $professorId = $request->validated()['professor_id'];
         $disciplinaId = $request->validated()['disciplina_id'];
-        
+
         // Remover o vínculo usando Eloquent
         $turma->professores()
             ->wherePivot('disciplina_id', $disciplinaId)
             ->detach($professorId);
-        
+
         return redirect()
             ->route('turmas.show', $turma)
             ->with('success', 'Professor desvinculado com sucesso!');

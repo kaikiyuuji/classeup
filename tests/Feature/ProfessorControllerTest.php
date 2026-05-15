@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Professor;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProfessorControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     private User $user;
 
@@ -75,7 +76,7 @@ class ProfessorControllerTest extends TestCase
             ->post(route('professores.store'), []);
 
         $response->assertSessionHasErrors([
-            'nome', 'email', 'cpf', 'data_nascimento', 'especialidade', 'formacao'
+            'nome', 'email', 'cpf', 'data_nascimento', 'especialidade', 'formacao',
         ]);
     }
 
@@ -94,7 +95,7 @@ class ProfessorControllerTest extends TestCase
     public function test_edit_displays_form_with_professor(): void
     {
         $professor = Professor::factory()->create();
-        
+
         $response = $this->actingAs($this->user)
             ->get(route('professores.edit', $professor));
 

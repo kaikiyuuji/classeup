@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Turma;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Turma>
+ * @extends Factory<Turma>
  */
 class TurmaFactory extends Factory
 {
@@ -21,17 +23,17 @@ class TurmaFactory extends Factory
         $turnos = ['matutino', 'vespertino', 'noturno'];
         $nivel = $this->faker->randomElement($niveisEducacionais);
         $turno = $this->faker->randomElement($turnos);
-        
+
         // Mapear nomes para exibição
         $nomesNiveis = [
             'pré-escola' => 'Pré-Escola',
             'fundamental' => 'Fundamental',
-            'médio' => 'Médio'
+            'médio' => 'Médio',
         ];
         $nomeNivel = $nomesNiveis[$nivel];
-        
+
         return [
-            'nome' => $nomeNivel . ' ' . ucfirst($turno) . ' - ' . $this->faker->randomLetter() . $this->faker->numberBetween(1, 3),
+            'nome' => $nomeNivel.' '.ucfirst($turno).' - '.$this->faker->randomLetter().$this->faker->numberBetween(1, 3),
             'ano_letivo' => $this->faker->numberBetween(2023, 2025),
             'serie' => $nivel,
             'turno' => $turno,
@@ -39,7 +41,7 @@ class TurmaFactory extends Factory
             'ativo' => $this->faker->boolean(85), // 85% de chance de estar ativa
         ];
     }
-    
+
     /**
      * Indica que a turma está ativa.
      */
@@ -49,7 +51,7 @@ class TurmaFactory extends Factory
             'ativo' => true,
         ]);
     }
-    
+
     /**
      * Indica que a turma está inativa.
      */
@@ -59,19 +61,20 @@ class TurmaFactory extends Factory
             'ativo' => false,
         ]);
     }
-    
+
     /**
      * Define uma turma para um nível educacional específico.
      */
     public function nivel(string $nivel): static
     {
         $nomeNivel = Turma::getNiveisEducacionais()[$nivel] ?? $nivel;
+
         return $this->state(fn (array $attributes) => [
             'serie' => $nivel,
-            'nome' => $nomeNivel . ' ' . ucfirst($attributes['turno']) . ' - ' . $this->faker->randomLetter() . $this->faker->numberBetween(1, 3),
+            'nome' => $nomeNivel.' '.ucfirst($attributes['turno']).' - '.$this->faker->randomLetter().$this->faker->numberBetween(1, 3),
         ]);
     }
-    
+
     /**
      * Define uma turma para um turno específico.
      */
@@ -79,7 +82,7 @@ class TurmaFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'turno' => $turno,
-            'nome' => Turma::getNiveisEducacionais()[$attributes['serie']] . ' ' . ucfirst($turno) . ' - ' . $this->faker->randomLetter() . $this->faker->numberBetween(1, 3),
+            'nome' => Turma::getNiveisEducacionais()[$attributes['serie']].' '.ucfirst($turno).' - '.$this->faker->randomLetter().$this->faker->numberBetween(1, 3),
         ]);
     }
 }

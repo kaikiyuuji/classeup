@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class DesvincularAlunoRequest extends FormRequest
 {
@@ -17,7 +21,7 @@ class DesvincularAlunoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -41,7 +45,7 @@ class DesvincularAlunoRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param  Validator $validator
      * @return void
      */
     public function withValidator($validator)
@@ -58,14 +62,14 @@ class DesvincularAlunoRequest extends FormRequest
     {
         $turma = $this->route('turma');
         $aluno = $this->route('aluno');
-        
-        if (!$aluno || !$turma) {
+
+        if (! $aluno || ! $turma) {
             return;
         }
-        
+
         if ($aluno->turma_id !== $turma->id) {
             $validator->errors()->add(
-                'aluno', 
+                'aluno',
                 'Este aluno não está vinculado a esta turma.'
             );
         }

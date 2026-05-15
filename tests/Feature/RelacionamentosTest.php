@@ -1,21 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\Professor;
-use App\Models\Disciplina;
-use App\Models\Turma;
 use App\Models\Aluno;
-
+use App\Models\Disciplina;
+use App\Models\Professor;
+use App\Models\Turma;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Tests\TestCase;
 
 class RelacionamentosTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * Testa o relacionamento Professor-Disciplina-Turma
      */
@@ -46,7 +44,7 @@ class RelacionamentosTest extends TestCase
         // Testar relacionamentos diretos (professor_disciplina)
         $this->assertTrue($professor->disciplinas->contains($disciplina));
         $this->assertTrue($disciplina->professores->contains($professor));
-        
+
         // Testar relacionamentos através da tabela tripla (professor_disciplina_turma)
         $this->assertTrue($professor->turmas->contains($turma));
         $this->assertTrue($disciplina->turmas->contains($turma));
@@ -88,7 +86,7 @@ class RelacionamentosTest extends TestCase
         ]);
 
         // Segunda inserção com os mesmos dados deve falhar
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
         DB::table('professor_disciplina_turma')->insert([
             'professor_id' => $professor->id,
             'disciplina_id' => $disciplina->id,
@@ -104,22 +102,22 @@ class RelacionamentosTest extends TestCase
     public function test_aluno_matricula_methods(): void
     {
         $aluno = Aluno::factory()->matriculaAtiva()->create();
-        
+
         // Testar se a matrícula está ativa
         $this->assertTrue($aluno->isMatriculaAtiva());
-        
+
         // Inativar matrícula
         $aluno->inativarMatricula();
         $aluno->refresh();
-        
+
         $this->assertFalse($aluno->isMatriculaAtiva());
         $this->assertEquals('inativa', $aluno->status_matricula);
         $this->assertFalse($aluno->isAtivo());
-        
+
         // Ativar matrícula novamente
         $aluno->ativarMatricula();
         $aluno->refresh();
-        
+
         $this->assertTrue($aluno->isMatriculaAtiva());
         $this->assertEquals('ativa', $aluno->status_matricula);
         $this->assertTrue($aluno->isAtivo());
@@ -131,16 +129,16 @@ class RelacionamentosTest extends TestCase
     public function test_gerar_numero_matricula(): void
     {
         $ano = date('Y');
-        
+
         // Primeiro número de matrícula do ano
         $numeroMatricula1 = Aluno::gerarNumeroMatricula($ano);
-        $this->assertEquals($ano . '0001', $numeroMatricula1);
-        
+        $this->assertEquals($ano.'0001', $numeroMatricula1);
+
         // Criar um aluno com esse número
         Aluno::factory()->create(['numero_matricula' => $numeroMatricula1]);
-        
+
         // Próximo número deve ser incrementado
         $numeroMatricula2 = Aluno::gerarNumeroMatricula($ano);
-        $this->assertEquals($ano . '0002', $numeroMatricula2);
+        $this->assertEquals($ano.'0002', $numeroMatricula2);
     }
 }

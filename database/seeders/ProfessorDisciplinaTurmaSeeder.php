@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Disciplina;
+use App\Models\Professor;
+use App\Models\Turma;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\Professor;
-use App\Models\Disciplina;
-use App\Models\Turma;
 
 class ProfessorDisciplinaTurmaSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class ProfessorDisciplinaTurmaSeeder extends Seeder
 
         if ($professores->isEmpty() || $disciplinas->isEmpty() || $turmas->isEmpty()) {
             $this->command->warn('Certifique-se de que existem professores, disciplinas e turmas no banco de dados.');
+
             return;
         }
 

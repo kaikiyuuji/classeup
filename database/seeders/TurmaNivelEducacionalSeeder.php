@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Turma;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TurmaNivelEducacionalSeeder extends Seeder
@@ -16,11 +17,11 @@ class TurmaNivelEducacionalSeeder extends Seeder
         // Criar turmas de exemplo para cada nível educacional
         $niveisEducacionais = Turma::getNiveisEducacionais();
         $turnos = ['matutino', 'vespertino', 'noturno'];
-        
+
         foreach ($niveisEducacionais as $nivel => $nomeNivel) {
             foreach ($turnos as $turno) {
                 Turma::create([
-                    'nome' => $nomeNivel . ' ' . ucfirst($turno) . ' - A',
+                    'nome' => $nomeNivel.' '.ucfirst($turno).' - A',
                     'ano_letivo' => 2024,
                     'serie' => $nivel,
                     'turno' => $turno,
@@ -29,7 +30,7 @@ class TurmaNivelEducacionalSeeder extends Seeder
                 ]);
             }
         }
-        
+
         // Criar algumas turmas adicionais
         Turma::create([
             'nome' => 'Pré-escola Matutino - B',
@@ -39,7 +40,7 @@ class TurmaNivelEducacionalSeeder extends Seeder
             'capacidade_maxima' => 25,
             'ativo' => true,
         ]);
-        
+
         Turma::create([
             'nome' => 'Fundamental Vespertino - B',
             'ano_letivo' => 2024,
@@ -48,7 +49,7 @@ class TurmaNivelEducacionalSeeder extends Seeder
             'capacidade_maxima' => 35,
             'ativo' => true,
         ]);
-        
+
         Turma::create([
             'nome' => 'Médio Noturno - B',
             'ano_letivo' => 2024,

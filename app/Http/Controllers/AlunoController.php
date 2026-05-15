@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\AlunoStoreRequest;
 use App\Http\Requests\AlunoUpdateRequest;
 use App\Http\Requests\AvaliacaoUpdateRequest;
@@ -36,9 +37,9 @@ class AlunoController extends Controller
         $turmas = Turma::where('ativo', true)
             ->orderBy('nome')
             ->get();
-            
+
         $turmaSelecionada = $request->get('turma_id');
-            
+
         return view('admin.alunos.create', compact('turmas', 'turmaSelecionada'));
     }
 
@@ -48,17 +49,17 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
             $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
         }
-        
+
         // Gerar dados de matrícula automaticamente
         $validatedData['numero_matricula'] = Aluno::gerarNumeroMatricula();
         $validatedData['data_matricula'] = now()->format('Y-m-d');
         $validatedData['status_matricula'] = 'ativa';
-        
+
         Aluno::create($validatedData);
 
         return redirect()
@@ -72,7 +73,7 @@ class AlunoController extends Controller
     public function show(Aluno $aluno): View
     {
         $aluno->load('turma');
-            
+
         return view('admin.alunos.show', compact('aluno'));
     }
 
@@ -84,7 +85,7 @@ class AlunoController extends Controller
         $turmas = Turma::where('ativo', true)
             ->orderBy('nome')
             ->get();
-            
+
         return view('admin.alunos.edit', compact('aluno', 'turmas'));
     }
 
@@ -94,7 +95,7 @@ class AlunoController extends Controller
     public function update(AlunoUpdateRequest $request, Aluno $aluno): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
             // Delete old photo if exists
@@ -103,7 +104,7 @@ class AlunoController extends Controller
             }
             $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
         }
-        
+
         $aluno->update($validatedData);
 
         return redirect()
@@ -123,21 +124,17 @@ class AlunoController extends Controller
             ->with('success', 'Aluno excluído com sucesso!');
     }
 
-
-
-
-
     /**
      * Handle photo upload and return the stored path.
      */
     private function handlePhotoUpload($file): string
     {
         // Generate unique filename
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        
+        $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+
         // Store in public disk under alunos folder
         $path = $file->storeAs('alunos', $filename, 'public');
-        
+
         return $path;
     }
 
@@ -147,7 +144,7 @@ class AlunoController extends Controller
     public function boletim(Aluno $aluno, AvaliacaoService $avaliacaoService): View
     {
         $avaliacoes = $avaliacaoService->obterAvaliacoesDoAluno($aluno);
-        
+
         return view('admin.alunos.notas.boletim', compact('aluno', 'avaliacoes'));
     }
 
@@ -155,13 +152,13 @@ class AlunoController extends Controller
      * Atualiza as notas de uma avaliação específica
      */
     public function atualizarAvaliacao(
-        AvaliacaoUpdateRequest $request, 
-        Aluno $aluno, 
+        AvaliacaoUpdateRequest $request,
+        Aluno $aluno,
         Avaliacao $avaliacao,
         AvaliacaoService $avaliacaoService
     ): RedirectResponse {
         $avaliacaoService->atualizarNotas($avaliacao, $request->validated());
-        
+
         return redirect()
             ->route('alunos.boletim', $aluno)
             ->with('success', 'Notas atualizadas com sucesso!');

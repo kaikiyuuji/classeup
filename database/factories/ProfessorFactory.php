@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\Professor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Professor>
+ * @extends Factory<Professor>
  */
 class ProfessorFactory extends Factory
 {
@@ -29,7 +32,7 @@ class ProfessorFactory extends Factory
             'Educação Física',
             'Artes',
             'Filosofia',
-            'Sociologia'
+            'Sociologia',
         ];
 
         $formacoes = [
@@ -42,7 +45,7 @@ class ProfessorFactory extends Factory
             'Licenciatura em Química - UFBA',
             'Licenciatura em Educação Física - UNESP',
             'Licenciatura em Artes Visuais - UFSC',
-            'Bacharelado e Licenciatura em Filosofia - PUC-SP'
+            'Bacharelado e Licenciatura em Filosofia - PUC-SP',
         ];
 
         return [

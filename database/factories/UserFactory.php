@@ -1,26 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected static ?string $password = null;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
@@ -32,13 +27,34 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * Stub para Fase 2: state será expandido para popular `users.role` e FK `professor_id`/`aluno_id`.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn () => []);
+    }
+
+    /**
+     * Stub para Fase 2.
+     */
+    public function professor(): static
+    {
+        return $this->state(fn () => []);
+    }
+
+    /**
+     * Stub para Fase 2.
+     */
+    public function aluno(): static
+    {
+        return $this->state(fn () => []);
     }
 }

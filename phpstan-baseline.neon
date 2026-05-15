@@ -1,0 +1,655 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method App\\Http\\Controllers\\AlunoController\:\:handlePhotoUpload\(\) has parameter \$file with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/AlunoController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:chamada\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:chamada\(\) has parameter \$disciplina with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:chamada\(\) has parameter \$turma with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:index\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:justificar\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:justificar\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterAlunosDaTurma\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterAlunosDaTurma\(\) has parameter \$turmaId with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasDoAluno\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasDoAluno\(\) has parameter \$dataFim with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasDoAluno\(\) has parameter \$dataInicio with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasDoAluno\(\) has parameter \$matricula with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasExistentes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasExistentes\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasExistentes\(\) has parameter \$disciplinaId with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterFaltasExistentes\(\) has parameter \$professorId with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:obterTurmasComVinculo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:processarChamada\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:processarJustificativa\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:processarJustificativa\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:registrarNovasFaltas\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:relatorioAluno\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:removerFaltasExistentes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:removerJustificativa\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:removerJustificativa\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\FaltaController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/FaltaController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\ProfessorController\:\:handlePhotoUpload\(\) has parameter \$file with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/ProfessorController.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Str\:\:lower\(\) expects string, Illuminate\\Support\\Stringable given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Requests/Auth/LoginRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\DesvincularAlunoRequest\:\:validateAlunoVinculado\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/DesvincularAlunoRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\DesvincularProfessorRequest\:\:validateVinculoExiste\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/DesvincularProfessorRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\VincularAlunosRequest\:\:validateCapacidadeTurma\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/VincularAlunosRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\VincularProfessorRequest\:\:validateProfessorHasDisciplina\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/VincularProfessorRequest.php
+
+		-
+			message: '#^Method App\\Http\\Requests\\VincularProfessorRequest\:\:validateVinculoNaoExiste\(\) has parameter \$validator with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Requests/VincularProfessorRequest.php
+
+		-
+			message: '#^Class App\\Models\\Aluno uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Aluno.php
+
+		-
+			message: '#^Method App\\Models\\Aluno\:\:avaliacoes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Aluno.php
+
+		-
+			message: '#^Method App\\Models\\Aluno\:\:turma\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Aluno.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\Aluno\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/Aluno.php
+
+		-
+			message: '#^Class App\\Models\\Avaliacao uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:aluno\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:aplicarRecuperacaoFinal\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:aplicarRecuperacaoFinal\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:aplicarSubstitutiva\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:aplicarSubstitutiva\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:calcularMedia\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:disciplina\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:encontrarIndiceMenorNota\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Method App\\Models\\Avaliacao\:\:obterNotasParaCalculo\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\Avaliacao\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/Avaliacao.php
+
+		-
+			message: '#^Class App\\Models\\Disciplina uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Disciplina.php
+
+		-
+			message: '#^Method App\\Models\\Disciplina\:\:avaliacoes\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Disciplina.php
+
+		-
+			message: '#^Method App\\Models\\Disciplina\:\:professores\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Disciplina.php
+
+		-
+			message: '#^Method App\\Models\\Disciplina\:\:professoresComTurma\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Disciplina.php
+
+		-
+			message: '#^Method App\\Models\\Disciplina\:\:turmas\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Disciplina.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\Disciplina\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/Disciplina.php
+
+		-
+			message: '#^Class App\\Models\\Falta uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:aluno\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:disciplina\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:professor\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopeJustificadas\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopeJustificadas\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopeNaoJustificadas\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopeNaoJustificadas\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorAluno\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorAluno\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorDisciplina\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorDisciplina\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorPeriodo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorPeriodo\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorProfessor\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:scopePorProfessor\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Class App\\Models\\Professor uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:disciplinas\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:disciplinasComTurma\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:scopeAtivo\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:scopeAtivo\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:scopeInativo\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:scopeInativo\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Method App\\Models\\Professor\:\:turmas\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\Professor\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/Professor.php
+
+		-
+			message: '#^Class App\\Models\\Turma uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Turma.php
+
+		-
+			message: '#^Method App\\Models\\Turma\:\:alunos\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\HasMany does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Turma.php
+
+		-
+			message: '#^Method App\\Models\\Turma\:\:disciplinas\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Turma.php
+
+		-
+			message: '#^Method App\\Models\\Turma\:\:getNiveisEducacionais\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Models/Turma.php
+
+		-
+			message: '#^Method App\\Models\\Turma\:\:professores\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany does not specify its types\: TRelatedModel, TDeclaringModel, TPivotModel, TAccessor \(2\-4 required\)$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Turma.php
+
+		-
+			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\Turma\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Models/Turma.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disciplinas\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Method App\\Services\\AvaliacaoService\:\:atualizarNotas\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Method App\\Services\\AvaliacaoService\:\:criarAvaliacoesSeNecessario\(\) has parameter \$disciplinas with generic class Illuminate\\Database\\Eloquent\\Collection but does not specify its types\: TKey, TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Method App\\Services\\AvaliacaoService\:\:criarAvaliacoesSeNecessario\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Method App\\Services\\AvaliacaoService\:\:obterAvaliacoesDoAluno\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Method App\\Services\\AvaliacaoService\:\:obterDisciplinasDaTurma\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Parameter \#2 \$disciplina of method App\\Services\\AvaliacaoService\:\:avaliacaoExiste\(\) expects App\\Models\\Disciplina, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Parameter \#2 \$disciplina of method App\\Services\\AvaliacaoService\:\:criarAvaliacaoParaDisciplina\(\) expects App\\Models\\Disciplina, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/AvaliacaoService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 9
+			path: database/seeders/ProfessorDisciplinaTurmaSeeder.php
+
+		-
+			message: '#^Method Tests\\Feature\\AlunoControllerTest\:\:test_can_update_aluno_turma\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Feature/AlunoControllerTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\AlunoControllerTest\:\:test_cannot_assign_aluno_to_inactive_turma\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Feature/AlunoControllerTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$aluno_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/AvaliacaoTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disciplina_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/AvaliacaoTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/RelacionamentosTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\TurmaProfessorVinculacaoTest\:\:pode_desvincular_professor_da_turma\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Feature/TurmaProfessorVinculacaoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\TurmaProfessorVinculacaoTest\:\:pode_vincular_professor_a_turma\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Feature/TurmaProfessorVinculacaoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\TurmaProfessorVinculacaoTest\:\:pode_visualizar_turma_com_sessao_de_professores\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Feature/TurmaProfessorVinculacaoTest.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:actingAsAdmin\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:actingAsAluno\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:actingAsProfessor\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:createUser\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/ExampleTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with int will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/Tooling/SmokeTest.php

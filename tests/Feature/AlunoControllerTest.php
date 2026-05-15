@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Aluno;
 use App\Models\Turma;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AlunoControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     private User $user;
 
@@ -72,7 +73,7 @@ class AlunoControllerTest extends TestCase
             ->post(route('alunos.store'), []);
 
         $response->assertSessionHasErrors([
-            'nome', 'email', 'cpf', 'data_nascimento'
+            'nome', 'email', 'cpf', 'data_nascimento',
         ]);
     }
 
@@ -162,7 +163,7 @@ class AlunoControllerTest extends TestCase
             'telefone' => $aluno->telefone,
             'endereco' => $aluno->endereco,
             'status_matricula' => $aluno->status_matricula,
-            'turma_id' => $turma->id
+            'turma_id' => $turma->id,
         ];
 
         $response = $this->actingAs($this->user)
@@ -188,7 +189,7 @@ class AlunoControllerTest extends TestCase
             'telefone' => $aluno->telefone,
             'endereco' => $aluno->endereco,
             'status_matricula' => $aluno->status_matricula,
-            'turma_id' => $turma->id
+            'turma_id' => $turma->id,
         ];
 
         $response = $this->actingAs($this->user)

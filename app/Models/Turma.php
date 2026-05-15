@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
 
 class Turma extends Model
 {
@@ -16,7 +17,9 @@ class Turma extends Model
      * Constantes para os níveis educacionais
      */
     public const NIVEL_PRE_ESCOLA = 'pré-escola';
+
     public const NIVEL_FUNDAMENTAL = 'fundamental';
+
     public const NIVEL_MEDIO = 'médio';
 
     /**
@@ -35,8 +38,6 @@ class Turma extends Model
 
     /**
      * Retorna as opções de níveis educacionais
-     *
-     * @return array
      */
     public static function getNiveisEducacionais(): array
     {
@@ -64,8 +65,8 @@ class Turma extends Model
     public function professores(): BelongsToMany
     {
         return $this->belongsToMany(Professor::class, 'professor_disciplina_turma')
-                    ->withPivot('disciplina_id')
-                    ->withTimestamps();
+            ->withPivot('disciplina_id')
+            ->withTimestamps();
     }
 
     /**
@@ -74,8 +75,8 @@ class Turma extends Model
     public function disciplinas(): BelongsToMany
     {
         return $this->belongsToMany(Disciplina::class, 'professor_disciplina_turma')
-                    ->withPivot('professor_id')
-                    ->withTimestamps();
+            ->withPivot('professor_id')
+            ->withTimestamps();
     }
 
     /**

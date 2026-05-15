@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 use App\Models\Professor;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class VincularProfessorRequest extends FormRequest
 {
@@ -19,13 +22,13 @@ class VincularProfessorRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'professor_id' => 'required|exists:professores,id',
-            'disciplina_id' => 'required|exists:disciplinas,id'
+            'disciplina_id' => 'required|exists:disciplinas,id',
         ];
     }
 
@@ -40,14 +43,14 @@ class VincularProfessorRequest extends FormRequest
             'professor_id.required' => 'Selecione um professor.',
             'professor_id.exists' => 'Professor selecionado não existe.',
             'disciplina_id.required' => 'Selecione uma disciplina.',
-            'disciplina_id.exists' => 'Disciplina selecionada não existe.'
+            'disciplina_id.exists' => 'Disciplina selecionada não existe.',
         ];
     }
 
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param  Validator $validator
      * @return void
      */
     public function withValidator($validator)
@@ -63,15 +66,15 @@ class VincularProfessorRequest extends FormRequest
      */
     private function validateProfessorHasDisciplina($validator): void
     {
-        if (!$this->professor_id || !$this->disciplina_id) {
+        if (! $this->professor_id || ! $this->disciplina_id) {
             return;
         }
 
         $professor = Professor::with('disciplinas')->find($this->professor_id);
-        
-        if ($professor && !$professor->disciplinas->contains($this->disciplina_id)) {
+
+        if ($professor && ! $professor->disciplinas->contains($this->disciplina_id)) {
             $validator->errors()->add(
-                'disciplina_id', 
+                'disciplina_id',
                 'O professor selecionado não possui a disciplina escolhida.'
             );
         }
@@ -82,20 +85,20 @@ class VincularProfessorRequest extends FormRequest
      */
     private function validateVinculoNaoExiste($validator): void
     {
-        if (!$this->professor_id || !$this->disciplina_id) {
+        if (! $this->professor_id || ! $this->disciplina_id) {
             return;
         }
 
         $turma = $this->route('turma');
-        
+
         $existeVinculo = $turma->professores()
             ->where('professor_id', $this->professor_id)
             ->wherePivot('disciplina_id', $this->disciplina_id)
             ->exists();
-            
+
         if ($existeVinculo) {
             $validator->errors()->add(
-                'vinculo_existente', 
+                'vinculo_existente',
                 'Este professor já está vinculado a esta disciplina nesta turma.'
             );
         }

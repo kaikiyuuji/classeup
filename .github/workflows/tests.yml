@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - main
+      - 'claude/**'
       - '*.x'
   pull_request:
   schedule:
@@ -21,7 +23,7 @@ jobs:
       matrix:
         php: [8.2, 8.3, 8.4]
 
-    name: PHP ${{ matrix.php }}
+    name: tests (PHP ${{ matrix.php }})
 
     steps:
       - name: Checkout code
@@ -31,8 +33,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
-          coverage: none
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: xdebug
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
@@ -45,3 +47,29 @@ jobs:
 
       - name: Execute tests
         run: php artisan test
+
+  lint:
+    runs-on: ubuntu-latest
+    name: lint (pint)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - run: vendor/bin/pint --test
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    name: static analysis (phpstan)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress

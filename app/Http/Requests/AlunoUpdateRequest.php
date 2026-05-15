@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
+use App\Models\Turma;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +22,7 @@ class AlunoUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -46,7 +50,7 @@ class AlunoUpdateRequest extends FormRequest
                 'nullable',
                 'exists:turmas,id',
                 function ($attribute, $value, $fail) {
-                    if ($value && !\App\Models\Turma::where('id', $value)->where('ativo', true)->exists()) {
+                    if ($value && ! Turma::where('id', $value)->where('ativo', true)->exists()) {
                         $fail('A turma selecionada não está ativa.');
                     }
                 },
@@ -92,5 +96,4 @@ class AlunoUpdateRequest extends FormRequest
             'turma_id.exists' => 'A turma selecionada não existe.',
         ];
     }
-
 }

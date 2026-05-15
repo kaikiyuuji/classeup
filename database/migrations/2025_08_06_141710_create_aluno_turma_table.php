@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +18,7 @@ return new class extends Migration
             $table->foreignId('aluno_id')->constrained('alunos')->onDelete('cascade');
             $table->foreignId('turma_id')->constrained('turmas')->onDelete('cascade');
             $table->timestamps();
-            
+
             // Evitar duplicatas na mesma associação
             $table->unique(['aluno_id', 'turma_id'], 'aluno_turma_unique');
         });

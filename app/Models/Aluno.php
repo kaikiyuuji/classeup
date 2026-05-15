@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Aluno extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -53,7 +56,7 @@ class Aluno extends Model
      */
     public function getFotoPerfilUrlAttribute(): ?string
     {
-        if (!$this->foto_perfil) {
+        if (! $this->foto_perfil) {
             return null;
         }
 
@@ -63,21 +66,21 @@ class Aluno extends Model
         }
 
         // Otherwise, generate storage URL
-        return asset('storage/' . $this->foto_perfil);
+        return asset('storage/'.$this->foto_perfil);
     }
 
     /**
      * Gera um número de matrícula único baseado no ano
      */
-    public static function gerarNumeroMatricula(int $ano = null): string
+    public static function gerarNumeroMatricula(int|string|null $ano = null): string
     {
-        $ano = $ano ?? date('Y');
-        
+        $ano = (string) ($ano ?? date('Y'));
+
         // Busca o último número de matrícula do ano
-        $ultimaMatricula = static::where('numero_matricula', 'like', $ano . '%')
+        $ultimaMatricula = static::where('numero_matricula', 'like', $ano.'%')
             ->orderBy('numero_matricula', 'desc')
             ->first();
-        
+
         if ($ultimaMatricula) {
             // Extrai o número sequencial e incrementa
             $ultimoNumero = (int) substr($ultimaMatricula->numero_matricula, 4);
@@ -86,8 +89,8 @@ class Aluno extends Model
             // Primeiro aluno do ano
             $proximoNumero = 1;
         }
-        
-        return $ano . str_pad($proximoNumero, 4, '0', STR_PAD_LEFT);
+
+        return $ano.str_pad((string) $proximoNumero, 4, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -104,7 +107,7 @@ class Aluno extends Model
     public function ativarMatricula(): void
     {
         $this->update([
-            'status_matricula' => 'ativa'
+            'status_matricula' => 'ativa',
         ]);
     }
 
@@ -114,7 +117,7 @@ class Aluno extends Model
     public function inativarMatricula(): void
     {
         $this->update([
-            'status_matricula' => 'inativa'
+            'status_matricula' => 'inativa',
         ]);
     }
 

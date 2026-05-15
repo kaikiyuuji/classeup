@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Models\Turma;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TurmaUpdateRequest extends FormRequest
@@ -18,14 +21,14 @@ class TurmaUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'nome' => 'required|string|max:255',
             'ano_letivo' => 'required|integer|min:2020|max:2030',
-            'serie' => 'required|in:' . implode(',', array_keys(Turma::getNiveisEducacionais())),
+            'serie' => 'required|in:'.implode(',', array_keys(Turma::getNiveisEducacionais())),
             'turno' => 'required|in:matutino,vespertino,noturno',
             'capacidade_maxima' => 'required|integer|min:1|max:50',
             'ativo' => 'boolean',

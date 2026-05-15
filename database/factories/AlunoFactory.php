@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Aluno;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Aluno>
+ * @extends Factory<Aluno>
  */
 class AlunoFactory extends Factory
 {
@@ -19,7 +21,7 @@ class AlunoFactory extends Factory
     {
         $dataMatricula = $this->faker->dateTimeBetween('-2 years', 'now');
         $ano = $dataMatricula->format('Y');
-        
+
         return [
             'numero_matricula' => $this->generateNumeroMatricula($ano),
             'data_matricula' => $dataMatricula->format('Y-m-d'),
@@ -30,7 +32,7 @@ class AlunoFactory extends Factory
             'data_nascimento' => $this->faker->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
             'telefone' => $this->faker->numerify('(##) #####-####'),
             'endereco' => $this->faker->address(),
-            'foto_perfil' => null
+            'foto_perfil' => null,
         ];
     }
 
@@ -72,14 +74,14 @@ class AlunoFactory extends Factory
     private function generateNumeroMatricula(string $ano): string
     {
         static $counters = [];
-        
-        if (!isset($counters[$ano])) {
+
+        if (! isset($counters[$ano])) {
             $counters[$ano] = 1;
         } else {
             $counters[$ano]++;
         }
-        
-        return $ano . str_pad($counters[$ano], 4, '0', STR_PAD_LEFT);
+
+        return $ano.str_pad((string) $counters[$ano], 4, '0', STR_PAD_LEFT);
     }
 
     /**

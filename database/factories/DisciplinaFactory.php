@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\Disciplina;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Disciplina>
+ * @extends Factory<Disciplina>
  */
 class DisciplinaFactory extends Factory
 {
@@ -35,7 +38,7 @@ class DisciplinaFactory extends Factory
         ];
 
         $disciplina = $this->faker->randomElement($disciplinas);
-        $codigo = $disciplina['codigo'] . $this->faker->numberBetween(100, 999);
+        $codigo = $disciplina['codigo'].$this->faker->numberBetween(100, 999);
 
         return [
             'nome' => $disciplina['nome'],

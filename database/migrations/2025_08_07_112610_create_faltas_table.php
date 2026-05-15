@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +22,7 @@ return new class extends Migration
             $table->boolean('justificada')->default(false);
             $table->text('observacoes')->nullable();
             $table->timestamps();
-            
+
             // Índices para otimizar consultas
             $table->index(['matricula', 'data_falta']);
             $table->index(['disciplina_id', 'data_falta']);

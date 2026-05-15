@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +16,7 @@ return new class extends Migration
         Schema::table('alunos', function (Blueprint $table) {
             $table->string('numero_matricula')->unique()->after('id');
             $table->date('data_matricula')->after('numero_matricula');
-            $table->enum('status_matricula', ['ativa', 'inativa','cancelada'])->default('ativa')->after('data_matricula');
+            $table->enum('status_matricula', ['ativa', 'inativa', 'cancelada'])->default('ativa')->after('data_matricula');
         });
     }
 

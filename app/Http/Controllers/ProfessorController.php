@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfessorStoreRequest;
 use App\Http\Requests\ProfessorUpdateRequest;
 use App\Models\Disciplina;
@@ -38,12 +39,12 @@ class ProfessorController extends Controller
     public function store(ProfessorStoreRequest $request): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
             $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
         }
-        
+
         Professor::create($validatedData);
 
         return redirect()
@@ -58,9 +59,9 @@ class ProfessorController extends Controller
     {
         $disciplinasVinculadas = $professor->disciplinas;
         $disciplinasDisponiveis = Disciplina::whereNotIn('id', $disciplinasVinculadas->pluck('id'))
-                                          ->orderBy('nome')
-                                          ->get();
-        
+            ->orderBy('nome')
+            ->get();
+
         return view('admin.professores.show', compact('professor', 'disciplinasVinculadas', 'disciplinasDisponiveis'));
     }
 
@@ -78,7 +79,7 @@ class ProfessorController extends Controller
     public function update(ProfessorUpdateRequest $request, Professor $professor): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         // Handle photo upload
         if ($request->hasFile('foto_perfil')) {
             // Delete old photo if exists
@@ -87,7 +88,7 @@ class ProfessorController extends Controller
             }
             $validatedData['foto_perfil'] = $this->handlePhotoUpload($request->file('foto_perfil'));
         }
-        
+
         $professor->update($validatedData);
 
         return redirect()
@@ -107,57 +108,55 @@ class ProfessorController extends Controller
             ->with('success', 'Professor excluído com sucesso!');
     }
 
-
-
     /**
      * Vincular professor a uma disciplina
      */
     public function vincularDisciplina(Request $request, Professor $professor): RedirectResponse
     {
         $request->validate([
-            'disciplina_id' => 'required|exists:disciplinas,id'
+            'disciplina_id' => 'required|exists:disciplinas,id',
         ]);
-        
+
         $disciplinaId = $request->disciplina_id;
-        
+
         // Verificar se já está vinculado
         if ($professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
             return redirect()
                 ->route('professores.show', $professor)
                 ->with('error', 'Professor já está vinculado a esta disciplina!');
         }
-        
+
         $professor->disciplinas()->attach($disciplinaId);
-        
+
         $disciplina = Disciplina::find($disciplinaId);
-        
+
         return redirect()
             ->route('professores.show', $professor)
             ->with('success', "Professor vinculado à disciplina {$disciplina->nome} com sucesso!");
     }
-    
+
     /**
      * Desvincular professor de uma disciplina
      */
     public function desvincularDisciplina(Request $request, Professor $professor): RedirectResponse
     {
         $request->validate([
-            'disciplina_id' => 'required|exists:disciplinas,id'
+            'disciplina_id' => 'required|exists:disciplinas,id',
         ]);
-        
+
         $disciplinaId = $request->disciplina_id;
-        
+
         // Verificar se está vinculado
-        if (!$professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
+        if (! $professor->disciplinas()->where('disciplina_id', $disciplinaId)->exists()) {
             return redirect()
                 ->route('professores.show', $professor)
                 ->with('error', 'Professor não está vinculado a esta disciplina!');
         }
-        
+
         $professor->disciplinas()->detach($disciplinaId);
-        
+
         $disciplina = Disciplina::find($disciplinaId);
-        
+
         return redirect()
             ->route('professores.show', $professor)
             ->with('success', "Professor desvinculado da disciplina {$disciplina->nome} com sucesso!");
@@ -169,11 +168,11 @@ class ProfessorController extends Controller
     private function handlePhotoUpload($file): string
     {
         // Generate unique filename
-        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        
+        $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+
         // Store in public disk under professores folder
         $path = $file->storeAs('professores', $filename, 'public');
-        
+
         return $path;
     }
 }

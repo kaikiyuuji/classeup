@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Turma;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TurmaControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     private User $user;
 
@@ -71,7 +72,7 @@ class TurmaControllerTest extends TestCase
             'ano_letivo',
             'serie',
             'turno',
-            'capacidade_maxima'
+            'capacidade_maxima',
         ]);
     }
 
@@ -125,7 +126,7 @@ class TurmaControllerTest extends TestCase
             'turno' => 'vespertino',
             'capacidade_maxima' => 35,
         ]);
-        
+
         // Verificar separadamente que a turma foi atualizada
         $turma->refresh();
         $this->assertEquals('2ª Vespertino - B', $turma->nome);

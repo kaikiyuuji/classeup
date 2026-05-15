@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\DisciplinaStoreRequest;
 use App\Http\Requests\DisciplinaUpdateRequest;
 use App\Models\Disciplina;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class DisciplinaController extends Controller
 {
@@ -17,7 +18,7 @@ class DisciplinaController extends Controller
     public function index(): View
     {
         $disciplinas = Disciplina::orderBy('nome')->paginate(10);
-        
+
         return view('admin.disciplinas.index', compact('disciplinas'));
     }
 
@@ -64,7 +65,7 @@ class DisciplinaController extends Controller
     public function update(DisciplinaUpdateRequest $request, Disciplina $disciplina): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         // Processar o campo 'ativo' corretamente para radio buttons
         // Radio buttons sempre enviam um valor quando selecionados
         $validatedData['ativo'] = $request->input('ativo') === '1';

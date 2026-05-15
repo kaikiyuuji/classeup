@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,7 +26,7 @@ return new class extends Migration
             $table->decimal('nota_final', 4, 2)->nullable()->default(0);
             $table->enum('situacao', ['aprovado', 'reprovado', 'em_andamento'])->default('em_andamento');
             $table->timestamps();
-            
+
             // Índice único para evitar duplicatas de avaliação por aluno/disciplina
             $table->unique(['aluno_id', 'disciplina_id']);
         });

@@ -1,27 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Carbon\Carbon;
 
 class Falta extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'matricula',
         'disciplina_id',
         'professor_id',
         'data_falta',
         'justificada',
-        'observacoes'
+        'observacoes',
     ];
 
     protected $casts = [
         'data_falta' => 'date',
-        'justificada' => 'boolean'
+        'justificada' => 'boolean',
     ];
 
     // Relacionamentos
@@ -45,7 +48,7 @@ class Falta extends Model
     {
         $this->update([
             'justificada' => true,
-            'observacoes' => $observacao
+            'observacoes' => $observacao,
         ]);
     }
 
@@ -53,7 +56,7 @@ class Falta extends Model
     {
         $this->update([
             'justificada' => false,
-            'observacoes' => null
+            'observacoes' => null,
         ]);
     }
 

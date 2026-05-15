@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -53,7 +56,7 @@ class Professor extends Model
     public function disciplinas(): BelongsToMany
     {
         return $this->belongsToMany(Disciplina::class, 'professor_disciplina')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     /**
@@ -62,8 +65,8 @@ class Professor extends Model
     public function disciplinasComTurma(): BelongsToMany
     {
         return $this->belongsToMany(Disciplina::class, 'professor_disciplina_turma')
-                    ->withPivot('turma_id')
-                    ->withTimestamps();
+            ->withPivot('turma_id')
+            ->withTimestamps();
     }
 
     /**
@@ -72,25 +75,23 @@ class Professor extends Model
     public function turmas(): BelongsToMany
     {
         return $this->belongsToMany(Turma::class, 'professor_disciplina_turma')
-                    ->withPivot('disciplina_id')
-                    ->withTimestamps();
+            ->withPivot('disciplina_id')
+            ->withTimestamps();
     }
 
     /**
      * Get the URL for the professor's profile photo.
-     *
-     * @return string|null
      */
     public function getFotoPerfilUrlAttribute(): ?string
     {
-        return $this->foto_perfil ? asset('storage/' . $this->foto_perfil) : null;
+        return $this->foto_perfil ? asset('storage/'.$this->foto_perfil) : null;
     }
 
     /**
      * Scope a query to only include active professors.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder $query
+     * @return Builder
      */
     public function scopeAtivo($query)
     {
@@ -100,8 +101,8 @@ class Professor extends Model
     /**
      * Scope a query to only include inactive professors.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder $query
+     * @return Builder
      */
     public function scopeInativo($query)
     {

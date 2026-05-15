@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Disciplina;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DisciplinaControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     private User $user;
 
@@ -57,7 +58,7 @@ class DisciplinaControllerTest extends TestCase
 
         $response->assertRedirect(route('disciplinas.index'));
         $response->assertSessionHas('success', 'Disciplina criada com sucesso!');
-        
+
         $this->assertDatabaseHas('disciplinas', [
             'nome' => 'Matemática Avançada',
             'codigo' => 'MAT001',
@@ -113,7 +114,7 @@ class DisciplinaControllerTest extends TestCase
 
         $response->assertRedirect(route('disciplinas.show', $disciplina));
         $response->assertSessionHas('success', 'Disciplina atualizada com sucesso!');
-        
+
         $disciplina->refresh();
         $this->assertEquals('Nome Atualizado', $disciplina->nome);
         $this->assertEquals('UPD001', $disciplina->codigo);
