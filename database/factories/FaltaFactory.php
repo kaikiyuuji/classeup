@@ -22,10 +22,13 @@ class FaltaFactory extends Factory
      */
     public function definition(): array
     {
-        $justificada = $this->faker->boolean(30); // 30% de chance de ser justificada
+        $justificada = $this->faker->boolean(30);
+
+        $aluno = Aluno::factory()->create();
 
         return [
-            'matricula' => Aluno::factory(),
+            'aluno_id' => $aluno->id,
+            'matricula' => $aluno->numero_matricula,
             'disciplina_id' => Disciplina::factory(),
             'professor_id' => Professor::factory(),
             'data_falta' => $this->faker->dateTimeBetween('-30 days', 'now')->format('Y-m-d'),

@@ -162,7 +162,7 @@ class AlunoControllerTest extends TestCase
             'data_nascimento' => $aluno->data_nascimento->format('Y-m-d'),
             'telefone' => $aluno->telefone,
             'endereco' => $aluno->endereco,
-            'status_matricula' => $aluno->status_matricula,
+            'status_matricula' => $aluno->status_matricula->value,
             'turma_id' => $turma->id,
         ];
 
@@ -188,7 +188,7 @@ class AlunoControllerTest extends TestCase
             'data_nascimento' => $aluno->data_nascimento->format('Y-m-d'),
             'telefone' => $aluno->telefone,
             'endereco' => $aluno->endereco,
-            'status_matricula' => $aluno->status_matricula,
+            'status_matricula' => $aluno->status_matricula->value,
             'turma_id' => $turma->id,
         ];
 

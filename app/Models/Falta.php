@@ -14,6 +14,7 @@ class Falta extends Model
     use HasFactory;
 
     protected $fillable = [
+        'aluno_id',
         'matricula',
         'disciplina_id',
         'professor_id',
@@ -27,10 +28,30 @@ class Falta extends Model
         'justificada' => 'boolean',
     ];
 
-    // Relacionamentos
+    /**
+     * Relacionamento canônico via FK aluno_id. Faz fallback para resolver
+     * via numero_matricula caso a FK não esteja preenchida (linhas legacy
+     * que ainda não passaram pelo backfill da migration).
+     */
     public function aluno(): BelongsTo
     {
-        return $this->belongsTo(Aluno::class, 'matricula', 'numero_matricula');
+        return $this->belongsTo(Aluno::class, 'aluno_id');
+    }
+
+    /**
+     * Resolve o aluno mesmo quando aluno_id é null, usando matricula.
+     */
+    public function getAlunoResolvidoAttribute(): ?Aluno
+    {
+        if ($this->aluno_id !== null && $this->aluno !== null) {
+            return $this->aluno;
+        }
+
+        if ($this->matricula !== null) {
+            return Aluno::where('numero_matricula', $this->matricula)->first();
+        }
+
+        return null;
     }
 
     public function disciplina(): BelongsTo
@@ -43,7 +64,6 @@ class Falta extends Model
         return $this->belongsTo(Professor::class);
     }
 
-    // Métodos de comportamento seguindo Object Calisthenics
     public function justificar(?string $observacao = null): void
     {
         $this->update([
@@ -75,10 +95,16 @@ class Falta extends Model
         return $this->data_falta->gte(now()->subDays(7));
     }
 
-    // Scopes para consultas otimizadas
-    public function scopePorAluno($query, string $matricula)
+    /**
+     * Aceita ID numérico do aluno ou string de matrícula.
+     */
+    public function scopePorAluno($query, int|string $alunoOuMatricula)
     {
-        return $query->where('matricula', $matricula);
+        if (is_int($alunoOuMatricula)) {
+            return $query->where('aluno_id', $alunoOuMatricula);
+        }
+
+        return $query->where('matricula', $alunoOuMatricula);
     }
 
     public function scopePorDisciplina($query, int $disciplinaId)

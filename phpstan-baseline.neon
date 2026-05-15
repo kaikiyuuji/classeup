@@ -241,56 +241,8 @@ parameters:
 			path: app/Models/Avaliacao.php
 
 		-
-			message: '#^Method App\\Models\\Avaliacao\:\:aplicarRecuperacaoFinal\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^Method App\\Models\\Avaliacao\:\:aplicarRecuperacaoFinal\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^Method App\\Models\\Avaliacao\:\:aplicarSubstitutiva\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^Method App\\Models\\Avaliacao\:\:aplicarSubstitutiva\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^Method App\\Models\\Avaliacao\:\:calcularMedia\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
 			message: '#^Method App\\Models\\Avaliacao\:\:disciplina\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^Method App\\Models\\Avaliacao\:\:encontrarIndiceMenorNota\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^Method App\\Models\\Avaliacao\:\:obterNotasParaCalculo\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Models/Avaliacao.php
-
-		-
-			message: '#^PHPDoc type array\<int, string\> of property App\\Models\\Avaliacao\:\:\$fillable is not covariant with PHPDoc type list\<string\> of overridden property Illuminate\\Database\\Eloquent\\Model\:\:\$fillable\.$#'
-			identifier: property.phpDocType
 			count: 1
 			path: app/Models/Avaliacao.php
 
@@ -345,6 +297,12 @@ parameters:
 		-
 			message: '#^Method App\\Models\\Falta\:\:disciplina\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Method App\\Models\\Falta\:\:getAlunoResolvidoAttribute\(\) should return App\\Models\\Aluno\|null but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
 			count: 1
 			path: app/Models/Falta.php
 
@@ -423,6 +381,18 @@ parameters:
 		-
 			message: '#^Method App\\Models\\Falta\:\:scopePorProfessor\(\) has parameter \$query with no type specified\.$#'
 			identifier: missingType.parameter
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between string and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Models/Falta.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 1
 			path: app/Models/Falta.php
 
@@ -523,44 +493,8 @@ parameters:
 			path: app/Services/AvaliacaoService.php
 
 		-
-			message: '#^Method App\\Services\\AvaliacaoService\:\:atualizarNotas\(\) has parameter \$notas with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: app/Services/AvaliacaoService.php
-
-		-
-			message: '#^Method App\\Services\\AvaliacaoService\:\:criarAvaliacoesSeNecessario\(\) has parameter \$disciplinas with generic class Illuminate\\Database\\Eloquent\\Collection but does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/AvaliacaoService.php
-
-		-
-			message: '#^Method App\\Services\\AvaliacaoService\:\:criarAvaliacoesSeNecessario\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/AvaliacaoService.php
-
-		-
-			message: '#^Method App\\Services\\AvaliacaoService\:\:obterAvaliacoesDoAluno\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/AvaliacaoService.php
-
-		-
-			message: '#^Method App\\Services\\AvaliacaoService\:\:obterDisciplinasDaTurma\(\) return type with generic class Illuminate\\Database\\Eloquent\\Collection does not specify its types\: TKey, TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Services/AvaliacaoService.php
-
-		-
-			message: '#^Parameter \#2 \$disciplina of method App\\Services\\AvaliacaoService\:\:avaliacaoExiste\(\) expects App\\Models\\Disciplina, Illuminate\\Database\\Eloquent\\Model given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Services/AvaliacaoService.php
-
-		-
-			message: '#^Parameter \#2 \$disciplina of method App\\Services\\AvaliacaoService\:\:criarAvaliacaoParaDisciplina\(\) expects App\\Models\\Disciplina, Illuminate\\Database\\Eloquent\\Model given\.$#'
-			identifier: argument.type
+			message: '#^Method App\\Services\\AvaliacaoService\:\:obterAvaliacoesDoAluno\(\) should return Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Avaliacao\> but returns Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
 			count: 1
 			path: app/Services/AvaliacaoService.php
 
@@ -583,16 +517,10 @@ parameters:
 			path: tests/Feature/AlunoControllerTest.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$aluno_id\.$#'
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 1
-			path: tests/Feature/AvaliacaoTest.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disciplina_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: tests/Feature/AvaliacaoTest.php
+			path: tests/Feature/Falta/RelacionamentoAlunoTest.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'

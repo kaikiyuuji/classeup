@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\StatusMatricula;
 use App\Models\Aluno;
 use App\Models\Disciplina;
 use App\Models\Professor;
@@ -111,7 +112,7 @@ class RelacionamentosTest extends TestCase
         $aluno->refresh();
 
         $this->assertFalse($aluno->isMatriculaAtiva());
-        $this->assertEquals('inativa', $aluno->status_matricula);
+        $this->assertSame(StatusMatricula::Inativa, $aluno->status_matricula);
         $this->assertFalse($aluno->isAtivo());
 
         // Ativar matrícula novamente
@@ -119,7 +120,7 @@ class RelacionamentosTest extends TestCase
         $aluno->refresh();
 
         $this->assertTrue($aluno->isMatriculaAtiva());
-        $this->assertEquals('ativa', $aluno->status_matricula);
+        $this->assertSame(StatusMatricula::Ativa, $aluno->status_matricula);
         $this->assertTrue($aluno->isAtivo());
     }
 

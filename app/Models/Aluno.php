@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\StatusMatricula;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,6 +41,7 @@ class Aluno extends Model
     protected $casts = [
         'data_matricula' => 'date',
         'data_nascimento' => 'date',
+        'status_matricula' => StatusMatricula::class,
     ];
 
     /**
@@ -93,31 +95,22 @@ class Aluno extends Model
         return $ano.str_pad((string) $proximoNumero, 4, '0', STR_PAD_LEFT);
     }
 
-    /**
-     * Verifica se a matrícula está ativa
-     */
     public function isMatriculaAtiva(): bool
     {
-        return $this->status_matricula === 'ativa';
+        return $this->status_matricula === StatusMatricula::Ativa;
     }
 
-    /**
-     * Ativa a matrícula do aluno
-     */
     public function ativarMatricula(): void
     {
         $this->update([
-            'status_matricula' => 'ativa',
+            'status_matricula' => StatusMatricula::Ativa,
         ]);
     }
 
-    /**
-     * Inativa a matrícula do aluno
-     */
     public function inativarMatricula(): void
     {
         $this->update([
-            'status_matricula' => 'inativa',
+            'status_matricula' => StatusMatricula::Inativa,
         ]);
     }
 

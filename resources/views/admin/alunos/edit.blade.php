@@ -129,8 +129,9 @@
                                     <label for="status_matricula" class="block text-sm font-semibold text-gray-700 mb-2">Status da Matrícula</label>
                                     <select name="status_matricula" id="status_matricula" 
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                                        <option value="ativa" {{ $aluno->status_matricula === 'ativa' ? 'selected' : '' }}>Ativa</option>
-                                        <option value="inativa" {{ $aluno->status_matricula === 'inativa' ? 'selected' : '' }}>Inativa</option>
+                                        @foreach (\App\Enums\StatusMatricula::cases() as $statusOption)
+                                            <option value="{{ $statusOption->value }}" {{ $aluno->status_matricula === $statusOption ? 'selected' : '' }}>{{ $statusOption->label() }}</option>
+                                        @endforeach
                                     </select>
                                     @error('status_matricula')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\SituacaoAvaliacao;
 use App\Models\Aluno;
 use App\Models\Avaliacao;
 use App\Models\Disciplina;
@@ -98,7 +99,7 @@ class AvaliacaoTest extends TestCase
         $avaliacao->calcularNotaFinal();
 
         $this->assertEquals(8.25, $avaliacao->nota_final);
-        $this->assertEquals('aprovado', $avaliacao->situacao);
+        $this->assertSame(SituacaoAvaliacao::Aprovado, $avaliacao->situacao);
     }
 
     public function test_calculo_nota_final_reprovado(): void
@@ -116,7 +117,7 @@ class AvaliacaoTest extends TestCase
         $avaliacao->calcularNotaFinal();
 
         $this->assertEquals(4.25, $avaliacao->nota_final);
-        $this->assertEquals('reprovado', $avaliacao->situacao);
+        $this->assertSame(SituacaoAvaliacao::Reprovado, $avaliacao->situacao);
     }
 
     public function test_pode_atualizar_notas_da_avaliacao(): void
@@ -145,7 +146,7 @@ class AvaliacaoTest extends TestCase
         $this->assertEquals(9.5, $avaliacao->av3);
         $this->assertEquals(8.0, $avaliacao->av4);
         $this->assertEquals(8.75, $avaliacao->nota_final);
-        $this->assertEquals('aprovado', $avaliacao->situacao);
+        $this->assertSame(SituacaoAvaliacao::Aprovado, $avaliacao->situacao);
     }
 
     public function test_validacao_notas_invalidas(): void

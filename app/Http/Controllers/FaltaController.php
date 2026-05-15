@@ -214,7 +214,10 @@ class FaltaController extends Controller
         $faltas = $request->get('faltas', []);
 
         foreach ($faltas as $matricula) {
+            $alunoId = Aluno::where('numero_matricula', $matricula)->value('id');
+
             Falta::create([
+                'aluno_id' => $alunoId,
                 'matricula' => $matricula,
                 'disciplina_id' => $request->disciplina_id,
                 'professor_id' => $request->professor_id,

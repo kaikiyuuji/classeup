@@ -161,9 +161,9 @@
                             
                             <!-- Situação -->
                             <td class="px-4 py-4 text-center">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $avaliacao->situacao === 'aprovado' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ ucfirst($avaliacao->situacao) }}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {{ $avaliacao->isAprovado() ? 'bg-green-100 text-green-800' : ($avaliacao->isReprovado() ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                    {{ $avaliacao->situacao->label() }}
                                 </span>
                             </td>
                             
