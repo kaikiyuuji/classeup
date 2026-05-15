@@ -8,6 +8,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Two-Factor Authentication
+    |--------------------------------------------------------------------------
+    |
+    | Quando true, admins sem 2FA confirmado são forçados para a tela de
+    | setup. Para rollout gradual em produção, mantenha false e ative
+    | depois que todos os admins configurarem.
+    */
+
+    'two_factor_required_for_admin' => env('TWO_FACTOR_REQUIRED_FOR_ADMIN', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Authentication Defaults
     |--------------------------------------------------------------------------
     |

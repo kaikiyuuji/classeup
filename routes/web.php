@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\SolicitacaoExclusaoController;
 use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\FaltaController;
+use App\Http\Controllers\LgpdController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TurmaController;
@@ -23,6 +27,35 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Audit Log + Admin LGPD (admin only)
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/audit-log', AuditLogController::class)->name('admin.audit-log.index');
+
+    Route::get('/admin/lgpd/solicitacoes', [SolicitacaoExclusaoController::class, 'index'])->name('admin.lgpd.solicitacoes');
+    Route::post('/admin/lgpd/solicitacoes/{solicitacao}/aprovar', [SolicitacaoExclusaoController::class, 'aprovar'])->name('admin.lgpd.aprovar');
+    Route::post('/admin/lgpd/solicitacoes/{solicitacao}/rejeitar', [SolicitacaoExclusaoController::class, 'rejeitar'])->name('admin.lgpd.rejeitar');
+});
+
+// LGPD: rotas para o aluno consultar/solicitar exclusão dos próprios dados.
+Route::middleware('auth')->group(function () {
+    Route::get('/lgpd/meus-dados', [LgpdController::class, 'meusDados'])->name('lgpd.meus-dados');
+    Route::get('/lgpd/alunos/{aluno}', [LgpdController::class, 'exportarAluno'])->name('lgpd.aluno');
+    Route::post('/lgpd/solicitar-exclusao', [LgpdController::class, 'solicitarExclusao'])
+        ->middleware('throttle:writes')
+        ->name('lgpd.solicitar-exclusao');
+});
+
+// 2FA setup/confirm/disable
+Route::middleware('auth')->group(function () {
+    Route::get('/two-factor/setup', [TwoFactorController::class, 'setup'])->name('two-factor.setup');
+    Route::post('/two-factor/confirm', [TwoFactorController::class, 'confirm'])
+        ->middleware('throttle:writes')
+        ->name('two-factor.confirm');
+    Route::delete('/two-factor', [TwoFactorController::class, 'disable'])
+        ->middleware('throttle:writes')
+        ->name('two-factor.disable');
 });
 
 // Mutações admin (definidas ANTES das rotas com {param} para evitar

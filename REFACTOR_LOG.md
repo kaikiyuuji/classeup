@@ -887,3 +887,67 @@ Complementa o `NotaCalculatorTest` principal (13 testes) com:
 ## Fase 6 — Adiada conscientemente
 
 `spatie/laravel-activitylog` agrega tracking de mudanças por campo (valor antigo → novo) e página `/admin/audit-log`. O `AuditObserver` da Fase 5 já cobre quem fez e quando para CRUD. Sem requisito regulatório explícito ou demanda concreta de "quem alterou esta nota de 7 para 9", o esforço é prematuro: pacote externo, tabela polimórfica grande, rotina de limpeza, índices. Faz mais sentido instalar quando aparecer a demanda — aí registra `LogsActivity` em 1-2 models específicos.
+
+---
+
+## Feature 3 — Segurança + LGPD (branch `feature/seguranca-lgpd`)
+
+Plano aprovado em `/root/.claude/plans/an-lise-o-c-digo-inteiro-clever-pearl.md`. Quatro sub-features independentes, todas com TDD red-first.
+
+### 3.A — Política de senha forte
+
+- `app/Rules/StrongPassword.php`: regra custom (≥12 chars, maiúscula, minúscula, dígito, símbolo).
+- Integrada em `RegisteredUserController`, `NewPasswordController`, `Auth/PasswordController` substituindo `Rules\Password::defaults()`.
+- `tests/Unit/Rules/StrongPasswordTest.php` (6 testes): cada regra individualmente + caso feliz.
+- Tests do Breeze atualizados para usar senhas fortes (`'MinhaSenh@2026Forte!'`, `'NovaSenh@2026Forte!'`) — 3 arquivos.
+
+### 3.B — 2FA (TOTP RFC 6238 caseiro, sem dependência externa)
+
+- `app/Services/Auth/TwoFactorAuthenticator.php`: implementação RFC 6238 em ~100 linhas. Compatível com Google Authenticator/1Password/Authy. Janela de tolerância ±1 (compensa drift de relógio). Gera secret 16 chars, recovery codes 10 chars × 8.
+- Migration `add_two_factor_columns_to_users_table`: `two_factor_secret` (encrypted), `two_factor_recovery_codes` (encrypted array), `two_factor_confirmed_at`.
+- `User` ganha cast `encrypted`/`encrypted:array`/`datetime` + método `hasTwoFactorEnabled()`. Campos sensíveis em `$hidden`.
+- `app/Http/Middleware/RequireTwoFactor.php`: força admin sem 2FA confirmado para `/two-factor/setup` quando `config('auth.two_factor_required_for_admin')` é true. Whitelista rotas `setup`, `confirm`, `logout`, `profile.edit`.
+- `app/Http/Controllers/Auth/TwoFactorController.php`: setup (gera secret e QR), confirm (valida código), disable (remove tudo).
+- View `resources/views/auth/two-factor/setup.blade.php` com URL otpauth + lista de recovery codes.
+- `config/auth.php` ganha flag `two_factor_required_for_admin` (default false; envvar `TWO_FACTOR_REQUIRED_FOR_ADMIN`).
+- `tests/Unit/Services/Auth/TwoFactorAuthenticatorTest.php` (8 testes): geração de secret, validação ✓/✗, formato inválido, tolerância de janela, URL otpauth, recovery codes distintos.
+- `tests/Feature/Auth/TwoFactorTest.php` (7 testes): admin redirecionado para setup, fluxo completo de confirmação, código inválido, professor/aluno livres, flag desativada não força, disable.
+
+### 3.C — Audit Log Viewer (consome colunas da Fase 5)
+
+- `app/Services/AuditLogService.php`: agrega `created_by/updated_by/deleted_by` das 6 entidades em stream único ordenado por timestamp. Filtros por `resource`, `action`, `user`, `from`, `to`.
+- `app/Http/Controllers/Admin/AuditLogController.php` (single action `__invoke`).
+- View `resources/views/admin/audit-log/index.blade.php` com tabela e filtros.
+- Rota `GET /admin/audit-log` (admin only).
+- `tests/Feature/AuditLog/AuditLogViewerTest.php` (6 testes): admin acessa, professor/aluno 403, guest redirect login, filtro `resource`, filtro `user`.
+
+### 3.D — LGPD: exportação e exclusão (4-eyes principle)
+
+- Migration `create_solicitacoes_exclusao_table`: tabela com `aluno_id`, `solicitante_user_id`, `status` (pendente/aprovada/rejeitada), `motivo`, `decided_by`, `decided_at`.
+- `app/Enums/StatusSolicitacaoExclusao.php` (Pendente/Aprovada/Rejeitada).
+- `app/Models/SolicitacaoExclusao.php`.
+- `app/Services/LgpdService.php`:
+  - `exportarDadosDoAluno(Aluno): array` — retorna JSON com perfil, turma, avaliações, faltas.
+  - `solicitarExclusao(Aluno, User, ?motivo)` — idempotente (retorna pendente existente).
+  - `efetivarExclusao(SolicitacaoExclusao, aprovador)` — **lança exceção se aprovador == solicitante** (4-eyes). Soft-delete o aluno e anonimiza nome/email/cpf/telefone/endereco/foto.
+  - `rejeitarExclusao(...)`.
+- `app/Http/Controllers/LgpdController.php` (`meusDados`, `exportarAluno`, `solicitarExclusao`).
+- `app/Http/Controllers/Admin/SolicitacaoExclusaoController.php` (index, aprovar, rejeitar).
+- View `resources/views/admin/lgpd/solicitacoes.blade.php`.
+- Rotas: `GET /lgpd/meus-dados` (aluno), `GET /lgpd/alunos/{aluno}` (admin/owner), `POST /lgpd/solicitar-exclusao` (aluno autenticado), e admin `/admin/lgpd/solicitacoes` + aprovar/rejeitar.
+- `tests/Feature/Lgpd/LgpdExportTest.php` (4 testes): aluno baixa próprio JSON, admin baixa de qualquer aluno, aluno-A não baixa de aluno-B (403), export contém avaliações + faltas.
+- `tests/Feature/Lgpd/LgpdExclusaoTest.php` (6 testes): solicitar via rota, anonimizar+soft-delete, 4-eyes (aprovador ≠ solicitante), idempotência (duplicata retorna pendente), admin lista, aluno 403.
+
+### Estado de Feature 3: VERDE
+
+- ✅ **217 testes passando** (era 180; +37 nesta feature: 6 senha + 8 TOTP + 7 2FA + 6 audit log + 4 export + 6 exclusão).
+- ✅ **605 assertions** (era 541; +64).
+- ✅ Pint passa.
+- ✅ PHPStan: 0 erros novos (baseline 119, era 95 — cresceu por novos controllers/services).
+
+### Decisões e tradeoffs
+
+- **TOTP caseiro vs `laragear/two-factor`**: optei por implementação caseira (~100 linhas, 8 unit tests) porque o sandbox não permite `composer require` de pacote novo. Vantagem secundária: portfolio fica mais rico, mostra entendimento de RFC 6238.
+- **CPF NOT NULL no schema**: anonimização não pode null o CPF; usa placeholder `00000...id` em vez. Cumpre LGPD (não é mais PII associável) sem alterar schema.
+- **Senha forte vs `Password::uncompromised()`**: optei por regra local; HIBP exige requisição HTTPS externa que pode falhar e bloquear registro. Pode ser somado depois com `Password::min(12)->uncompromised()` se quiser.
+- **Flag `two_factor_required_for_admin`**: default `false` para rollout gradual em produção. Em portfolio fresh basta setar `TWO_FACTOR_REQUIRED_FOR_ADMIN=true` no `.env`.

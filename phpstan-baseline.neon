@@ -295,6 +295,24 @@ parameters:
 			path: app/Models/Professor.php
 
 		-
+			message: '#^Method App\\Models\\SolicitacaoExclusao\:\:aluno\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/SolicitacaoExclusao.php
+
+		-
+			message: '#^Method App\\Models\\SolicitacaoExclusao\:\:decidedBy\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/SolicitacaoExclusao.php
+
+		-
+			message: '#^Method App\\Models\\SolicitacaoExclusao\:\:solicitante\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/SolicitacaoExclusao.php
+
+		-
 			message: '#^Class App\\Models\\Turma uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
 			identifier: missingType.generics
 			count: 1
@@ -367,6 +385,18 @@ parameters:
 			path: app/Models/User.php
 
 		-
+			message: '#^Call to an undefined static method Illuminate\\Database\\Eloquent\\Model\:\:withTrashed\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Services/AuditLogService.php
+
+		-
+			message: '#^Method App\\Services\\AuditLogService\:\:listar\(\) has parameter \$filtros with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/AuditLogService.php
+
+		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disciplinas\.$#'
 			identifier: property.notFound
 			count: 1
@@ -383,6 +413,96 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: app/Services/ChamadaService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$av1\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$av2\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$av3\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$av4\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disciplina\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$foto_perfil\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$nota_final\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$recuperacao_final\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$situacao\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$substitutiva\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Return type of call to method Illuminate\\Database\\Eloquent\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: method.unresolvableReturnType
+			count: 1
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Services/LgpdService.php
+
+		-
+			message: '#^Using nullsafe property access on non\-nullable type App\\Enums\\StatusMatricula\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Services/LgpdService.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>id" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
@@ -407,6 +527,12 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: tests/Feature/Falta/RelacionamentoAlunoTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Aluno\:\:\$deleted_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/Lgpd/LgpdExclusaoTest.php
 
 		-
 			message: '#^Access to an undefined property App\\Models\\Aluno\:\:\$created_by\.$#'
@@ -485,6 +611,12 @@ parameters:
 			identifier: method.alreadyNarrowedType
 			count: 1
 			path: tests/Unit/ExampleTest.php
+
+		-
+			message: '#^Method Tests\\Unit\\Rules\\StrongPasswordTest\:\:validar\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Unit/Rules/StrongPasswordTest.php
 
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with int will always evaluate to true\.$#'
