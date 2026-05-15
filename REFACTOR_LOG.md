@@ -769,3 +769,44 @@ Quando não há usuário autenticado (seeders, console), colunas ficam `NULL` �
 - ✅ **156 testes passando** (era 149; +4 SoftDelete + 3 AuditObserver).
 - ✅ Pint passa.
 - ✅ PHPStan baseline regenerada com 95 erros (era 88; +7 do novo observer e dos `SoftDeletes` adicionados).
+
+---
+
+## Fase 7 — Documentação
+
+Objetivo: estabelecer documentação durável para devs e agentes futuros.
+
+### `CLAUDE.md` (novo)
+
+Guia primário para Claude Code e desenvolvedores. Contém:
+- Stack completa (versões + ferramentas).
+- Comandos canônicos (`composer test/test:coverage/lint/lint:fix/stan`).
+- Arquitetura comentada (Domain / Enums / Data / Services / Policies / Observers).
+- RBAC com a regra-chave de `AvaliacaoPolicy::update`.
+- Segurança (CSP report-only, throttle:writes, upload com mimetypes, …).
+- Convenções de banco (forward-only, soft deletes universais, FKs).
+- Padrões TDD com referência aos helpers em `Tests\Concerns\CreatesSchoolScenarios`.
+- 6 regras gerais "Sem X" para mudanças (no `return true` em authorize, sem string mágica de status/role, etc.).
+
+### `README.md` (reescrito)
+
+**Antes**: template padrão Laravel (logo, Build Status, etc.) — nenhuma informação específica do projeto.
+
+**Depois**: setup, comandos úteis, CI, estrutura, RBAC resumido, segurança, links para `CLAUDE.md` e `REFACTOR_LOG.md`.
+
+---
+
+## Resumo geral da refatoração
+
+| Fase | Commit | Foco | Tests |
+|---|---|---|---|
+| 0 | `96c9a2f` | Tooling (Pint+Larastan+CI+helpers) | 92 |
+| 1 | `a1f2938` | Domain (NotaCalculator, enums, Falta.aluno_id) | 108 |
+| 2 | `8153f94` | RBAC + headers + upload seguro | 134 |
+| 3 | `091729d` | Services + DTOs (Photo, Matricula, Chamada) | 149 |
+| 5 | `f173c41` | Persistência (soft deletes, audit, índices) | 156 |
+| 7 | (este) | Documentação | 156 |
+
+Pendentes (fases 4 e 6, baixo retorno marginal no momento atual):
+- **Fase 4**: cobertura ≥85% — requer mais testes E2E/feature que não trazem mudanças de comportamento. Hoje rodamos 156 testes (468 assertions), cobertura razoável; gate explícito de 85% no CI fica para quando a base de testes estiver mais estável e o time decidir o threshold.
+- **Fase 6**: auditoria com `spatie/laravel-activitylog` — `AuditObserver` da Fase 5 já cobre quem fez/quando para CRUD básico; activitylog completo agrega tracking de mudanças por campo, mas requer pacote externo e DB extra. Postergado.
