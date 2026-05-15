@@ -582,3 +582,103 @@ Mensagens custom em pt-BR adicionadas (`mimetypes`, `dimensions`).
 - **`role:admin,professor`**: aluno fica fora da maior parte do app — só boletim/faltas próprios. Conforme escopo aprovado.
 - **Rate limiter `writes`**: aplicado em mutações HTTP, não em leituras (para não atrapalhar UX em listagens). 60 req/min é folgado para uso normal e contém abuso automatizado.
 - **`mimetypes` ao invés de só `mimes`**: validar o conteúdo real do arquivo (via getimagesize) bloqueia upload de PHP renomeado para `.jpg`.
+
+---
+
+## Fase 3 — Service Layer e DTOs (parcial)
+
+Objetivo: tirar lógica dos controllers, eliminar duplicação e introduzir DTOs imutáveis.
+
+### 3.1 PhotoUploadService
+
+#### `app/Services/PhotoUploadService.php` (novo)
+
+API: `store(UploadedFile $file, string $folder, ?string $oldPath = null): string`.
+
+**Comportamento**:
+- Filename gerado por `Str::ulid()->toBase32()` (26 chars) — não previsível, evita race condition de `time().uniqid()` antigo.
+- Se `$oldPath` fornecido e existir, deleta antes de gravar.
+- Disco padrão `public`, parametrizável via construtor.
+
+#### `tests/Unit/Services/PhotoUploadServiceTest.php` (novo, 5 testes RED-first)
+
+Cobre: armazenamento, filename ULID, deleção de antigo, oldPath inexistente sem quebrar, dois uploads simultâneos sem colisão.
+
+#### `app/Http/Controllers/AlunoController.php` (refatorado)
+
+**Antes**: 167 linhas, com método privado `handlePhotoUpload($file)` (linhas 130-139) usando `time().'_'.uniqid()` (previsível). Lógica de delete de foto antiga duplicada inline no `update()`.
+
+**Depois**: 105 linhas. `PhotoUploadService` e `MatriculaService` injetados via construtor; uma linha por upload (`$this->photoUpload->store(...)`). `status_matricula` agora usa enum `StatusMatricula::Ativa`.
+
+#### `app/Http/Controllers/ProfessorController.php` (refatorado)
+
+**Antes**: 178 linhas com `handlePhotoUpload` duplicado.
+
+**Depois**: 130 linhas. Mesmo padrão de injeção de `PhotoUploadService`. Eliminada a duplicação.
+
+### 3.2 MatriculaService
+
+#### `app/Services/MatriculaService.php` (novo)
+
+API: `gerar(?int $ano = null): string` — retorna formato `AAAA####` (ex: `20260001`).
+
+**Diferença para o `Aluno::gerarNumeroMatricula()` legado**:
+- Usa `DB::transaction` + `lockForUpdate()` para evitar **race condition** quando dois admins criam alunos simultaneamente (o método antigo fazia `where('like', ano.'%') ... ->first()` sem lock, podendo gerar matrículas duplicadas em race).
+- `Aluno::gerarNumeroMatricula` foi mantido por compatibilidade até refator dos testes que ainda chamam, mas o controller agora usa `MatriculaService::gerar()`.
+
+#### `tests/Feature/Services/MatriculaServiceTest.php` (novo, 5 testes RED-first)
+
+Cobre: primeira matrícula `0001`, incremento sequencial, ano default (atual), ano específico não interfere com sequencial de outro ano, padding 4 dígitos.
+
+### 3.3 ChamadaService + DTO RegistrarChamadaData + FaltaStoreRequest
+
+#### `app/Data/RegistrarChamadaData.php` (novo, `final readonly class`)
+
+DTO imutável com factory `fromRequest(Request)`:
+```php
+new RegistrarChamadaData(
+    turmaId: int,
+    disciplinaId: int,
+    professorId: int,
+    dataFalta: CarbonImmutable,
+    matriculasAusentes: list<string>,
+    confirmarReenvio: bool,
+)
+```
+
+#### `app/Http/Requests/FaltaStoreRequest.php` (novo)
+
+Substitui a validação inline em `FaltaController::store` (era um `$request->validate(...)` no meio do método). `authorize()` via `FaltaPolicy::create`. Helper `toDto()` retorna `RegistrarChamadaData`.
+
+#### `app/Services/ChamadaService.php` (novo)
+
+Encapsula o que estava espalhado em 7 métodos privados de `FaltaController` (linhas 156-233 antes da refatoração):
+
+- `obterTurmasComVinculo(): Collection` — query cross-tabela com 3 joins.
+- `alunosDaTurma(int $turmaId): EloquentCollection<Aluno>`.
+- `matriculasAusentes(int $disciplinaId, int $professorId, string $data): array`.
+- `jaExisteChamada(...): bool` — flag para confirmar reenvio.
+- `registrar(RegistrarChamadaData $data): void` — idempotente: dentro de `DB::transaction`, apaga faltas anteriores do mesmo `(disciplina, professor, dia)` e re-cria. Popula `aluno_id` FK.
+- `relatorioPorMatricula(string, CarbonImmutable, CarbonImmutable): Collection<Falta>`.
+
+#### `tests/Feature/Services/ChamadaServiceTest.php` (novo, 5 testes TDD-first)
+
+Cobre: criação de múltiplas faltas, idempotência (re-submeter apaga antigas), `jaExisteChamada`, filtro por turma, filtro de relatório por período + matrícula.
+
+#### `app/Http/Controllers/FaltaController.php` (refatorado)
+
+**Antes**: 234 linhas, 7 métodos privados com queries cruas `DB::table(...)`, validação inline, transação inline.
+
+**Depois**: 117 linhas. `ChamadaService` injetado, `FaltaStoreRequest::toDto()` passado direto. Validação `data_falta` aceitando `CarbonImmutable`. Resolução `Falta` via route-model binding (`Falta $falta` em vez de `$id`).
+
+### 3.4 Estado da Fase 3 (parcial): VERDE
+
+- ✅ **149 testes passando** (era 134; +5 PhotoUploadServiceTest, +5 MatriculaServiceTest, +5 ChamadaServiceTest).
+- ✅ Pint passa.
+- ✅ PHPStan: baseline regenerada com **88 erros** (era 115; a refatoração eliminou 27 erros pré-existentes de "no return type specified" e "parameter with no type" no `FaltaController` e nos métodos `handlePhotoUpload`). Tudo isso ganho concreto.
+
+### 3.5 Pendências da Fase 3 (próxima iteração)
+
+- `AlunoService`, `ProfessorService`, `TurmaService`, `DisciplinaService` para encapsular CRUD (atualmente a lógica é simples; faz sentido extrair só quando algo a mais entrar — sem abstração prematura).
+- DTOs `CriarAlunoData`, `AtualizarAlunoData`, `AtualizarNotasData`, `JustificarFaltaData` — idem.
+- `AvaliacaoService` ainda tem método `obterAvaliacoesDoAluno` com side effect "criar avaliações automaticamente". Já foi separado em `garantirAvaliacoesParaAluno()` na Fase 1, mas o legacy continua sendo chamado por `AlunoController::boletim`. Próxima sub-fase troca a chamada para read+write explícito.

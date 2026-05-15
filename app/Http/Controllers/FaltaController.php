@@ -4,99 +4,82 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FaltaStoreRequest;
 use App\Models\Aluno;
 use App\Models\Disciplina;
 use App\Models\Falta;
 use App\Models\Professor;
 use App\Models\Turma;
-use Carbon\Carbon;
+use App\Services\ChamadaService;
+use Carbon\CarbonImmutable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class FaltaController extends Controller
 {
-    /**
-     * Exibe a lista de turmas para chamada
-     */
-    public function index()
+    public function __construct(
+        private readonly ChamadaService $chamada,
+    ) {}
+
+    public function index(): View
     {
-        $turmasComVinculo = $this->obterTurmasComVinculo();
+        $turmasComVinculo = $this->chamada->obterTurmasComVinculo();
 
         return view('admin.faltas.index', compact('turmasComVinculo'));
     }
 
-    /**
-     * Exibe a interface de chamada para uma turma/disciplina específica
-     */
-    public function chamada(Request $request, $turma, $disciplina)
+    public function chamada(Request $request, int $turma, int $disciplina): View|RedirectResponse
     {
-        $professorId = $request->get('professor_id');
+        $professorId = $request->integer('professor_id');
         $data = $request->get('data', now()->format('Y-m-d'));
 
         $turma = Turma::findOrFail($turma);
         $disciplina = Disciplina::findOrFail($disciplina);
 
-        // Se não foi especificado professor, pega o primeiro vinculado à turma/disciplina
-        if (! $professorId) {
+        if ($professorId === 0) {
             $vinculo = DB::table('professor_disciplina_turma')
                 ->where('turma_id', $turma->id)
                 ->where('disciplina_id', $disciplina->id)
                 ->first();
 
-            if (! $vinculo) {
+            if ($vinculo === null) {
                 return redirect()->route('faltas.index')
                     ->with('error', 'Nenhum professor vinculado a esta turma/disciplina.');
             }
 
-            $professorId = $vinculo->professor_id;
+            $professorId = (int) $vinculo->professor_id;
         }
 
         $professor = Professor::findOrFail($professorId);
-        $alunos = $this->obterAlunosDaTurma($turma->id);
-        $faltasExistentes = $this->obterFaltasExistentes($disciplina->id, $professorId, $data);
+        $alunos = $this->chamada->alunosDaTurma($turma->id);
+        $faltasExistentes = $this->chamada->matriculasAusentes($disciplina->id, $professorId, $data);
 
         return view('admin.faltas.chamada', compact(
             'turma', 'disciplina', 'professor', 'alunos', 'faltasExistentes', 'data'
         ));
     }
 
-    /**
-     * Registra as faltas da chamada
-     */
-    public function store(Request $request)
+    public function store(FaltaStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'turma_id' => 'required|exists:turmas,id',
-            'disciplina_id' => 'required|exists:disciplinas,id',
-            'professor_id' => 'required|exists:professores,id',
-            'data_falta' => 'required|date',
-            'faltas' => 'array',
-            'faltas.*' => 'string',
-            'confirmar_reenvio' => 'sometimes|boolean',
-        ]);
+        $dto = $request->toDto();
 
-        // Verifica se já existe chamada para o dia
-        $chamadaExistente = Falta::where('disciplina_id', $request->disciplina_id)
-            ->where('professor_id', $request->professor_id)
-            ->whereDate('data_falta', $request->data_falta)
-            ->exists();
-
-        if ($chamadaExistente && ! $request->has('confirmar_reenvio')) {
+        if (! $dto->confirmarReenvio
+            && $this->chamada->jaExisteChamada($dto->disciplinaId, $dto->professorId, $dto->dataFalta->toDateString())
+        ) {
             return redirect()->back()
                 ->withInput()
                 ->with('warning', 'Já existe uma chamada cadastrada para este dia. Deseja confirmar o reenvio?')
                 ->with('mostrar_confirmacao', true);
         }
 
-        $this->processarChamada($request);
+        $this->chamada->registrar($dto);
 
         return redirect()->route('faltas.index')->with('success', 'Chamada registrada com sucesso!');
     }
 
-    /**
-     * Exibe relatório de faltas por aluno
-     */
-    public function relatorioAluno(Request $request)
+    public function relatorioAluno(Request $request): View
     {
         $matricula = $request->get('matricula');
         $dataInicio = $request->get('data_inicio', now()->startOfMonth()->format('Y-m-d'));
@@ -105,134 +88,41 @@ class FaltaController extends Controller
         $aluno = null;
         $faltas = collect();
 
-        if ($matricula) {
+        if ($matricula !== null) {
             $aluno = Aluno::where('numero_matricula', $matricula)->first();
-            if ($aluno) {
-                $faltas = $this->obterFaltasDoAluno($matricula, $dataInicio, $dataFim);
+            if ($aluno !== null) {
+                $faltas = $this->chamada->relatorioPorMatricula(
+                    (string) $matricula,
+                    CarbonImmutable::parse((string) $dataInicio),
+                    CarbonImmutable::parse((string) $dataFim),
+                );
             }
         }
 
         return view('admin.faltas.relatorio-aluno', compact('aluno', 'faltas', 'matricula', 'dataInicio', 'dataFim'));
     }
 
-    /**
-     * Exibe formulário para justificar falta
-     */
-    public function justificar($id)
+    public function justificar(Falta $falta): View
     {
-        $falta = Falta::with(['aluno', 'disciplina', 'professor'])->findOrFail($id);
+        $falta->load(['aluno', 'disciplina', 'professor']);
 
         return view('admin.faltas.justificar', compact('falta'));
     }
 
-    /**
-     * Processa justificativa de falta
-     */
-    public function processarJustificativa(Request $request, $id)
+    public function processarJustificativa(Request $request, Falta $falta): RedirectResponse
     {
-        $request->validate([
-            'observacoes' => 'required|string|max:1000',
-        ]);
+        $request->validate(['observacoes' => 'required|string|max:1000']);
 
-        $falta = Falta::findOrFail($id);
-        $falta->justificar($request->observacoes);
+        $falta->justificar((string) $request->input('observacoes'));
 
         return redirect()->route('faltas.relatorio-aluno', ['matricula' => $falta->matricula])
             ->with('success', 'Falta justificada com sucesso!');
     }
 
-    /**
-     * Remove justificativa de falta
-     */
-    public function removerJustificativa($id)
+    public function removerJustificativa(Falta $falta): RedirectResponse
     {
-        $falta = Falta::findOrFail($id);
         $falta->removerJustificativa();
 
         return redirect()->back()->with('success', 'Justificativa removida com sucesso!');
-    }
-
-    // Métodos auxiliares privados seguindo Object Calisthenics
-
-    private function obterTurmasComVinculo()
-    {
-        return DB::table('turmas')
-            ->join('professor_disciplina_turma', function ($join) {
-                $join->on('turmas.id', '=', 'professor_disciplina_turma.turma_id');
-            })
-            ->join('professores', 'professor_disciplina_turma.professor_id', '=', 'professores.id')
-            ->join('disciplinas', 'professor_disciplina_turma.disciplina_id', '=', 'disciplinas.id')
-            ->select(
-                'turmas.id as turma_id',
-                'turmas.nome as turma_nome',
-                'turmas.serie',
-                'disciplinas.id as disciplina_id',
-                'disciplinas.nome as disciplina_nome',
-                'professores.id as professor_id',
-                'professores.nome as professor_nome'
-            )
-            ->orderBy('turmas.nome')
-            ->orderBy('disciplinas.nome')
-            ->get()
-            ->groupBy('turma_nome');
-    }
-
-    private function obterAlunosDaTurma($turmaId)
-    {
-        return Aluno::where('turma_id', $turmaId)
-            ->orderBy('nome')
-            ->get();
-    }
-
-    private function obterFaltasExistentes($disciplinaId, $professorId, $data)
-    {
-        return Falta::where('disciplina_id', $disciplinaId)
-            ->where('professor_id', $professorId)
-            ->where('data_falta', $data)
-            ->pluck('matricula')
-            ->toArray();
-    }
-
-    private function processarChamada(Request $request)
-    {
-        DB::transaction(function () use ($request) {
-            $this->removerFaltasExistentes($request);
-            $this->registrarNovasFaltas($request);
-        });
-    }
-
-    private function removerFaltasExistentes(Request $request)
-    {
-        Falta::where('disciplina_id', $request->disciplina_id)
-            ->where('professor_id', $request->professor_id)
-            ->where('data_falta', $request->data_falta)
-            ->delete();
-    }
-
-    private function registrarNovasFaltas(Request $request)
-    {
-        $faltas = $request->get('faltas', []);
-
-        foreach ($faltas as $matricula) {
-            $alunoId = Aluno::where('numero_matricula', $matricula)->value('id');
-
-            Falta::create([
-                'aluno_id' => $alunoId,
-                'matricula' => $matricula,
-                'disciplina_id' => $request->disciplina_id,
-                'professor_id' => $request->professor_id,
-                'data_falta' => $request->data_falta,
-                'justificada' => false,
-            ]);
-        }
-    }
-
-    private function obterFaltasDoAluno($matricula, $dataInicio, $dataFim)
-    {
-        return Falta::with(['disciplina', 'professor'])
-            ->porAluno($matricula)
-            ->porPeriodo(Carbon::parse($dataInicio), Carbon::parse($dataFim))
-            ->orderBy('data_falta', 'desc')
-            ->get();
     }
 }
